@@ -8,6 +8,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import TablePagination from "@material-ui/core/TablePagination";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 
 const useStyles = makeStyles({
   table: {
@@ -15,33 +16,37 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(name, calories, fat, carbs, protein,status) {
-  return { name, calories, fat, carbs, protein,status };
+function createData(name, calories, fat, carbs, protein, status) {
+  return { name, calories, fat, carbs, protein, status };
 }
 
 export default function SimpleTable({ data }) {
   const classes = useStyles();
 
-  const rows = data.map((i,k)=>(
+  const rows = data.map((i, k) =>
     createData(
       i["user_id"],
-      i['full_name'],
-      i['email'],
-      i['phone'],
-      i['created_at'],
-      i['status']
+      i["full_name"],
+      i["email"],
+      i["phone"],
+      i["created_at"],
+      i["status"]
     )
-  ))
-
+  );
 
   return (
     <React.Fragment>
       <TableContainer elevation={0} component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
+        <Table
+          // size="small"
+          className={classes.table}
+          aria-label="simple table"
+        >
           <TableHead>
             <TableRow
               style={{
                 background: "#f4f4f4",
+                height: "3.4rem",
               }}
             >
               <TableCell
@@ -98,11 +103,25 @@ export default function SimpleTable({ data }) {
               >
                 Status
               </TableCell>
+              <TableCell
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "0.8rem",
+                  color: "#282b3c",
+                }}
+              ></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow elevation={0} style={{ border: "none" }} key={row.name}>
+            {rows.map((row, i) => (
+              <TableRow
+                elevation={0}
+                style={{
+                  height: "3.4rem",
+                  border: "none",
+                }}
+                key={row.name}
+              >
                 <TableCell
                   style={{
                     color: "#8095a1",
@@ -125,28 +144,38 @@ export default function SimpleTable({ data }) {
                 <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
                   {row.protein}
                 </TableCell>
-                <TableCell
-                  style={{ color: "#8095a1", fontWeight: 500 }}
-                >
+                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
                   {row.status}
+                </TableCell>
+                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                  {i === 0 && <InfoOutlinedIcon />}
                 </TableCell>
               </TableRow>
             ))}
 
-            {/* {[...Array(5).keys()].map((i, k) => (
-              <TableRow elevation={0} style={{ border: "none" }} key={k}>
+            {[...Array(4).keys()].map((i, k) => (
+              <TableRow
+                elevation={0}
+                style={{
+                  height: "3.4rem",
+                  border: "none",
+                }}
+                key={k}
+              >
+                <TableCell></TableCell>
+                <TableCell></TableCell>
                 <TableCell></TableCell>
                 <TableCell></TableCell>
                 <TableCell></TableCell>
                 <TableCell></TableCell>
                 <TableCell></TableCell>
               </TableRow>
-            ))} */}
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5,10]}
+        rowsPerPageOptions={[5, 10]}
         component="div"
         count={6}
         rowsPerPage={6}
