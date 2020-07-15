@@ -41,18 +41,21 @@ useEffect(() => {
           background: "#fff",
           position: "absolute",
           bottom: 0,
-          display:!loading?'flex':'',
-          alignItems:"center",
-          justifyContent:"center"
+          display: !loading ? "flex" : "",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        {
-        !loading ?
-        <CircularProgress style={{
-          margin:'auto',
-        }}/>:
-        <Table data={data} />
-        }
+        {!loading ? (
+          <CircularProgress
+            style={{
+              margin: "auto",
+              color: "#151628",
+            }}
+          />
+        ) : (
+          <Table data={data} />
+        )}
       </Box>
     </Box>
   );
