@@ -148,7 +148,7 @@ export default function SimpleTable({ data }) {
                   {row.status}
                 </TableCell>
                 <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {i === 0 && <InfoOutlinedIcon />}
+                  {i === 0 && <InfoOutlinedIcon style={{cursor:'pointer'}} />}
                 </TableCell>
               </TableRow>
             ))}

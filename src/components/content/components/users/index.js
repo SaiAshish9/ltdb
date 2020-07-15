@@ -1,5 +1,10 @@
 import React, { useEffect,useState } from "react";
-import Box from "@material-ui/core/Box";
+
+import {
+  Box,
+  CircularProgress
+} from "@material-ui/core";
+
 import Table from "./table";
 import axios from "axios";
 
@@ -36,9 +41,18 @@ useEffect(() => {
           background: "#fff",
           position: "absolute",
           bottom: 0,
+          display:!loading?'flex':'',
+          alignItems:"center",
+          justifyContent:"center"
         }}
       >
-        {loading && <Table data={data} />}
+        {
+        !loading ?
+        <CircularProgress style={{
+          margin:'auto',
+        }}/>:
+        <Table data={data} />
+        }
       </Box>
     </Box>
   );
