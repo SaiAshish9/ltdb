@@ -41,8 +41,8 @@ export const options= [
     "/categories/add/subcategory"
     ],
     options: [
-      { name: "Add Categories", path: "/categories" },
-      { name: "Add Sub Categories", path: "/categories/add/subcategory" },
+      // { name: "Add Categories", path: "/categories" },
+      // { name: "Add Sub Categories", path: "/categories/add/subcategory" },
     ],
   },
   {
