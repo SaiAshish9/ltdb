@@ -2,6 +2,7 @@ import React from 'react'
 import {Switch,Route} from 'react-router-dom'
 import Homepage from '../homepage'
 import Users from './components/users'
+import Categories from './components/categories'
 
 const Content = () => {
     return (
@@ -14,6 +15,11 @@ const Content = () => {
             exact 
             path="/users"
             component={Users}
+            />
+            <Route
+            exact
+            path="/categories"
+            component={Categories}
             />
         </Switch>
     )
