@@ -97,7 +97,7 @@ const Category = () => {
             display="flex"
             alignItems="center"
             justifyContent="space-between"
-            style={{ padding: "0 2rem", color: "#979aa4" }}
+            style={{ padding: "0 1rem", color: "#979aa4" }}
           >
             <p
               style={{
