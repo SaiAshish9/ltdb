@@ -139,6 +139,8 @@ export default function SimpleTable({ data }) {
                   fontWeight: "bold",
                   fontSize: "0.8rem",
                   color: "#282b3c",
+                  // textAlign: "center",
+                  paddingLeft:"3rem"
                 }}
               >
                 Sub Category
@@ -200,11 +202,14 @@ export default function SimpleTable({ data }) {
                         color: "#8095a1",
                         fontWeight: 600,
                         // background: "#282b3c",
-                        width:'10rem'
+                        width: "10rem",
+                        display:'flex',
+                        alignItems:"center",
+                        justifyContent:"center"
+                        // textAlign: "center",
                       }}
                     >
-                      
-                      {i>0?`${i} - `:'   '}
+                      {i > 0 ? `${i} - ` : "   "}
                       Add Sub Category
                     </Button>{" "}
                   </TableCell>
