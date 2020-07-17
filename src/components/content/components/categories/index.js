@@ -111,7 +111,7 @@ const Category = () => {
           alignItems:"center",
           justifyContent:"center",
           width: "85%",
-          height: "60vh",
+          height: loading ?"60vh":"",
           background: "#fff",
         }}
       >
