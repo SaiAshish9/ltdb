@@ -29,12 +29,13 @@ const Login = ({ dispatch }) => {
   const { register, handleSubmit } = useForm();
   const [forgotEmail,setForgotEmail]=useState(null)
   // const history = useHistory();
-  const forgotPasswordSubmit = ({ email }) => {
+  const forgotPasswordSubmit = ({ forgotEmail }) => {
+    console.log(forgotEmail)
     axios({
       method: "post",
       url: "http://15.206.151.171/lootbox_backend/public/api/app/user/forgot-password",
       data: {
-        email,
+        email:forgotEmail,
       },
       headers: {
         "X-Localization": "en",
@@ -44,11 +45,12 @@ const Login = ({ dispatch }) => {
     }).then((data)=>{
           console.log(data)
           setEmailSent(true);
-          setForgotEmail(email);
+          setForgotEmail(forgotEmail);
     }).catch(e=>console.log(e))
   };
 
   const onSubmit = ({ email, password }) => {
+    console.log(email,password)
     axios({
       method: "post",
       url: "http://15.206.151.171/lootbox_backend/public/api/admin/login",
@@ -204,7 +206,7 @@ const Login = ({ dispatch }) => {
         >
           <form onSubmit={handleSubmit(forgotPasswordSubmit)}>
             <TextField 
-            name="email"
+            name="forgotEmail"
             inputRef={register}
             fullWidth label="Email" type="email" />
             <Button

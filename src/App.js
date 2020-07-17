@@ -8,14 +8,12 @@ import {connect} from "react-redux"
 const App = ({token}) => {
   return (
     <Switch>
-      {token && token.length>0 ? (
-        <Route exact  path="/" >
-          <Dashboard
-          token={token}
-          />
+      {token && token.length > 0 ? (
+        <Route  path="/">
+          <Dashboard token={token} />
         </Route>
       ) : (
-        <Route exact  path="/" component={Login} />
+        <Route exact path="/" component={Login} />
       )}
     </Switch>
   );

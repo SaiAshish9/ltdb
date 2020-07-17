@@ -4,6 +4,7 @@ import Sidebar from "../components/sidebar";
 import {Box} from '@material-ui/core'
 import {connect} from 'react-redux'
 import Snackbar from "@material-ui/core/Snackbar";
+import {withRouter} from 'react-router-dom'
 
 const Homepage = ({user}) => {
   
@@ -51,5 +52,5 @@ const mapStateToProps=state => ({
   user: state.auth.user
 })
 
-export default connect(mapStateToProps,null)(Homepage)
+export default connect(mapStateToProps, null)(withRouter(Homepage));
 
