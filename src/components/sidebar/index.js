@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import ScrollArea from "react-scrollbar";
 import Topbar from "./topbar";
 import Box from "@material-ui/core/Box";
-import { useHistory } from "react-router-dom";
+import { useHistory,withRouter } from "react-router-dom";
 import { options } from "./data";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import { connect } from "react-redux";
@@ -167,4 +167,4 @@ const Sidebar = ({ dispatch }) => {
   );
 };
 
-export default connect(null)(Sidebar);
+export default connect(null)(withRouter(Sidebar));

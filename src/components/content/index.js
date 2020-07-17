@@ -1,5 +1,5 @@
 import React,{useEffect} from 'react'
-import {Switch,Route} from 'react-router-dom'
+import {Switch,Route,withRouter} from 'react-router-dom'
 import Homepage from '../homepage'
 import Users from './components/users'
 import Categories from './components/categories'
@@ -43,4 +43,4 @@ useEffect(() => {
           );
 }
 
-export default Content
+export default withRouter(Content)
