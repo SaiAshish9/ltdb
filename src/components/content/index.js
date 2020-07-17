@@ -6,23 +6,12 @@ import Categories from './components/categories'
 
 const Content = () => {
     return (
-        <Switch>
-            <Route
-            exact path to="/"
-            component={Homepage}
-            />
-            <Route 
-            exact 
-            path="/users"
-            component={Users}
-            />
-            <Route
-            exact
-            path="/categories"
-            component={Categories}
-            />
-        </Switch>
-    )
+      <Switch>
+        <Route exact path to="/home" component={Homepage} />
+        <Route exact path="/users" component={Users} />
+        <Route exact path="/categories" component={Categories} />
+      </Switch>
+    );
 }
 
 export default Content

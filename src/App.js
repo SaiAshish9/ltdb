@@ -1,39 +1,28 @@
 import React from "react";
-import Box from "@material-ui/core/Box";
-import { withRouter } from "react-router-dom";
-import Content from "./components/content";
-import Sidebar from "./components/sidebar"
+import { Switch,Route,withRouter } from "react-router-dom";
+import Dashboard from './containers/homepage'
+import Login from "./containers/auth/login";
+import {connect} from "react-redux"
 
 
-const App = () => {
-
+const App = ({token}) => {
   return (
-    <Box
-      display="flex"
-      justifyContent="space-between"
-      style={{
-        display: "flex",
-        width: "100vw",
-        height: "100vh",
-        overflow: "hidden",
-        background: "#e6ebed",
-        //   position: "absolute",
-        //   bottom: 0,
-      }}
-    >
-<Sidebar/>    
-      <Box style={{ width: "85%", height: "100vh" }}>
-        <Box
-          style={{
-            height: "10vh",
-            width: "100%",
-            background: "#282b3c",
-          }}
-        ></Box>
-        <Content />
-      </Box>
-    </Box>
+    <Switch>
+      {token && token.length>0 ? (
+        <Route exact  path="/" >
+          <Dashboard
+          token={token}
+          />
+        </Route>
+      ) : (
+        <Route exact  path="/" component={Login} />
+      )}
+    </Switch>
   );
 };
 
-export default withRouter(App);
+const mapStateToProps =(state) => ({
+  token: state.auth.user && state.auth.user.token
+})
+
+export default withRouter(connect(mapStateToProps,null)(App));
