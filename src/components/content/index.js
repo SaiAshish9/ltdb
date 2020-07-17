@@ -3,7 +3,7 @@ import {Switch,Route,withRouter} from 'react-router-dom'
 import Homepage from '../homepage'
 import Users from './components/users'
 import Categories from './components/categories'
-import axios from 'axios'
+// import axios from 'axios'
 
 
 

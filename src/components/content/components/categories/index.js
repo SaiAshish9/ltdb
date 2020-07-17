@@ -5,12 +5,12 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Search from './search'
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 
-const useStyles = makeStyles((theme) => ({
+// const useStyles = makeStyles((theme) => ({
 
-}));
+// }));
 
 
 
@@ -45,7 +45,7 @@ const Category = () => {
 
 
 
-  const classes = useStyles()
+  // const classes = useStyles()
 
   return (
     <div>
