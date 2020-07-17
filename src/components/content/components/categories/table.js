@@ -6,34 +6,46 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import {Box,Paper} from "@material-ui/core";
 import TablePagination from "@material-ui/core/TablePagination";
 import axios from "axios";
 import Check from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button"
+import Backdrop from "@material-ui/core/Backdrop";
+import TextField from "@material-ui/core/TextField";
+import Fab from "@material-ui/core/Fab";
+import Divider from "@material-ui/core/Divider";
+import ClearIcon from "@material-ui/icons/Clear";
+import IconButton from "@material-ui/core/IconButton";
+import SubTable from "./subTable";
+import AddIcon from "@material-ui/icons/Add";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme=>({
   table: {
     minWidth: 650,
   },
-});
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff",
+  }
+}));
 
-function createData(name, calories, fat, carbs, protein, status) {
-  return { name, calories, fat, carbs, protein, status };
+function createData(id,name, name_ar, status) {
+  return { id,name, name_ar, status };
 }
 
 export default function SimpleTable({ data }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
+  const [open, setOpen] = useState(false);
+
 
   const convertRows = (data) => {
     return data.map((i, k) =>
       createData(
-        i["user_id"],
-        i["full_name"],
-        i["email"],
-        i["phone"],
-        i["created_at"],
+        i["category_id"],
+        i["name_en"],
+        i["name_ar"],
         i["status"]
       )
     );
@@ -44,7 +56,7 @@ export default function SimpleTable({ data }) {
 //   const rows1 = convertRows(data);
 
   const [rows, setRows] = useState(convertRows(data.data.data));
-  const [rowsPerPage, setRowsPerPage] = useState(7);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
 
 
 
@@ -104,6 +116,15 @@ export default function SimpleTable({ data }) {
                   color: "#282b3c",
                 }}
               >
+                Category Id
+              </TableCell>
+              <TableCell
+                style={{
+                  fontWeight: "bolder",
+                  fontSize: "0.8rem",
+                  color: "#282b3c",
+                }}
+              >
                 Name
               </TableCell>
               <TableCell
@@ -113,7 +134,7 @@ export default function SimpleTable({ data }) {
                   color: "#282b3c",
                 }}
               >
-                عربى
+                اسم
               </TableCell>
               <TableCell
                 style={{
@@ -121,7 +142,7 @@ export default function SimpleTable({ data }) {
                   fontSize: "0.8rem",
                   color: "#282b3c",
                   // textAlign: "center",
-                  paddingLeft:"3rem"
+                  paddingLeft: "3rem",
                 }}
               >
                 Sub Category
@@ -147,79 +168,97 @@ export default function SimpleTable({ data }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            { rows.map((row, i) => (
-                <TableRow
-                  elevation={0}
+            {rows.map((row, i) => (
+              <TableRow
+                elevation={0}
+                style={{
+                  height: "3rem",
+                  padding: "0px",
+                  border: "none",
+                }}
+                key={i}
+              >
+                <TableCell
                   style={{
-                    height: "3rem",
-                    padding: "0px",
-                    border: "none",
+                    color: "#8095a1",
+                    fontWeight: 500,
                   }}
-                  key={row.name}
+                  component="th"
+                  scope="row"
                 >
-                  <TableCell
-                    style={{
-                      color: "#8095a1",
-                      fontWeight: 500,
+                  <Check color="#282b3c" />
+                </TableCell>
+                <TableCell
+                  style={{
+                    paddingLeft: "3rem",
+                    color: "#8095a1",
+                    fontWeight: 500,
+                  }}
+                >
+                  {row.id}
+                </TableCell>
+                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                  {row.name}
+                </TableCell>
+                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                  {row.name_ar}
+                </TableCell>
+                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                  <Button
+                    onClick={() => {
+                      setOpen(true);
                     }}
-                    component="th"
-                    scope="row"
+                    style={{
+                      textTransform: "none",
+                      fontSize: 12,
+                      // color: "#fff",
+                      color: "#8095a1",
+                      fontWeight: 600,
+                      // background: "#282b3c",
+                      width: "10rem",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      // textAlign: "center",
+                    }}
                   >
-                    <Check color="#282b3c" />
-                  </TableCell>
-                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                    {row.calories}
-                  </TableCell>
-                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                    عربى
-                  </TableCell>
-                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                    <Button
-                      style={{
-                        textTransform: "none",
-                        fontSize: 12,
-                        // color: "#fff",
-                        color: "#8095a1",
-                        fontWeight: 600,
-                        // background: "#282b3c",
-                        width: "10rem",
-                        display:'flex',
-                        alignItems:"center",
-                        justifyContent:"center"
-                        // textAlign: "center",
-                      }}
-                    >
-                      {i > 0 ? `${i} - ` : "   "}
-                      Add Sub Category
-                    </Button>{" "}
-                  </TableCell>
-                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                    Active
-                  </TableCell>
-                  <TableCell
-                    style={{ color: "#8095a1", fontWeight: 500 }}
-                  ></TableCell>
-                </TableRow>
-              ))}
-
-            {
-              [...Array(7 - rows.length).keys()].map((i, k) => (
-                <TableRow
-                  elevation={0}
+                    {i > 0 ? `${i} - ` : "   "}
+                    Add Sub Category
+                  </Button>{" "}
+                </TableCell>
+                <TableCell
                   style={{
-                    height: "3.5rem",
-                    border: "none",
+                    paddingLeft: "2rem",
+                    color: "#8095a1",
+                    fontWeight: 500,
                   }}
-                  key={k}
                 >
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                </TableRow>
-              ))}
+                  {row.status}
+                </TableCell>
+                <TableCell
+                  style={{ color: "#8095a1", fontWeight: 500 }}
+                ></TableCell>
+              </TableRow>
+            ))}
+
+            {[...Array(6 - rows.length).keys()].map((i, k) => (
+              <TableRow
+                elevation={0}
+                style={{
+                  height: "3.5rem",
+                  border: "none",
+                }}
+                key={k}
+              >
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -233,6 +272,69 @@ export default function SimpleTable({ data }) {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
+      <Backdrop className={classes.backdrop} open={open}>
+        <Paper
+          style={{
+            // height: "20rem",
+
+            width: "50vw",
+            position: "absolute",
+            top: "20vh",
+            paddingBottom: "2rem",
+          }}
+        >
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            style={{ padding: "0 1rem", color: "#979aa4" }}
+          >
+            <p
+              style={{
+                fontSize: "1rem",
+                fontWeight: 600,
+              }}
+            >
+              Add Sub Category
+            </p>
+            <IconButton
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              <ClearIcon />
+            </IconButton>
+          </Box>
+          <Divider />
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            style={{
+              padding: "1rem",
+            }}
+          >
+            <TextField variant="outlined" label="Name" />
+            <TextField variant="outlined" label="عربى" defaultValue="عربى" />
+            <TextField
+              variant="outlined"
+              label="Status"
+              defaultValue={"Active"}
+            />
+            <Fab
+              style={{
+                // color: "#282b3c",
+                // background:'orange',
+                color: "#fff",
+              }}
+              size="medium"
+              color="secondary"
+            >
+              <AddIcon />
+            </Fab>
+          </Box>
+          <SubTable />
+        </Paper>
+      </Backdrop>
     </React.Fragment>
   );
 }
