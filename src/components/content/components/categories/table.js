@@ -98,8 +98,7 @@ export default function SimpleTable({ data }) {
       setData1(z)
     }
     )()
-
-  }, []);
+  });
 
   const convertRows = (data) => {
     return data.map((i, k) =>
