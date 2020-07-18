@@ -1,5 +1,6 @@
 import React from 'react'
 import Box from "@material-ui/core/Box";
+import Lootbox from "../../lootbox.png"
 
 const Home = () => {
     return (
@@ -16,7 +17,8 @@ const Home = () => {
       >
         <img
           className="animate__animated animate__zoomIn"
-          src="https://cdn.pixabay.com/photo/2014/12/21/23/35/parcel-575623_960_720.png"
+          // src="https://cdn.pixabay.com/photo/2014/12/21/23/35/parcel-575623_960_720.png"
+          src={Lootbox}
           style={{
             height: "10rem",
             width: "10rem",
@@ -34,7 +36,7 @@ const Home = () => {
             }}
           >
             {/* Table */}
-            Lootbox
+            {/* Lootbox */}
           </p>
           <p
             style={{

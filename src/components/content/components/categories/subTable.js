@@ -8,6 +8,9 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Chip from "@material-ui/core/Chip";
+import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
+import IconButton from "@material-ui/core/IconButton";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles({
   table: {
@@ -15,13 +18,9 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
 
-const rows = [createData(1, "Sanjiv pandey", "عربى", 24, "")];
 
-export default function DenseTable() {
+export default function DenseTable({rows}) {
   const classes = useStyles();
 
   return (
@@ -42,29 +41,49 @@ export default function DenseTable() {
               Status
             </TableCell>
             <TableCell style={{ color: "#4c5172", fontWeight: 600 }}>
-              Active
+              Custom Fields
             </TableCell>
+            <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {!rows?
+          <CircularProgress/>
+          :rows.map((row) => (
             <TableRow key={row.name}>
               <TableCell component="th" scope="row">
-                {row.name}
+                {row.id}
               </TableCell>
-              <TableCell style={{ color: "#a197a3" }}>{row.calories}</TableCell>
-              <TableCell style={{ color: "#a197a3" }}>{row.fat}</TableCell>
+              <TableCell style={{ color: "#a197a3" }}>{row.name}</TableCell>
+              <TableCell style={{ color: "#a197a3" }}>{row.name_ar}</TableCell>
               <TableCell style={{ color: "#a197a3" }}>
                 <Chip
                   style={{
-                    color: "#fff",
-                    background: "#6cc07f",
+                    color: "#6cc07f",
+                    background: "#fff",
                     fontWeight: 600,
                   }}
-                  label="Active"
+                  label={row.status}
                 />
               </TableCell>
-              <TableCell style={{ color: "#a197a3" }}>{row.protein}</TableCell>
+              <TableCell style={{ color: "#a197a3" }}>
+                <p
+                  style={{
+                    cursor: "pointer",
+                    color: "#3f51b5",
+                    fontWeight: 600,
+                    // textAlign:'center'
+                    marginLeft: "2rem",
+                  }}
+                >
+                  View
+                </p>
+              </TableCell>
+              <TableCell>
+                <IconButton style={{color:'red'}}>
+                  <DeleteOutlineIcon/>
+                </IconButton>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
