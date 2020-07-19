@@ -30,11 +30,8 @@ export default function DenseTable({ rows }) {
   const fetchCustomFields = (id) => {
     axios({
       url:
-        "http://15.206.151.171/lootbox_backend/public/api/admin/subcategory/custom-fields?sub_category_id=4",
+        `http://15.206.151.171/lootbox_backend/public/api/admin/subcategory/custom-fields?sub_category_id=${id}`,
       method: "get",
-      data: {
-        sub_category_id: id,
-      },
       headers: {
         "X-Localization": "ar",
         "Content-Type": "application/json",

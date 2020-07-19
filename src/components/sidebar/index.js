@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import ScrollArea from "react-scrollbar";
 import Topbar from "./topbar";
 import Box from "@material-ui/core/Box";
-import { useHistory,withRouter } from "react-router-dom";
+import { useHistory, withRouter, Link } from "react-router-dom";
 import { options } from "./data";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import { connect } from "react-redux";
@@ -149,15 +149,23 @@ const Sidebar = ({ dispatch }) => {
                 >
                   <ExitToAppOutlinedIcon />
                 </Box>
-                <p
+
+                <Link
+                  to="/"
                   style={{
                     marginLeft: "0.8rem",
                     fontSize: "0.8rem",
                     fontWeight: 600,
+                    color:'#fff',
+                    opacity:0.8,
+                    textDecoration:"none"
                   }}
                 >
-                  Logout
-                </p>
+                  <p
+                  >
+                    Logout
+                  </p>
+                </Link>
               </Box>
             </Button>
           </ScrollArea>

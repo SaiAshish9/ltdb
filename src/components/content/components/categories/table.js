@@ -98,7 +98,7 @@ export default function SimpleTable({ data }) {
       setData1(z)
     }
     )()
-  });
+  },[data]);
 
   const convertRows = (data) => {
     return data.map((i, k) =>
@@ -215,7 +215,7 @@ export default function SimpleTable({ data }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, i) => (
+            { rows && rows.map((row, i) => (
               <TableRow
                 elevation={0}
                 style={{

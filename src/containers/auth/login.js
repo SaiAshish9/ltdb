@@ -9,7 +9,7 @@ import { setCurrentUser } from "../../redux/reducers/actionTypes";
 import { useForm } from "react-hook-form";
 // import { useHistory } from "react-router-dom";
 import { Box, Backdrop, makeStyles } from "@material-ui/core";
-
+import Lootbox from '../../lootbox.png'
 
 
 
@@ -93,6 +93,17 @@ const Login = ({ dispatch }) => {
           padding: "2rem",
         }}
       >
+        <img
+          src={Lootbox}
+          alt="lootbox"
+          style={{
+            width: "10rem",
+            position: "absolute",
+            zIndex: 1,
+            marginLeft: "8rem",
+            marginTop: "-7rem",
+          }}
+        />
         <form onSubmit={handleSubmit(onSubmit)}>
           <p
             style={{
@@ -101,12 +112,14 @@ const Login = ({ dispatch }) => {
               textAlign: "center",
               marginBottom: "1rem",
               fontSize: "1rem",
+              marginTop: "5rem",
             }}
           >
-            Lootbox Welcomes You{" "}
-            <span role="img" aria-label="emoji">
+            Welcome back to lootbox
+            {/* Lootbox Welcomes You{" "} */}
+            {/* <span role="img" aria-label="emoji">
               🙌
-            </span>{" "}
+            </span>{" "} */}
           </p>
           <TextField
             defaultValue="admin@lootbox.com"
@@ -131,7 +144,8 @@ const Login = ({ dispatch }) => {
             }}
             style={{
               cursor: "pointer",
-              color: "blue",
+              // color: "blue",
+              color: "#2c2c2c",
               textAlign: "end",
               fontWeight: "bold",
             }}
@@ -150,9 +164,10 @@ const Login = ({ dispatch }) => {
               margin: "2rem auto",
               display: "flex",
               justifyContent: "center",
+              textTransform: "none",
             }}
           >
-            Login Now
+            Sign In
           </Button>
           {/* <p
             style={{
@@ -205,10 +220,13 @@ const Login = ({ dispatch }) => {
           }}
         >
           <form onSubmit={handleSubmit(forgotPasswordSubmit)}>
-            <TextField 
-            name="forgotEmail"
-            inputRef={register}
-            fullWidth label="Email" type="email" />
+            <TextField
+              name="forgotEmail"
+              inputRef={register}
+              fullWidth
+              label="Email"
+              type="email"
+            />
             <Button
               variant="contained"
               disableElevation
