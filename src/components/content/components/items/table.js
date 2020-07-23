@@ -30,8 +30,8 @@ export default function SimpleTable({ data }) {
         i["item_id"],
         i["name_en"],
         i["name_ar"],
-        i["price"],
         i["created_at"],
+        i["price"],
         i["status"]
       )
     );
