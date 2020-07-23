@@ -10,12 +10,17 @@ import Paper from "@material-ui/core/Paper";
 import TablePagination from "@material-ui/core/TablePagination";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import axios from "axios";
+import Backdrop from "@material-ui/core/Backdrop";
+import IconButton from "@material-ui/core/IconButton";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme=>({
   table: {
     minWidth: 650,
   },
-});
+  backdrop:{
+    zIndex:theme.zIndex.drawer + 1,
+  }
+}));
 
 function createData(name, calories, fat, carbs, protein, status) {
   return { name, calories, fat, carbs, protein, status };
@@ -24,6 +29,7 @@ function createData(name, calories, fat, carbs, protein, status) {
 export default function SimpleTable({ data }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
+  const [open, setOpen] = useState(false);
 
   const convertRows = (data) => {
     return data.map((i, k) =>
@@ -153,7 +159,7 @@ export default function SimpleTable({ data }) {
                 elevation={0}
                 style={{
                   height: "3.4rem",
-                  padding:'0px',
+                  padding: "0px",
                   border: "none",
                 }}
                 key={row.name}
@@ -185,13 +191,18 @@ export default function SimpleTable({ data }) {
                 </TableCell>
                 <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
                   {/* {i === 0 && ( */}
-                    <InfoOutlinedIcon style={{ cursor: "pointer" }} />
+                  <IconButton
+                  onClick={()=>{
+                    setOpen(true)
+                  }} 
+                  >
+                    <InfoOutlinedIcon style={{ cursor: "pointer" }} />                  </IconButton>
                   {/* )} */}
                 </TableCell>
               </TableRow>
             ))}
 
-            {[...Array(10-rows.length).keys()].map((i, k) => (
+            {[...Array(10 - rows.length).keys()].map((i, k) => (
               <TableRow
                 elevation={0}
                 style={{
@@ -221,6 +232,19 @@ export default function SimpleTable({ data }) {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
+        <Backdrop 
+        open={open}
+        className={classes.backdrop}>
+          <Paper
+            style={{
+              height: "60vh",
+              width: "27rem",
+              position: "absolute",
+              top: "15vh",
+              background:'#fff'
+            }}
+          ></Paper>
+        </Backdrop>
     </React.Fragment>
   );
 }
