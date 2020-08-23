@@ -12,6 +12,8 @@ import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import axios from "axios";
 import Backdrop from "@material-ui/core/Backdrop";
 import IconButton from "@material-ui/core/IconButton";
+import Box from "@material-ui/core/Box";
+import {Clear} from '@material-ui/icons'
 
 const useStyles = makeStyles(theme=>({
   table: {
@@ -57,7 +59,7 @@ export default function SimpleTable({ data }) {
   const handleChangePage = (event,newPage) => {
     axios({
       url:
-        `http://15.206.151.171/lootbox_backend/public/api/admin/user/list?page=${newPage+1}`,
+        `https://test-api.loot-box.co/api/admin/user/list?page=${newPage+1}`,
       method: "get",
       headers: {
         "X-Localization": "en",
@@ -237,13 +239,25 @@ export default function SimpleTable({ data }) {
         className={classes.backdrop}>
           <Paper
             style={{
-              height: "60vh",
-              width: "27rem",
+              height: "80vh",
+              width: "80vw",
               position: "absolute",
-              top: "15vh",
-              background:'#fff'
+              top: "10vh",
+              background:'#fff',
+              padding:'2rem'
             }}
-          ></Paper>
+          >
+            <Box display="flex" flexDirection="row-reverse">
+            <IconButton
+            onClick={()=>{
+              setOpen(false)
+            }}
+            >
+              <Clear/>
+            </IconButton>
+            </Box>
+            
+          </Paper>
         </Backdrop>
     </React.Fragment>
   );

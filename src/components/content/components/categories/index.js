@@ -23,7 +23,7 @@ const Category = () => {
 
   useEffect(() => {
     axios({
-      url: `http://15.206.151.171/lootbox_backend/public/api/admin/category/list`,
+      url: `https://test-api.loot-box.co/api/admin/category/list`,
       method: "get",
       headers: {
         "X-Localization": "en",

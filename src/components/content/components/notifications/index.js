@@ -34,7 +34,7 @@ const Notifications = () => {
   useEffect(() => {
     axios({
       url:
-        "http://15.206.151.171/lootbox_backend/public/api/admin/item/brand-list",
+        "https://test-api.loot-box.co/api/admin/item/brand-list",
       method: "get",
       headers: {
         "X-Localization": "en",
@@ -49,7 +49,7 @@ const Notifications = () => {
       })
       .catch((error) => console.log(error));
     axios({
-      url: `http://15.206.151.171/lootbox_backend/public/api/admin/category/list`,
+      url: `https://test-api.loot-box.co/api/admin/category/list`,
       method: "get",
       headers: {
         "X-Localization": "en",
@@ -65,7 +65,7 @@ const Notifications = () => {
       .catch((error) => console.log(error));
 
     axios({
-      url: `http://15.206.151.171/lootbox_backend/public/api/admin/item/getitem?item_id=20`,
+      url: `https://test-api.loot-box.co/api/admin/item/getitem?item_id=20`,
       method: "get",
       data:{
        item_id:20
@@ -96,7 +96,7 @@ const Notifications = () => {
   const fetchSubCategories = (id) => {
     axios({
       url:
-        "http://15.206.151.171/lootbox_backend/public/api/admin/subcategory/category-wise-list",
+        "https://test-api.loot-box.co/api/admin/subcategory/category-wise-list",
       method: "post",
       data: {
         category_id: id,

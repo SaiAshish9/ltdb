@@ -37,7 +37,7 @@ export default function SimpleTable({ data }) {
   const fetchSubCategories = (id) => {
     axios({
       url:
-        "http://15.206.151.171/lootbox_backend/public/api/admin/subcategory/category-wise-list",
+        "https://test-api.loot-box.co/api/admin/subcategory/category-wise-list",
       method: "post",
       data: {
         category_id: id,
@@ -66,7 +66,7 @@ export default function SimpleTable({ data }) {
         try {
           const z = await axios({
             url:
-              "http://15.206.151.171/lootbox_backend/public/api/admin/subcategory/category-wise-list",
+              "https://test-api.loot-box.co/api/admin/subcategory/category-wise-list",
             method: "post",
             data: {
               category_id: x,
@@ -116,7 +116,7 @@ export default function SimpleTable({ data }) {
 
   const handleChangePage = (event, newPage) => {
     axios({
-      url: `http://15.206.151.171/lootbox_backend/public/api/admin/user/list?page=${
+      url: `https://test-api.loot-box.co/api/admin/user/list?page=${
         newPage + 1
       }`,
       method: "get",

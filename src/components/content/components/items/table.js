@@ -49,7 +49,7 @@ export default function SimpleTable({ data }) {
 
   const handleChangePage = (event, newPage) => {
     axios({
-      url: `http://15.206.151.171/lootbox_backend/public/api/admin/user/list?page=${
+      url: `https://test-api.loot-box.co/api/admin/user/list?page=${
         newPage + 1
       }`,
       method: "get",

@@ -33,7 +33,7 @@ const Login = ({ dispatch }) => {
     console.log(forgotEmail)
     axios({
       method: "post",
-      url: "http://15.206.151.171/lootbox_backend/public/api/app/user/forgot-password",
+      url: "https://test-api.loot-box.co/api/app/user/forgot-password",
       data: {
         email:forgotEmail,
       },
@@ -53,7 +53,7 @@ const Login = ({ dispatch }) => {
     console.log(email,password)
     axios({
       method: "post",
-      url: "http://15.206.151.171/lootbox_backend/public/api/admin/login",
+      url: "https://test-api.loot-box.co/api/admin/login",
       data: {
         email,
         password,

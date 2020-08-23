@@ -14,7 +14,7 @@ const [loading,isLoading] = useState(false)
 
 useEffect(() => {
   axios({
-    url: "http://15.206.151.171/lootbox_backend/public/api/admin/user/list",
+    url: "https://test-api.loot-box.co/api/admin/user/list",
     method: "get",
     headers: {
       "X-Localization": "en",
