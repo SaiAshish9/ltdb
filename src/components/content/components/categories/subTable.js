@@ -128,7 +128,8 @@ export default function DenseTable({ rows, classes1 }) {
                       <IconButton
                         onClick={() => {
                           setOpenEditDialog(true);
-                          setSelected(row.name);
+                          setSelected(row);
+                          fetchCustomFields(row.id);
                         }}
                         style={{ color: "orange" }}
                       >
@@ -215,6 +216,8 @@ export default function DenseTable({ rows, classes1 }) {
         openEditDialog={openEditDialog}
         setOpenEditDialog={setOpenEditDialog}
         current={selected}
+        data={data}
+        setData={setData}
       />
     </React.Fragment>
   );

@@ -25,11 +25,9 @@ const SubCategoryTable = ({
   classes,
   setOpen,
   open,
-  fetchSubCategories,
-  history,
 }) => {
   const [loading, setLoading] = useState(true);
-  const { handleSubmit, register, errors } = useForm();
+  const { handleSubmit, register } = useForm();
   const onSubmit = (values) => {
     let x = Object.values(values).splice(2);
     let y = [];
