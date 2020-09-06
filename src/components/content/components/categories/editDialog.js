@@ -27,7 +27,7 @@ const EditDialog = ({
   const [customFieldCount, setCustomFieldCount] = useState(3);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open1, setOpen1] = useState(false);
-  const [msg, setMsg] = useState(0);
+  const [msg, setMsg] = useState(current && current.status);
   const handleClose = () => {
     setAnchorEl(null);
     setOpen1(false);
