@@ -56,6 +56,7 @@ function SimpleTable({ data }) {
       }).then((data) => {
         var x = data.data.data.map((x) => ({
           id: x.sub_category_id,
+          categoryId: x.category_id,
           name: x.name_en,
           name_ar: x.name_ar,
           status: x.status,

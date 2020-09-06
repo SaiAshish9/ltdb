@@ -19,15 +19,10 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 
-const SubCategoryTable = ({
-  categoryId,
-  rows,
-  classes,
-  setOpen,
-  open,
-}) => {
+const SubCategoryTable = ({ categoryId, rows, classes, setOpen, open }) => {
   const [loading, setLoading] = useState(true);
   const { handleSubmit, register } = useForm();
+  const [current, setCurrent] = useState(true);
   const onSubmit = (values) => {
     let x = Object.values(values).splice(2);
     let y = [];
@@ -43,7 +38,7 @@ const SubCategoryTable = ({
     res["status"] = msg;
     res["custom_fields"] = y;
     res["category_id"] = categoryId;
-    axios({
+    current && axios({
       url: `https://test-api.loot-box.co/api/admin/subcategory/add`,
       method: "post",
       data: res,
@@ -56,10 +51,7 @@ const SubCategoryTable = ({
       },
     })
       .then((data) => {
-        // fetchSubCategories(categoryId);
         setOpen(false);
-        // history.push("/categories");
-        // console.log(data);
       })
       .catch((error) => console.log(error));
   };
@@ -294,7 +286,11 @@ const SubCategoryTable = ({
           </Box>
           <Box style={{ padding: "1rem" }}>
             {!loading ? (
-              <SubTable classes1={classes} rows={rows} />
+              <SubTable
+                setCurrent={setCurrent}
+                classes1={classes}
+                rows={rows}
+              />
             ) : (
               <CircularProgress />
             )}

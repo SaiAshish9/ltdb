@@ -25,7 +25,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function DenseTable({ rows, classes1 }) {
+export default function DenseTable({ rows, classes1, setCurrent }) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [data, setData] = useState(null);
@@ -127,6 +127,7 @@ export default function DenseTable({ rows, classes1 }) {
                       </IconButton>
                       <IconButton
                         onClick={() => {
+                          setCurrent(false);
                           setOpenEditDialog(true);
                           setSelected(row);
                           fetchCustomFields(row.id);
@@ -137,7 +138,12 @@ export default function DenseTable({ rows, classes1 }) {
                       </IconButton>
                     </TableCell>
                     <TableCell>
-                      <IconButton style={{ color: "red" }}>
+                      <IconButton
+                        onClick={() => {
+                          console.log(row);
+                        }}
+                        style={{ color: "red" }}
+                      >
                         <DeleteOutlineIcon />
                       </IconButton>
                     </TableCell>

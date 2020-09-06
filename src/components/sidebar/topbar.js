@@ -3,7 +3,7 @@ import HomeIcon from "@material-ui/icons/Home";
 import IconButton from "@material-ui/core/IconButton";
 import Box from "@material-ui/core/Box";
 import {useHistory} from 'react-router-dom'
-// import Lootbox from '../../lootbox.png'
+import Lootbox from '../../lootbox.png'
 const Topbar = () => {
     const history = useHistory()
     return (
@@ -26,20 +26,21 @@ const Topbar = () => {
         <p
           style={{
             color: "#fff",
-            opacity: 0.6,
+            // opacity: 0.6,
             fontSize: "1rem",
             marginLeft: "1rem",
           }}
         >
-          {/* <img
+          <img
           src={Lootbox}
           alt="Lootbox"
           style={{
-            width:"3rem",
-            height:"3rem"
+            width:"2.7rem",
+            height:"2.7rem",
+            cursor:'pointer'
           }}
-          /> */}
-          Lootbox
+          />
+          {/* Lootbox */}
         </p>
         <IconButton
           onClick={() => {
