@@ -41,7 +41,8 @@ const Home = () => {
             fontSize: "1rem",
           }}
         >
-          lorem ipsum dolor sit amet, consectetur adipiscing
+          welcome back to lootbox
+          {/* lorem ipsum dolor sit amet, consectetur adipiscing */}
         </p>
       </div>
     </Box>
