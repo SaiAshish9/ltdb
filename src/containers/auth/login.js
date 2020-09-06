@@ -7,12 +7,8 @@ import Snackbar from "@material-ui/core/Snackbar";
 import { connect } from "react-redux";
 import { setCurrentUser } from "../../redux/reducers/actionTypes";
 import { useForm } from "react-hook-form";
-// import { useHistory } from "react-router-dom";
 import { Box, Backdrop, makeStyles } from "@material-ui/core";
-import Lootbox from '../../lootbox.png'
-
-
-
+import Lootbox from "../../lootbox.png";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -25,32 +21,34 @@ const Login = ({ dispatch }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [forgot, setForgot] = useState(false);
-  const [emailSent,setEmailSent]=useState(false);
+  const [emailSent, setEmailSent] = useState(false);
   const { register, handleSubmit } = useForm();
-  const [forgotEmail,setForgotEmail]=useState(null)
+  const [forgotEmail, setForgotEmail] = useState(null);
   // const history = useHistory();
   const forgotPasswordSubmit = ({ forgotEmail }) => {
-    console.log(forgotEmail)
+    console.log(forgotEmail);
     axios({
       method: "post",
       url: "https://test-api.loot-box.co/api/app/user/forgot-password",
       data: {
-        email:forgotEmail,
+        email: forgotEmail,
       },
       headers: {
         "X-Localization": "en",
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-    }).then((data)=>{
-          console.log(data)
-          setEmailSent(true);
-          setForgotEmail(forgotEmail);
-    }).catch(e=>console.log(e))
+    })
+      .then((data) => {
+        console.log(data);
+        setEmailSent(true);
+        setForgotEmail(forgotEmail);
+      })
+      .catch((e) => console.log(e));
   };
 
   const onSubmit = ({ email, password }) => {
-    console.log(email,password)
+    console.log(email, password);
     axios({
       method: "post",
       url: "https://test-api.loot-box.co/api/admin/login",
@@ -70,7 +68,7 @@ const Login = ({ dispatch }) => {
             first_name: data.data.data.first_name,
             token: data.data.data.token,
           })
-        )
+        );
         //   window.location.pathname='/dashboard'
         // history.push("/dashboard");
       })
@@ -260,6 +258,5 @@ const Login = ({ dispatch }) => {
     </Box>
   );
 };
-
 
 export default connect(null)(Login);

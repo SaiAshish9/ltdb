@@ -5,21 +5,12 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Search from './search'
-// import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
-
-// const useStyles = makeStyles((theme) => ({
-
-// }));
-
-
-
 
 const Category = () => {
 
   const [loading, setLoading] = useState(true)
   const [data,setData]=useState(null)
-
 
   useEffect(() => {
     axios({
@@ -40,12 +31,6 @@ const Category = () => {
       })
       .catch((error) => console.log(error));
   }, []);
-
-
-
-
-
-  // const classes = useStyles()
 
   return (
     <div>
@@ -72,7 +57,6 @@ const Category = () => {
             style={{
               marginRight: 10,
             }}
-
           >
             <AddIcon />
           </Fab>

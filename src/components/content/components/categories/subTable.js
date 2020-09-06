@@ -15,6 +15,9 @@ import axios from "axios";
 import Box from "@material-ui/core/Box";
 import { ArrowBack } from "@material-ui/icons";
 import { Tooltip, Fab } from "@material-ui/core";
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
+import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
+import EditDialog from "./editDialog";
 
 const useStyles = makeStyles({
   table: {
@@ -22,15 +25,16 @@ const useStyles = makeStyles({
   },
 });
 
-export default function DenseTable({ rows }) {
+export default function DenseTable({ rows, classes1 }) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [data, setData] = useState(null);
+  const [selected, setSelected] = useState(null);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
 
   const fetchCustomFields = (id) => {
     axios({
-      url:
-        `https://test-api.loot-box.co/api/admin/subcategory/custom-fields?sub_category_id=${id}`,
+      url: `https://test-api.loot-box.co/api/admin/subcategory/custom-fields?sub_category_id=${id}`,
       method: "get",
       headers: {
         "X-Localization": "ar",
@@ -103,22 +107,33 @@ export default function DenseTable({ rows }) {
                         label={row.status}
                       />
                     </TableCell>
-                    <TableCell style={{ color: "#a197a3" }}>
-                      <p
+                    <TableCell
+                      style={{
+                        color: "#a197a3",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <IconButton
                         onClick={() => {
                           setOpen(true);
-                          fetchCustomFields(row.id)
+                          fetchCustomFields(row.id);
                         }}
                         style={{
-                          cursor: "pointer",
                           color: "#3f51b5",
-                          fontWeight: 600,
-                          // textAlign:'center'
-                          marginLeft: "2rem",
                         }}
                       >
-                        View
-                      </p>
+                        <VisibilityOutlinedIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
+                          setOpenEditDialog(true);
+                          setSelected(row.name);
+                        }}
+                        style={{ color: "orange" }}
+                      >
+                        <EditOutlinedIcon />
+                      </IconButton>
                     </TableCell>
                     <TableCell>
                       <IconButton style={{ color: "red" }}>
@@ -194,6 +209,13 @@ export default function DenseTable({ rows }) {
           </TableContainer>
         </Box>
       )}
+
+      <EditDialog
+        classes1={classes1}
+        openEditDialog={openEditDialog}
+        setOpenEditDialog={setOpenEditDialog}
+        current={selected}
+      />
     </React.Fragment>
   );
 }

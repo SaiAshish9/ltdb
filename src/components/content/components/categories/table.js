@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -12,6 +12,7 @@ import axios from "axios";
 import Check from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import Popup from "./popup";
+import { withRouter } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -27,42 +28,47 @@ function createData(id, name, name_ar, status) {
   return { id, name, name_ar, status };
 }
 
-export default function SimpleTable({ data }) {
+function SimpleTable({ data }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
   const [subCategories, setSubCategories] = useState(null);
   const [data1, setData1] = useState(null);
+  const [categoryId, setCategoryId] = useState(null);
 
-  const fetchSubCategories = (id) => {
-    axios({
-      url:
-        "https://test-api.loot-box.co/api/admin/subcategory/category-wise-list",
-      method: "post",
-      data: {
-        category_id: id,
-      },
-      headers: {
-        "X-Localization": "ar",
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization:
-          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNGEyNzhiZjQ0MjM5YjIwNjVkYmZjZGNhNzU1ZTkxYzM3Nzc0MTk5Nzc4MWUwMzlmZGViOTE4ZjEwZWFjYzBlNWMyYmVlNzI5OGQyZGM4OGQiLCJpYXQiOjE1OTM0OTU1MzQsIm5iZiI6MTU5MzQ5NTUzNCwiZXhwIjoxNjI1MDMxNTM0LCJzdWIiOiI4Iiwic2NvcGVzIjpbXX0.k690oN3lko2MEDhLCTgtAdvB6_FCla9_LhQLI2JvZxCyelgnOvZTUPZlZPSGWQ8gUaKeA9ELacNNpyhX_UFYnORVfrmWUrLxwxrzf337_aWGrA_4R4rPYSjL5RQaxwimBlYP1EdPRTGvuxzCn1cBdHEbRNLP2RMobK_2bHRNJ2VQjMDgeFJVjBEC0iIqKglZOLwIAQJ0roNAYBjbhxWFEuuANrv2U_vsENrbtsfQ1x9kF27O7x-8zkAATGJqmEng7U2GzI_lMjCMzcdAL55k9n4Hg8iyr3NeOwh1BCQ7tutpzO11Fzqydzna6CDVx6nP3Ov_DCCE_1MnjTUHYtnCAe7NcwC-4FvKqE2moUtEXK1NtHF1an52SrCExcSa1JiVx2veRl6sSFucXQQC9kE1N-MkDuoTdj9ZzWqcCXCGi1xx4S5x0NPgmiD--xh7sYGUMwG7xNPd7t1FZw0QHuHaFysM_Dea90TQ4XKtUA2_x9dG96QflGGkloW1DnEcZ-A8v2l8Klsl6cLXfBcsLimIzmVPSr7OdFxpgm0IBh3YQsxJNHrA0_DhLwZFe7px1OmWfRm_ed9UHpBxFsMeDDQ3uGgdzGn3-7tEW0MjYFzs2lvSWTcmndlPbrOaY-hkrOHH_zpjoL9klbQEpLIo3cwj7NNp0YfpW6owqssiqKIh7f4",
-      },
-    }).then((data) => {
-      var x = data.data.data.map((x) => ({
-        id: x.sub_category_id,
-        name: x.name_en,
-        name_ar: x.name_ar,
-        status: x.status,
-      }));
-      setSubCategories(x);
-    });
-  };
+  const fetchSubCategories = useCallback(
+    async (id) => {
+      setCategoryId(id);
+      axios({
+        url:
+          "https://test-api.loot-box.co/api/admin/subcategory/category-wise-list",
+        method: "post",
+        data: {
+          category_id: id,
+        },
+        headers: {
+          "X-Localization": "ar",
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization:
+            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNGEyNzhiZjQ0MjM5YjIwNjVkYmZjZGNhNzU1ZTkxYzM3Nzc0MTk5Nzc4MWUwMzlmZGViOTE4ZjEwZWFjYzBlNWMyYmVlNzI5OGQyZGM4OGQiLCJpYXQiOjE1OTM0OTU1MzQsIm5iZiI6MTU5MzQ5NTUzNCwiZXhwIjoxNjI1MDMxNTM0LCJzdWIiOiI4Iiwic2NvcGVzIjpbXX0.k690oN3lko2MEDhLCTgtAdvB6_FCla9_LhQLI2JvZxCyelgnOvZTUPZlZPSGWQ8gUaKeA9ELacNNpyhX_UFYnORVfrmWUrLxwxrzf337_aWGrA_4R4rPYSjL5RQaxwimBlYP1EdPRTGvuxzCn1cBdHEbRNLP2RMobK_2bHRNJ2VQjMDgeFJVjBEC0iIqKglZOLwIAQJ0roNAYBjbhxWFEuuANrv2U_vsENrbtsfQ1x9kF27O7x-8zkAATGJqmEng7U2GzI_lMjCMzcdAL55k9n4Hg8iyr3NeOwh1BCQ7tutpzO11Fzqydzna6CDVx6nP3Ov_DCCE_1MnjTUHYtnCAe7NcwC-4FvKqE2moUtEXK1NtHF1an52SrCExcSa1JiVx2veRl6sSFucXQQC9kE1N-MkDuoTdj9ZzWqcCXCGi1xx4S5x0NPgmiD--xh7sYGUMwG7xNPd7t1FZw0QHuHaFysM_Dea90TQ4XKtUA2_x9dG96QflGGkloW1DnEcZ-A8v2l8Klsl6cLXfBcsLimIzmVPSr7OdFxpgm0IBh3YQsxJNHrA0_DhLwZFe7px1OmWfRm_ed9UHpBxFsMeDDQ3uGgdzGn3-7tEW0MjYFzs2lvSWTcmndlPbrOaY-hkrOHH_zpjoL9klbQEpLIo3cwj7NNp0YfpW6owqssiqKIh7f4",
+        },
+      }).then((data) => {
+        var x = data.data.data.map((x) => ({
+          id: x.sub_category_id,
+          name: x.name_en,
+          name_ar: x.name_ar,
+          status: x.status,
+        }));
+        setSubCategories(x);
+      });
+    },
+    [categoryId, open]
+  );
 
   async function getSubCategories(rows) {
     return await Promise.all(
-      rows.map(async x => {
+      rows.map(async (x) => {
         try {
           const z = await axios({
             url:
@@ -89,16 +95,15 @@ export default function SimpleTable({ data }) {
     );
   }
 
+  const getSub = useCallback(async () => {
+    var y = await convertRows(data.data.data).map((i) => i.id);
+    const z = await getSubCategories(y);
+    setData1(z);
+  }, [data, open]);
+
   useEffect(() => {
-    (
-      async function getSub(){
-      var y = await convertRows(data.data.data).map((i) => i.id);
-      const z=await getSubCategories(y);
-      // console.log(z)  
-      setData1(z)
-    }
-    )()
-  },[data]);
+    getSub();
+  }, [data, open]);
 
   const convertRows = (data) => {
     return data.map((i, k) =>
@@ -215,81 +220,81 @@ export default function SimpleTable({ data }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            { rows && rows.map((row, i) => (
-              <TableRow
-                elevation={0}
-                style={{
-                  height: "3rem",
-                  padding: "0px",
-                  border: "none",
-                }}
-                key={i}
-              >
-                <TableCell
+            {rows &&
+              rows.map((row, i) => (
+                <TableRow
+                  elevation={0}
                   style={{
-                    color: "#8095a1",
-                    fontWeight: 500,
+                    height: "3rem",
+                    padding: "0px",
+                    border: "none",
                   }}
-                  component="th"
-                  scope="row"
+                  key={i}
                 >
-                  <Check color="#282b3c" />
-                </TableCell>
-                <TableCell
-                  style={{
-                    paddingLeft: "3rem",
-                    color: "#8095a1",
-                    fontWeight: 500,
-                  }}
-                >
-                  {row.id}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.name}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.name_ar}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-
-                  <Button
-                    onClick={() => {
-                      setOpen(true);
-                      fetchSubCategories(row.id);
-                    }}
+                  <TableCell
                     style={{
-                      textTransform: "none",
-                      fontSize: 12,
-                      // color: "#fff",
                       color: "#8095a1",
-                      fontWeight: 600,
-                      // background: "#282b3c",
-                      width: "10rem",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      // textAlign: "center",
+                      fontWeight: 500,
+                    }}
+                    component="th"
+                    scope="row"
+                  >
+                    <Check color="#282b3c" />
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      paddingLeft: "3rem",
+                      color: "#8095a1",
+                      fontWeight: 500,
                     }}
                   >
-                   {data1 && data1[i][row.id]>0&&
-                   `${data1[i][row.id]} - `}
-                    Add Sub Category
-                  </Button>{" "}
-                </TableCell>
-                <TableCell
-                  style={{
-                    paddingLeft: "2rem",
-                    color: "#8095a1",
-                    fontWeight: 500,
-                  }}
-                >
-                  {row.status}
-                </TableCell>
-                <TableCell
-                  style={{ color: "#8095a1", fontWeight: 500 }}
-                ></TableCell>
-              </TableRow>
-            ))}
+                    {row.id}
+                  </TableCell>
+                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                    {row.name}
+                  </TableCell>
+                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                    {row.name_ar}
+                  </TableCell>
+                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                    <Button
+                      onClick={() => {
+                        setOpen(true);
+                        fetchSubCategories(row.id);
+                      }}
+                      style={{
+                        textTransform: "none",
+                        fontSize: 12,
+                        color: "#8095a1",
+                        fontWeight: 600,
+                        width: "10rem",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {data1 &&
+                        data1[i][row.id] > 0 &&
+                        `${data1[i][row.id]} - `}
+                      {
+                        data1 && "Add Sub Category"
+                      }
+                    </Button>{" "}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      paddingLeft: "2rem",
+                      color: "#8095a1",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {row.status}
+                  </TableCell>
+                  <TableCell
+                    style={{ color: "#8095a1", fontWeight: 500 }}
+                  ></TableCell>
+                </TableRow>
+              ))}
 
             {[...Array(7 - rows.length).keys()].map((i, k) => (
               <TableRow
@@ -322,14 +327,16 @@ export default function SimpleTable({ data }) {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
-      {open && (
-        <Popup
-          rows={subCategories}
-          classes={classes}
-          setOpen={setOpen}
-          open={open}
-        />
-      )}
+      <Popup
+        categoryId={categoryId}
+        fetchSubCategories={fetchSubCategories}
+        rows={subCategories}
+        classes={classes}
+        setOpen={setOpen}
+        open={open}
+      />
     </React.Fragment>
   );
 }
+
+export default withRouter(SimpleTable);
