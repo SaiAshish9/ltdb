@@ -24,6 +24,7 @@ const EditDialog = ({
   data,
   setData,
   categoryId,
+  setOpen
 }) => {
   const { handleSubmit, register } = useForm();
   const [customFieldCount, setCustomFieldCount] = useState(3);
@@ -68,6 +69,7 @@ const EditDialog = ({
     })
       .then((data) => {
         setOpenEditDialog(false);
+        setOpen(false);
       })
       .catch((error) => console.log(error));
   };

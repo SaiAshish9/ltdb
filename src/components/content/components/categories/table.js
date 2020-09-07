@@ -35,6 +35,7 @@ function SimpleTable({ data }) {
   const [subCategories, setSubCategories] = useState(null);
   const [data1, setData1] = useState(null);
   const [categoryId, setCategoryId] = useState(null);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
 
   const fetchSubCategories = useCallback(
     async (id) => {
@@ -64,7 +65,7 @@ function SimpleTable({ data }) {
         setSubCategories(x);
       });
     },
-    [categoryId, open]
+    [categoryId, open, openEditDialog,setOpenEditDialog]
   );
 
   async function getSubCategories(rows) {
@@ -277,9 +278,7 @@ function SimpleTable({ data }) {
                       {data1 &&
                         data1[i][row.id] > 0 &&
                         `${data1[i][row.id]} - `}
-                      {
-                        data1 && "Add Sub Category"
-                      }
+                      {data1 && "Add Sub Category"}
                     </Button>{" "}
                   </TableCell>
                   <TableCell
@@ -335,6 +334,8 @@ function SimpleTable({ data }) {
         classes={classes}
         setOpen={setOpen}
         open={open}
+        openEditDialog={openEditDialog}
+        setOpenEditDialog={setOpenEditDialog}
       />
     </React.Fragment>
   );
