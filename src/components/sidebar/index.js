@@ -8,6 +8,7 @@ import { options } from "./data";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import { connect } from "react-redux";
 import { setCurrentUser } from "../../redux/reducers/actionTypes";
+import Cookie from "js-cookie";
 
 const Sidebar = ({ dispatch }) => {
   const history = useHistory();
@@ -20,8 +21,6 @@ const Sidebar = ({ dispatch }) => {
         maxWidth: "15rem",
         minHeight: "110vh",
         overflowY: "scroll",
-        // position: "absolute",
-        // bottom: 0,
       }}
     >
       <Box
@@ -42,8 +41,6 @@ const Sidebar = ({ dispatch }) => {
             minHeight: "110vh",
             marginTop: "10vh",
             marginBottom: 0,
-            // position: "absolute",
-            // bottom: 0,
           }}
         >
           <ScrollArea speed={0.8} horizontal={false}>
@@ -99,7 +96,6 @@ const Sidebar = ({ dispatch }) => {
                         style={{
                           width: "100%",
                           textTransform: "none",
-                          // paddingLeft:"3.3rem",
                           color: "#fff",
                           opacity:
                             history.location.pathname === a.path ? 1 : 0.6,
@@ -123,6 +119,7 @@ const Sidebar = ({ dispatch }) => {
             ))}
             <Button
               onClick={() => {
+                Cookie.set("token", null);
                 dispatch(setCurrentUser(null));
               }}
               style={{
@@ -156,15 +153,12 @@ const Sidebar = ({ dispatch }) => {
                     marginLeft: "0.8rem",
                     fontSize: "0.8rem",
                     fontWeight: 600,
-                    color:'#fff',
-                    opacity:0.8,
-                    textDecoration:"none"
+                    color: "#fff",
+                    opacity: 0.8,
+                    textDecoration: "none",
                   }}
                 >
-                  <p
-                  >
-                    Logout
-                  </p>
+                  <p>Logout</p>
                 </Link>
               </Box>
             </Button>

@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import axios from "axios";
 import Snackbar from "@material-ui/core/Snackbar";
 import { connect } from "react-redux";
 import { setCurrentUser } from "../../redux/reducers/actionTypes";
 import { useForm } from "react-hook-form";
 import { Box, Backdrop, makeStyles } from "@material-ui/core";
 import Lootbox from "../../lootbox.png";
+import Cookie from "js-cookie";
+import Api from "../../api";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -24,20 +25,9 @@ const Login = ({ dispatch }) => {
   const [emailSent, setEmailSent] = useState(false);
   const { register, handleSubmit } = useForm();
   const [forgotEmail, setForgotEmail] = useState(null);
-  // const history = useHistory();
   const forgotPasswordSubmit = ({ forgotEmail }) => {
-    console.log(forgotEmail);
-    axios({
-      method: "post",
-      url: "https://test-api.loot-box.co/api/app/user/forgot-password",
-      data: {
-        email: forgotEmail,
-      },
-      headers: {
-        "X-Localization": "en",
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
+    Api.post("https://test-api.loot-box.co/api/app/user/forgot-password", {
+      email: forgotEmail,
     })
       .then((data) => {
         console.log(data);
@@ -48,29 +38,18 @@ const Login = ({ dispatch }) => {
   };
 
   const onSubmit = ({ email, password }) => {
-    console.log(email, password);
-    axios({
-      method: "post",
-      url: "https://test-api.loot-box.co/api/admin/login",
-      data: {
-        email,
-        password,
-      },
-      headers: {
-        "X-Localization": "en",
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
+    Api.post("https://test-api.loot-box.co/api/admin/login", {
+      email,
+      password,
     })
       .then((data) => {
+        Cookie.set("token", data.data.data.token);
         dispatch(
           setCurrentUser({
             first_name: data.data.data.first_name,
             token: data.data.data.token,
           })
         );
-        //   window.location.pathname='/dashboard'
-        // history.push("/dashboard");
       })
       .catch((e) => setOpen(true));
   };
@@ -114,10 +93,6 @@ const Login = ({ dispatch }) => {
             }}
           >
             Welcome back to lootbox
-            {/* Lootbox Welcomes You{" "} */}
-            {/* <span role="img" aria-label="emoji">
-              🙌
-            </span>{" "} */}
           </p>
           <TextField
             defaultValue="admin@lootbox.com"
@@ -167,31 +142,6 @@ const Login = ({ dispatch }) => {
           >
             Sign In
           </Button>
-          {/* <p
-            style={{
-              display: "flex",
-              fontWeight: 600,
-              justifyContent: "center",
-            }}
-          >
-            Not registered yet,{" "}
-            <span
-              onClick={() => {
-                // showSignUpScreen(true);
-              }}
-              style={{
-                cursor: "pointer",
-                marginLeft: 10,
-                fontWeight: "bold",
-                color: "blue",
-              }}
-            >
-              Sign Up
-            </span>
-          </p> */}
-          {/* <p style={{ fontWeight: "bold", textAlign: "center" }}>
-            *try 12345 and 123456 as password
-          </p> */}
         </form>
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
