@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Box,
   Fab,
@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 import { Add, Clear, CameraAlt } from "@material-ui/icons";
 import Api from "../../../../api";
+import { Context as DataContext } from "../../../../api/dataProvider";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -30,7 +31,10 @@ const AddItem = () => {
   const [value, setValue] = useState(0);
   const [brandValue, setBrandValue] = useState(0);
   const [description, setDescription] = useState(null);
-
+  const [price, setPrice] = useState(null);
+  const [name_en, setNameEn] = useState("");
+  const [name_ar, setNameAr] = useState("");
+  const { addItem,fetchItems } = useContext(DataContext);
   useEffect(() => {
     Api("admin/item/brand-list")
       .then((data) => {
@@ -56,14 +60,28 @@ const AddItem = () => {
   }, []);
 
   const fetchSubCategories = (id) => {
-    Api.post(
-      "admin/subcategory/category-wise-list",
-      {
-        category_id: id,
-      }
-    ).then((data) => {
+    Api.post("admin/subcategory/category-wise-list", {
+      category_id: id,
+    }).then((data) => {
       setSubCategories(data.data.data);
     });
+  };
+
+  const handleSave = async () => {
+      await addItem({
+      category_id: categories[value]["category_id"],
+      sub_category_id: subCategories[subValue]["sub_category_id"],
+      brand_id: data[brandValue]["brand_id"],
+      name_en: name_en,
+      name_ar: name_ar,
+      description_en: description.desc,
+      description_ar: description.desc_ar,
+      image: "",
+      price: price ? +price : 0,
+      status: 1,
+    });
+    await fetchItems();
+    setOpen(false)
   };
 
   return (
@@ -210,11 +228,15 @@ const AddItem = () => {
               <TextField
                 variant="outlined"
                 label="name"
+                value={name_en}
+                onChange={(e) => setNameEn(e.target.value)}
                 style={{ width: "47%" }}
               />
               <TextField
                 variant="outlined"
                 label="name_ar"
+                name={name_ar}
+                onChange={(e) => setNameAr(e.target.value)}
                 style={{ width: "47%" }}
               />
             </Box>
@@ -285,7 +307,13 @@ const AddItem = () => {
                 >
                   Price :
                 </p>
-                <TextField variant="outlined" style={{ width: "47%" }} />
+                <TextField
+                  value={price}
+                  type="number"
+                  onChange={(e) => setPrice(e.target.value)}
+                  variant="outlined"
+                  style={{ width: "47%" }}
+                />
               </Box>
               <Box
                 display="flex"
@@ -329,7 +357,8 @@ const AddItem = () => {
           >
             <Fab
               onClick={() => {
-                setOpen(false);
+                // setOpen(false);
+                handleSave();
               }}
               variant="extended"
               color="primary"

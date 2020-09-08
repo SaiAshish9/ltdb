@@ -1,26 +1,28 @@
 import React from "react";
-import { Switch,Route,withRouter } from "react-router-dom";
-import Dashboard from './containers/homepage'
+import { Switch, Route, withRouter } from "react-router-dom";
+import Dashboard from "./containers/homepage";
 import Login from "./containers/auth/login";
-import {connect} from "react-redux"
+import { connect } from "react-redux";
+import { Provider as DataProvider } from "./api/dataProvider";
 
-
-const App = ({token}) => {
+const App = ({ token }) => {
   return (
-    <Switch>
-      {token && token.length > 0 ? (
-        <Route  path="/">
-          <Dashboard token={token} />
-        </Route>
-      ) : (
-        <Route exact path="/" component={Login} />
-      )}
-    </Switch>
+    <DataProvider>
+      <Switch>
+        {token && token.length > 0 ? (
+          <Route path="/">
+            <Dashboard token={token} />
+          </Route>
+        ) : (
+          <Route exact path="/" component={Login} />
+        )}
+      </Switch>
+    </DataProvider>
   );
 };
 
-const mapStateToProps =(state) => ({
-  token: state.auth.user && state.auth.user.token
-})
+const mapStateToProps = (state) => ({
+  token: state.auth.user && state.auth.user.token,
+});
 
-export default withRouter(connect(mapStateToProps,null)(App));
+export default withRouter(connect(mapStateToProps, null)(App));

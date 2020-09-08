@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -9,6 +9,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import TablePagination from "@material-ui/core/TablePagination";
 import Api from "../../../../api";
+import { Context as DataContext } from "../../../../api/dataProvider";
 
 const useStyles = makeStyles({
   table: {
@@ -23,9 +24,13 @@ function createData(name, calories, fat, carbs, protein, status) {
 export default function SimpleTable({ data }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
+  const {
+    state: { items },
+    fetchItems,
+  } = useContext(DataContext);
 
-  const convertRows = (data) => {
-    return data.map((i, k) =>
+  const convertRows = () => {
+    return items.map((i, k) =>
       createData(
         i["item_id"],
         i["name_en"],
@@ -37,18 +42,23 @@ export default function SimpleTable({ data }) {
     );
   };
 
-  const rows1 = convertRows(data);
+  const [rows, setRows] = useState(null);
 
-  const [rows, setRows] = useState(rows1);
+  useEffect(() => {
+    setRows(null);
+    setRows(convertRows());
+    // console.log(rows && rows.splice(8))
+  }, [items, fetchItems]);
+
   const [rowsPerPage, setRowsPerPage] = useState(8);
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    setPage(0);
+    setPage((page + 1) % 2);
   };
 
   const handleChangePage = (event, newPage) => {
-    Api(`https://test-api.loot-box.co/api/admin/user/list?page=${newPage + 1}`)
+    Api(`admin/user/list?page=${newPage + 1}`)
       .then((data) => {
         console.log(data.data.data);
         setRows(convertRows(data.data.data));
@@ -60,10 +70,7 @@ export default function SimpleTable({ data }) {
   return (
     <React.Fragment>
       <TableContainer elevation={0} component={Paper}>
-        <Table
-          className={classes.table}
-          aria-label="simple table"
-        >
+        <Table className={classes.table} aria-label="simple table">
           <TableHead>
             <TableRow
               style={{
@@ -128,68 +135,70 @@ export default function SimpleTable({ data }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, i) => (
-              <TableRow
-                elevation={0}
-                style={{
-                  height: "3.4rem",
-                  padding: "0px",
-                  border: "none",
-                }}
-                key={row.name}
-              >
-                <TableCell
+            {rows &&
+              rows.splice(8).map((row, i) => (
+                <TableRow
+                  elevation={0}
                   style={{
-                    color: "#8095a1",
-                    fontWeight: 500,
+                    height: "3.4rem",
+                    padding: "0px",
+                    border: "none",
                   }}
-                  component="th"
-                  scope="row"
+                  key={row.name}
                 >
-                  {row.name}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.calories}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.fat}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.carbs}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.protein}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.status}
-                </TableCell>
-              </TableRow>
-            ))}
+                  <TableCell
+                    style={{
+                      color: "#8095a1",
+                      fontWeight: 500,
+                    }}
+                    component="th"
+                    scope="row"
+                  >
+                    {row.name}
+                  </TableCell>
+                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                    {row.calories}
+                  </TableCell>
+                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                    {row.fat}
+                  </TableCell>
+                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                    {row.carbs}
+                  </TableCell>
+                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                    {row.protein}
+                  </TableCell>
+                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                    {row.status}
+                  </TableCell>
+                </TableRow>
+              ))}
 
-            {[...Array(8 - rows.length).keys()].map((i, k) => (
-              <TableRow
-                elevation={0}
-                style={{
-                  height: "3.5rem",
-                  border: "none",
-                }}
-                key={k}
-              >
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            ))}
+            {items &&
+              [...Array((8 - (items.length % 8))>0?(8 - (items.length % 8)) :0).keys()].map((i, k) => (
+                <TableRow
+                  elevation={0}
+                  style={{
+                    height: "3.5rem",
+                    border: "none",
+                  }}
+                  key={k}
+                >
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[5, 10]}
         component="div"
-        count={9}
+        count={8}
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}
