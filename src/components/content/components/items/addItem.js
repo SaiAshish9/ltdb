@@ -95,7 +95,7 @@ const AddItem = () => {
 
   const handleSave = async () => {
     await addItem({
-      category_id: categories[value]["category_id"],
+      category_id: subCategories[subValue]["category_id"],
       sub_category_id: subCategories[subValue]["sub_category_id"],
       brand_id: data[brandValue]["brand_id"],
       name_en: name_en,
@@ -115,6 +115,25 @@ const AddItem = () => {
     });
     await fetchItems();
     setOpen(false);
+    // console.log(categories, subCategories, {
+    //   category_id: subCategories[subValue]["category_id"],
+    //   sub_category_id: subCategories[subValue]["sub_category_id"],
+    //   brand_id: data[brandValue]["brand_id"],
+    //   name_en: name_en,
+    //   name_ar: name_ar,
+    //   description_en: description.desc,
+    //   description_ar: description.desc_ar,
+    //   image: "",
+    //   price: price ? +price : 0,
+    //   status: 1,
+    //   item_custom_values: customFields.map((i, k) => {
+    //     return {
+    //       custom_field_id: i.custom_field_id,
+    //       value_en: i.name_en,
+    //       value_ar: i.name_ar,
+    //     };
+    //   }),
+    // });
   };
 
   return (

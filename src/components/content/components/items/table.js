@@ -30,7 +30,7 @@ export default function SimpleTable({ data }) {
   } = useContext(DataContext);
 
   const convertRows = () => {
-    console.log(items)
+    console.log(items);
     return items.map((i, k) =>
       createData(
         i["item_id"],
@@ -137,7 +137,7 @@ export default function SimpleTable({ data }) {
           </TableHead>
           <TableBody>
             {rows &&
-              rows.splice(8).map((row, i) => (
+              rows.splice(16).map((row, i) => (
                 <TableRow
                   elevation={0}
                   style={{
@@ -176,7 +176,7 @@ export default function SimpleTable({ data }) {
               ))}
 
             {items &&
-              [...Array((8 - (items.length % 8))>0?(8 - (items.length % 8)) :0).keys()].map((i, k) => (
+              [...Array(items.length - 16).keys()].map((i, k) => (
                 <TableRow
                   elevation={0}
                   style={{
