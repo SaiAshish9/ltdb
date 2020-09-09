@@ -10,6 +10,7 @@ import {
   Select,
   MenuItem,
   FormControl,
+  Input,
 } from "@material-ui/core";
 import { Add, Clear, CameraAlt } from "@material-ui/icons";
 import Api from "../../../../api";
@@ -34,7 +35,15 @@ const AddItem = () => {
   const [price, setPrice] = useState(null);
   const [name_en, setNameEn] = useState("");
   const [name_ar, setNameAr] = useState("");
-  const { addItem,fetchItems } = useContext(DataContext);
+  const { addItem, fetchItems } = useContext(DataContext);
+  const [customFields, setCustomFields] = useState([]);
+  const [customFieldValue, setCustomFieldValue] = useState();
+  const [fields, setFields] = useState([]);
+
+  const handleChange = (e) => {
+    setFields(e.target.value);
+  };
+
   useEffect(() => {
     Api("admin/item/brand-list")
       .then((data) => {
@@ -64,11 +73,28 @@ const AddItem = () => {
       category_id: id,
     }).then((data) => {
       setSubCategories(data.data.data);
+      fetchCustomFields(data.data.data[0]["sub_category_id"]);
+    });
+  };
+
+  const fetchCustomFields = async (id) => {
+    await Api.post(`admin/subcategory/subcategory-by-id`, {
+      sub_category_id: ` ${
+        id ? id : subCategories[subValue]["sub_category_id"]
+      }`,
+    }).then((data) => {
+      console.log(data.data.data);
+      setFields(
+        data.data.data.custom_fields.map((i, k) => {
+          return `${i["name_en"]} ${i["name_ar"]} ${i["custom_field_id"]}`;
+        })
+      );
+      setCustomFields(data.data.data.custom_fields);
     });
   };
 
   const handleSave = async () => {
-      await addItem({
+    await addItem({
       category_id: categories[value]["category_id"],
       sub_category_id: subCategories[subValue]["sub_category_id"],
       brand_id: data[brandValue]["brand_id"],
@@ -79,9 +105,16 @@ const AddItem = () => {
       image: "",
       price: price ? +price : 0,
       status: 1,
+      item_custom_values: customFields.map((i, k) => {
+        return {
+          custom_field_id: i.custom_field_id,
+          value_en: i.name_en,
+          value_ar: i.name_ar,
+        };
+      }),
     });
     await fetchItems();
-    setOpen(false)
+    setOpen(false);
   };
 
   return (
@@ -175,7 +208,8 @@ const AddItem = () => {
                   <Select
                     value={subValue}
                     onChange={(e) => {
-                      setSubValue(e.target.value);
+                      if (value !== 0) setSubValue(e.target.value);
+                      fetchCustomFields();
                     }}
                   >
                     {subCategories ? (
@@ -202,7 +236,6 @@ const AddItem = () => {
                 >
                   Select Brand :
                 </p>
-
                 <Select
                   style={{
                     width: "47%",
@@ -219,7 +252,6 @@ const AddItem = () => {
                 </Select>
               </Box>
             </Box>
-
             <Box
               display="flex"
               justifyContent="space-between"
@@ -240,7 +272,6 @@ const AddItem = () => {
                 style={{ width: "47%" }}
               />
             </Box>
-
             {description && (
               <Box>
                 <Box display="flex" justifyContent="space-between">
@@ -258,11 +289,9 @@ const AddItem = () => {
                     rows={4}
                     variant="outlined"
                     defaultValue={description.desc}
-                    // placeholder="placeholder text"
                     style={{ width: "47%", opacity: 0.8 }}
                   />
                 </Box>
-
                 <Box
                   display="flex"
                   justifyContent="space-between"
@@ -287,7 +316,6 @@ const AddItem = () => {
                 </Box>
               </Box>
             )}
-
             <Box
               display="flex"
               flexDirection="column"
@@ -345,6 +373,36 @@ const AddItem = () => {
                   </Box>
                 </Paper>
               </Box>{" "}
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                style={{ margin: "1rem 0" }}
+              >
+                <p
+                  style={{
+                    fontSize: "1rem",
+                    color: "#282b3c",
+                    fontWeight: 600,
+                  }}
+                >
+                  Custom Fields :
+                </p>
+                <FormControl
+                  style={{
+                    // position: "absolute",
+                    width: "47%",
+                  }}
+                >
+                  <Select value={fields} multiple onChange={handleChange}>
+                    {customFields &&
+                      customFields.map((i, k) => (
+                        <MenuItem key={k} value={i.custom_field_id}>
+                          {i.name_en} {i.name_ar}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </Box>
             </Box>
           </Box>
           <Box
@@ -357,7 +415,6 @@ const AddItem = () => {
           >
             <Fab
               onClick={() => {
-                // setOpen(false);
                 handleSave();
               }}
               variant="extended"

@@ -34,10 +34,10 @@ const addItem = (dispatch) => async (data) => {
     name_ar: data.name_ar,
     description_en: data.description_en,
     description_ar: data.description_ar,
+    item_custom_values: data.item_custom_values,
     image: "",
     price: data.price,
     status: data.status,
-    item_custom_values: [],
   })
     .then(async (data) => {
       console.log(data);

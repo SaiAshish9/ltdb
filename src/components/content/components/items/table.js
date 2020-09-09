@@ -30,6 +30,7 @@ export default function SimpleTable({ data }) {
   } = useContext(DataContext);
 
   const convertRows = () => {
+    console.log(items)
     return items.map((i, k) =>
       createData(
         i["item_id"],
