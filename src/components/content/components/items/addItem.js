@@ -11,10 +11,12 @@ import {
   MenuItem,
   FormControl,
   Input,
+  Button,
 } from "@material-ui/core";
 import { Add, Clear, CameraAlt } from "@material-ui/icons";
 import Api from "../../../../api";
 import { Context as DataContext } from "../../../../api/dataProvider";
+import { useForm } from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -39,9 +41,26 @@ const AddItem = () => {
   const [customFields, setCustomFields] = useState([]);
   const [customFieldValue, setCustomFieldValue] = useState();
   const [fields, setFields] = useState([]);
+  const { register, handleSubmit } = useForm();
+  const [valueData, setValueData] = useState(null);
 
   const handleChange = (e) => {
     setFields(e.target.value);
+  };
+
+  const handleSubmit1 = async (data) => {
+    // setValueData(Object.values(data));
+    const y = [];
+    var x = Object.values(data);
+    for (let i = 0; i < x.length; i += 2) {
+      y.push({
+        custom_field_id: customFields[i / 2]["custom_field_id"],
+        value_en: x[i],
+        value_ar: x[i + 1],
+      });
+    }
+    // console.log( y);
+    await handleSave(y);
   };
 
   useEffect(() => {
@@ -93,7 +112,8 @@ const AddItem = () => {
     });
   };
 
-  const handleSave = async () => {
+  const handleSave = async (y) => {
+    console.log(y)
     await addItem({
       category_id: subCategories[subValue]["category_id"],
       sub_category_id: subCategories[subValue]["sub_category_id"],
@@ -105,35 +125,23 @@ const AddItem = () => {
       image: "",
       price: price ? +price : 0,
       status: 1,
-      item_custom_values: customFields.map((i, k) => {
-        return {
-          custom_field_id: i.custom_field_id,
-          value_en: i.name_en,
-          value_ar: i.name_ar,
-        };
-      }),
+      item_custom_values: y,
     });
     await fetchItems();
     setOpen(false);
-    // console.log(categories, subCategories, {
-    //   category_id: subCategories[subValue]["category_id"],
-    //   sub_category_id: subCategories[subValue]["sub_category_id"],
-    //   brand_id: data[brandValue]["brand_id"],
-    //   name_en: name_en,
-    //   name_ar: name_ar,
-    //   description_en: description.desc,
-    //   description_ar: description.desc_ar,
-    //   image: "",
-    //   price: price ? +price : 0,
-    //   status: 1,
-    //   item_custom_values: customFields.map((i, k) => {
-    //     return {
-    //       custom_field_id: i.custom_field_id,
-    //       value_en: i.name_en,
-    //       value_ar: i.name_ar,
-    //     };
-    //   }),
-    // });
+    console.log({
+      category_id: subCategories[subValue]["category_id"],
+      sub_category_id: subCategories[subValue]["sub_category_id"],
+      brand_id: data[brandValue]["brand_id"],
+      name_en: name_en,
+      name_ar: name_ar,
+      description_en: description.desc,
+      description_ar: description.desc_ar,
+      image: "",
+      price: price ? +price : 0,
+      status: 1,
+      item_custom_values: y
+    });
   };
 
   return (
@@ -143,157 +151,47 @@ const AddItem = () => {
       alignItems="center"
       style={{ padding: "1rem 2rem" }}
     >
-      <Fab
-        size="medium"
-        onClick={() => {
-          setOpen(true);
-        }}
-        color="secondary"
-      >
-        <Add />
-      </Fab>
-      <Backdrop open={open} className={classes.backdrop}>
-        <Paper
-          style={{
-            position: "absolute",
-            top: "10vh",
-            maxHeight: "70vh",
-            overflowY: "scroll",
-            width: "27rem",
-            padding: "2rem",
+      <form onSubmit={handleSubmit(handleSubmit1)}>
+        <Fab
+          size="medium"
+          onClick={() => {
+            setOpen(true);
           }}
+          color="secondary"
         >
-          <Box display="flex" flexDirection="row-reverse">
-            <IconButton
-              onClick={() => {
-                setOpen(false);
-              }}
-            >
-              <Clear />
-            </IconButton>
-          </Box>
-          <Box style={{ padding: "0 2rem 2rem" }}>
-            <Box
-              display="flex"
-              flexDirection="column"
-              justifyContent="space-between"
-            >
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                style={{ margin: "1rem 0" }}
+          <Add />
+        </Fab>
+        <Backdrop open={open} className={classes.backdrop}>
+          <Paper
+            style={{
+              position: "absolute",
+              top: "10vh",
+              maxHeight: "70vh",
+              overflowY: "scroll",
+              width: "27rem",
+              padding: "2rem",
+            }}
+          >
+            <Box display="flex" flexDirection="row-reverse">
+              <IconButton
+                onClick={() => {
+                  setOpen(false);
+                }}
               >
-                <p
-                  style={{
-                    fontSize: "1rem",
-                    color: "#282b3c",
-                    fontWeight: 600,
-                  }}
-                >
-                  Select Category :
-                </p>
-                <FormControl style={{ width: "47%" }}>
-                  <Select
-                    value={value}
-                    onChange={(e) => {
-                      setValue(e.target.value);
-                      fetchSubCategories(e.target.value);
-                    }}
-                  >
-                    {categories &&
-                      categories.map((i, k) => (
-                        <MenuItem value={i["category_id"]}>
-                          {i["name_en"]}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
-              </Box>
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                style={{ margin: "1rem 0" }}
-              >
-                <p
-                  style={{
-                    fontSize: "1rem",
-                    color: "#282b3c",
-                    fontWeight: 600,
-                  }}
-                >
-                  Select Sub-Category :
-                </p>
-                <FormControl style={{ width: "47%" }}>
-                  <Select
-                    value={subValue}
-                    onChange={(e) => {
-                      if (value !== 0) setSubValue(e.target.value);
-                      fetchCustomFields();
-                    }}
-                  >
-                    {subCategories ? (
-                      subCategories.map((i, k) => (
-                        <MenuItem value={k}>{i["name_en"]}</MenuItem>
-                      ))
-                    ) : (
-                      <MenuItem value={0}></MenuItem>
-                    )}
-                  </Select>
-                </FormControl>
-              </Box>
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                style={{ margin: "1rem 0" }}
-              >
-                <p
-                  style={{
-                    fontSize: "1rem",
-                    color: "#282b3c",
-                    fontWeight: 600,
-                  }}
-                >
-                  Select Brand :
-                </p>
-                <Select
-                  style={{
-                    width: "47%",
-                  }}
-                  value={brandValue}
-                  onChange={(e) => {
-                    setBrandValue(e.target.value);
-                  }}
-                >
-                  {data &&
-                    data.map((i, k) => (
-                      <MenuItem value={k}>{i["name_en"]}</MenuItem>
-                    ))}
-                </Select>
-              </Box>
+                <Clear />
+              </IconButton>
             </Box>
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              style={{ margin: "1rem 0" }}
-            >
-              <TextField
-                variant="outlined"
-                label="name"
-                value={name_en}
-                onChange={(e) => setNameEn(e.target.value)}
-                style={{ width: "47%" }}
-              />
-              <TextField
-                variant="outlined"
-                label="name_ar"
-                name={name_ar}
-                onChange={(e) => setNameAr(e.target.value)}
-                style={{ width: "47%" }}
-              />
-            </Box>
-            {description && (
-              <Box>
-                <Box display="flex" justifyContent="space-between">
+            <Box style={{ padding: "0 2rem 2rem" }}>
+              <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="space-between"
+              >
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  style={{ margin: "1rem 0" }}
+                >
                   <p
                     style={{
                       fontSize: "1rem",
@@ -301,20 +199,182 @@ const AddItem = () => {
                       fontWeight: 600,
                     }}
                   >
-                    Description_en :
+                    Select Category :
+                  </p>
+                  <FormControl style={{ width: "47%" }}>
+                    <Select
+                      value={value}
+                      onChange={(e) => {
+                        setValue(e.target.value);
+                        fetchSubCategories(e.target.value);
+                      }}
+                    >
+                      {categories &&
+                        categories.map((i, k) => (
+                          <MenuItem value={i["category_id"]}>
+                            {i["name_en"]}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  style={{ margin: "1rem 0" }}
+                >
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      color: "#282b3c",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Select Sub-Category :
+                  </p>
+                  <FormControl style={{ width: "47%" }}>
+                    <Select
+                      value={subValue}
+                      onChange={(e) => {
+                        if (value !== 0) setSubValue(e.target.value);
+                        fetchCustomFields();
+                      }}
+                    >
+                      {subCategories ? (
+                        subCategories.map((i, k) => (
+                          <MenuItem value={k}>{i["name_en"]}</MenuItem>
+                        ))
+                      ) : (
+                        <MenuItem value={0}></MenuItem>
+                      )}
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  style={{ margin: "1rem 0" }}
+                >
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      color: "#282b3c",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Select Brand :
+                  </p>
+                  <Select
+                    style={{
+                      width: "47%",
+                    }}
+                    value={brandValue}
+                    onChange={(e) => {
+                      setBrandValue(e.target.value);
+                    }}
+                  >
+                    {data &&
+                      data.map((i, k) => (
+                        <MenuItem value={k}>{i["name_en"]}</MenuItem>
+                      ))}
+                  </Select>
+                </Box>
+              </Box>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                style={{ margin: "1rem 0" }}
+              >
+                <TextField
+                  variant="outlined"
+                  label="name"
+                  value={name_en}
+                  onChange={(e) => setNameEn(e.target.value)}
+                  style={{ width: "47%" }}
+                />
+                <TextField
+                  variant="outlined"
+                  label="name_ar"
+                  name={name_ar}
+                  onChange={(e) => setNameAr(e.target.value)}
+                  style={{ width: "47%" }}
+                />
+              </Box>
+              {description && (
+                <Box>
+                  <Box display="flex" justifyContent="space-between">
+                    <p
+                      style={{
+                        fontSize: "1rem",
+                        color: "#282b3c",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Description_en :
+                    </p>
+                    <TextField
+                      multiline
+                      rows={4}
+                      variant="outlined"
+                      defaultValue={description.desc}
+                      style={{ width: "47%", opacity: 0.8 }}
+                    />
+                  </Box>
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    style={{ margin: "2rem 0" }}
+                  >
+                    <p
+                      style={{
+                        fontSize: "1rem",
+                        color: "#282b3c",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Description_ar :
+                    </p>
+                    <TextField
+                      multiline
+                      rows={4}
+                      defaultValue={description.desc_ar}
+                      variant="outlined"
+                      style={{ width: "47%", opacity: 0.8 }}
+                    />
+                  </Box>
+                </Box>
+              )}
+              <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="space-between"
+              >
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  style={{ margin: "1rem 0" }}
+                >
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      color: "#282b3c",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Price :
                   </p>
                   <TextField
-                    multiline
-                    rows={4}
+                    value={price}
+                    type="number"
+                    onChange={(e) => setPrice(e.target.value)}
                     variant="outlined"
-                    defaultValue={description.desc}
-                    style={{ width: "47%", opacity: 0.8 }}
+                    style={{ width: "47%" }}
                   />
                 </Box>
                 <Box
                   display="flex"
                   justifyContent="space-between"
-                  style={{ margin: "2rem 0" }}
+                  style={{ margin: "1rem 0" }}
                 >
                   <p
                     style={{
@@ -323,90 +383,40 @@ const AddItem = () => {
                       fontWeight: 600,
                     }}
                   >
-                    Description_ar :
+                    Image :
                   </p>
-                  <TextField
-                    multiline
-                    rows={4}
-                    defaultValue={description.desc_ar}
-                    variant="outlined"
-                    style={{ width: "47%", opacity: 0.8 }}
-                  />
-                </Box>
-              </Box>
-            )}
-            <Box
-              display="flex"
-              flexDirection="column"
-              justifyContent="space-between"
-            >
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                style={{ margin: "1rem 0" }}
-              >
-                <p
-                  style={{
-                    fontSize: "1rem",
-                    color: "#282b3c",
-                    fontWeight: 600,
-                  }}
+                  <Paper style={{ width: "47%" }}>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      style={{
+                        height: "20vh",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <IconButton>
+                        <CameraAlt />
+                      </IconButton>
+                    </Box>
+                  </Paper>
+                </Box>{" "}
+                <Box
+                  // display="flex"
+                  justifyContent="space-between"
+                  style={{ margin: "1rem 0" }}
                 >
-                  Price :
-                </p>
-                <TextField
-                  value={price}
-                  type="number"
-                  onChange={(e) => setPrice(e.target.value)}
-                  variant="outlined"
-                  style={{ width: "47%" }}
-                />
-              </Box>
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                style={{ margin: "1rem 0" }}
-              >
-                <p
-                  style={{
-                    fontSize: "1rem",
-                    color: "#282b3c",
-                    fontWeight: 600,
-                  }}
-                >
-                  Image :
-                </p>
-                <Paper style={{ width: "47%" }}>
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
+                  <p
                     style={{
-                      height: "20vh",
-                      cursor: "pointer",
+                      fontSize: "1rem",
+                      color: "#282b3c",
+                      fontWeight: 600,
+                      textAlign: "center",
                     }}
                   >
-                    <IconButton>
-                      <CameraAlt />
-                    </IconButton>
-                  </Box>
-                </Paper>
-              </Box>{" "}
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                style={{ margin: "1rem 0" }}
-              >
-                <p
-                  style={{
-                    fontSize: "1rem",
-                    color: "#282b3c",
-                    fontWeight: 600,
-                  }}
-                >
-                  Custom Fields :
-                </p>
-                <FormControl
+                    Custom Fields :
+                  </p>
+                  {/* <FormControl
                   style={{
                     // position: "absolute",
                     width: "47%",
@@ -420,30 +430,69 @@ const AddItem = () => {
                         </MenuItem>
                       ))}
                   </Select>
-                </FormControl>
+                </FormControl> */}
+
+                  {customFields &&
+                    customFields.map((i, k) => (
+                      <Box key={k}>
+                        <p
+                          style={{
+                            fontSize: "1rem",
+                            color: "#282b3c",
+                            fontWeight: 600,
+                          }}
+                        >
+                          {i.name_en}
+                        </p>
+
+                        <Box
+                          display="flex"
+                          justifyContent="space-between"
+                          style={{ margin: "1rem 0" }}
+                        >
+                          <TextField
+                            variant="outlined"
+                            label="value_en"
+                            required
+                            inputRef={register}
+                            name={`value_en${k + 1}`}
+                            // value={name_en}
+                            // onChange={(e) => setNameEn(e.target.value)}
+                            style={{ width: "47%" }}
+                          />
+                          <TextField
+                            variant="outlined"
+                            label="value_ar"
+                            required
+                            inputRef={register}
+                            name={`value_ar${k + 1}`}
+                            // name={name_ar}
+                            // onChange={(e) => setNameAr(e.target.value)}
+                            style={{ width: "47%" }}
+                          />
+                        </Box>
+                      </Box>
+                    ))}
+                </Box>
               </Box>
             </Box>
-          </Box>
-          <Box
-            display="flex"
-            flexDirection="row-reverse"
-            style={{
-              marginTop: "1rem",
-              marginRight: "2rem",
-            }}
-          >
-            <Fab
-              onClick={() => {
-                handleSave();
+            <Box
+              display="flex"
+              flexDirection="row-reverse"
+              style={{
+                marginTop: "1rem",
+                marginRight: "2rem",
               }}
-              variant="extended"
-              color="primary"
             >
-              Save
-            </Fab>
-          </Box>
-        </Paper>
-      </Backdrop>
+              {/* <Button type="submit"> */}
+              <Fab type="submit" variant="extended" color="primary">
+                Save
+              </Fab>
+              {/* </Button> */}
+            </Box>
+          </Paper>
+        </Backdrop>
+      </form>
     </Box>
   );
 };
