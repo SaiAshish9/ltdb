@@ -55,7 +55,7 @@ export default function SimpleTable({ data }) {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    setPage((page + 1) % 2);
+    setPage(page + 1);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -70,13 +70,25 @@ export default function SimpleTable({ data }) {
 
   return (
     <React.Fragment>
-      <TableContainer elevation={0} component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
+      <TableContainer
+        style={{
+          height: "60vh",
+          width: "100%"
+        }}
+        elevation={0}
+        component={Paper}
+      >
+        <Table
+          style={{ width: "100%" }}
+          className={classes.table}
+          aria-label="simple table"
+        >
           <TableHead>
             <TableRow
               style={{
                 background: "#f4f4f4",
                 height: "3.4rem",
+                width: "85vw"
               }}
             >
               <TableCell
@@ -137,7 +149,7 @@ export default function SimpleTable({ data }) {
           </TableHead>
           <TableBody>
             {rows &&
-              rows.splice(16).map((row, i) => (
+              rows.map((row, i) => (
                 <TableRow
                   elevation={0}
                   style={{
@@ -174,7 +186,7 @@ export default function SimpleTable({ data }) {
                   </TableCell>
                 </TableRow>
               ))}
-
+            {/* 
             {items &&
               [...Array(items.length - 16).keys()].map((i, k) => (
                 <TableRow
@@ -192,14 +204,14 @@ export default function SimpleTable({ data }) {
                   <TableCell></TableCell>
                   <TableCell></TableCell>
                 </TableRow>
-              ))}
+              ))} */}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[5, 10]}
         component="div"
-        count={8}
+        count={6}
         rowsPerPage={rowsPerPage}
         page={page}
         onChangePage={handleChangePage}

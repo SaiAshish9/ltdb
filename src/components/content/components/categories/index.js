@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Table from "./table";
 import { Box, CircularProgress } from "@material-ui/core";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+// import Fab from "@material-ui/core/Fab";
+// import AddIcon from "@material-ui/icons/Add";
+// import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Search from "./search";
 import Api from "../../../../api";
 
@@ -38,7 +38,7 @@ const Category = () => {
         >
           Category List
         </p>
-        <Box display="flex">
+        {/* <Box display="flex">
           <Fab
             size="medium"
             color="secondary"
@@ -53,15 +53,16 @@ const Category = () => {
             Action
             <ExpandMoreIcon />
           </Fab>
+        </Box> */}
+        <Box
+          display="flex"
+          flexDirection="row-reverse"
+          style={{ padding: "0 2rem" }}
+        >
+          <Search />
         </Box>
       </Box>
-      <Box
-        display="flex"
-        flexDirection="row-reverse"
-        style={{ padding: "0 2rem" }}
-      >
-        <Search />
-      </Box>
+
       <div
         style={{
           marginTop: "20vh",

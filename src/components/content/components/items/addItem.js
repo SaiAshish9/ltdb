@@ -9,9 +9,8 @@ import {
   TextField,
   Select,
   MenuItem,
+  Avatar,
   FormControl,
-  Input,
-  Button,
 } from "@material-ui/core";
 import { Add, Clear, CameraAlt } from "@material-ui/icons";
 import Api from "../../../../api";
@@ -39,17 +38,27 @@ const AddItem = () => {
   const [name_ar, setNameAr] = useState("");
   const { addItem, fetchItems } = useContext(DataContext);
   const [customFields, setCustomFields] = useState([]);
-  const [customFieldValue, setCustomFieldValue] = useState();
+  // const [customFieldValue, setCustomFieldValue] = useState();
   const [fields, setFields] = useState([]);
   const { register, handleSubmit } = useForm();
-  const [valueData, setValueData] = useState(null);
+  // const [valueData, setValueData] = useState(null);
+  const [file, setFile] = useState(null);
+
+  const handleImgChange = (e) => {
+    var file1 = e.target.files[0];
+    var reader = new FileReader();
+    reader.onload = (e) => {
+      setFile(reader.result);
+      console.log(file);
+    };
+    reader.readAsDataURL(file1);
+  };
 
   const handleChange = (e) => {
     setFields(e.target.value);
   };
 
   const handleSubmit1 = async (data) => {
-    // setValueData(Object.values(data));
     const y = [];
     var x = Object.values(data);
     for (let i = 0; i < x.length; i += 2) {
@@ -59,7 +68,6 @@ const AddItem = () => {
         value_ar: x[i + 1],
       });
     }
-    // console.log( y);
     await handleSave(y);
   };
 
@@ -113,7 +121,7 @@ const AddItem = () => {
   };
 
   const handleSave = async (y) => {
-    console.log(y)
+    console.log(y);
     await addItem({
       category_id: subCategories[subValue]["category_id"],
       sub_category_id: subCategories[subValue]["sub_category_id"],
@@ -122,7 +130,7 @@ const AddItem = () => {
       name_ar: name_ar,
       description_en: description.desc,
       description_ar: description.desc_ar,
-      image: "",
+      image: file,
       price: price ? +price : 0,
       status: 1,
       item_custom_values: y,
@@ -140,7 +148,7 @@ const AddItem = () => {
       image: "",
       price: price ? +price : 0,
       status: 1,
-      item_custom_values: y
+      item_custom_values: y,
     });
   };
 
@@ -152,6 +160,14 @@ const AddItem = () => {
       style={{ padding: "1rem 2rem" }}
     >
       <form onSubmit={handleSubmit(handleSubmit1)}>
+        <input
+          accept=".png,.jpeg,.jpg"
+          onChange={(e) => handleImgChange(e)}
+          style={{ display: "none" }}
+          id="icon-button-file"
+          type="file"
+        />
+
         <Fab
           size="medium"
           onClick={() => {
@@ -165,10 +181,10 @@ const AddItem = () => {
           <Paper
             style={{
               position: "absolute",
-              top: "10vh",
-              maxHeight: "70vh",
+              top: "7vh",
+              maxHeight: "80vh",
               overflowY: "scroll",
-              width: "27rem",
+              width: "70vw",
               padding: "2rem",
             }}
           >
@@ -279,6 +295,61 @@ const AddItem = () => {
                       ))}
                   </Select>
                 </Box>
+                <Box
+                  justifyContent="space-between"
+                  style={{ margin: "1rem 0" }}
+                >
+                  {customFields.length>0 && (
+                    <p
+                      style={{
+                        fontSize: "1rem",
+                        color: "#282b3c",
+                        fontWeight: 600,
+                        textAlign: "center",
+                      }}
+                    >
+                      Custom Fields :
+                    </p>
+                  )}
+
+                  {customFields &&
+                    customFields.map((i, k) => (
+                      <Box key={k}>
+                        <p
+                          style={{
+                            fontSize: "1rem",
+                            color: "#282b3c",
+                            fontWeight: 600,
+                          }}
+                        >
+                          {i.name_en}
+                        </p>
+
+                        <Box
+                          display="flex"
+                          justifyContent="space-between"
+                          style={{ margin: "1rem 0" }}
+                        >
+                          <TextField
+                            variant="outlined"
+                            label="value_en"
+                            required
+                            inputRef={register}
+                            name={`value_en${k + 1}`}
+                            style={{ width: "47%" }}
+                          />
+                          <TextField
+                            variant="outlined"
+                            label="value_ar"
+                            required
+                            inputRef={register}
+                            name={`value_ar${k + 1}`}
+                            style={{ width: "47%" }}
+                          />
+                        </Box>
+                      </Box>
+                    ))}
+                </Box>
               </Box>
               <Box
                 display="flex"
@@ -301,8 +372,8 @@ const AddItem = () => {
                 />
               </Box>
               {description && (
-                <Box>
-                  <Box display="flex" justifyContent="space-between">
+                <Box display="flex" justifyContent="space-between">
+                  <div style={{ width: "47%" }}>
                     <p
                       style={{
                         fontSize: "1rem",
@@ -316,15 +387,11 @@ const AddItem = () => {
                       multiline
                       rows={4}
                       variant="outlined"
-                      defaultValue={description.desc}
-                      style={{ width: "47%", opacity: 0.8 }}
+                      // defaultValue={description.desc}
+                      style={{ width: "100%", opacity: 0.8 }}
                     />
-                  </Box>
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    style={{ margin: "2rem 0" }}
-                  >
+                  </div>
+                  <div style={{ width: "47%" }}>
                     <p
                       style={{
                         fontSize: "1rem",
@@ -337,11 +404,11 @@ const AddItem = () => {
                     <TextField
                       multiline
                       rows={4}
-                      defaultValue={description.desc_ar}
+                      // defaultValue={description.desc_ar}
                       variant="outlined"
-                      style={{ width: "47%", opacity: 0.8 }}
+                      style={{ width: "100%", opacity: 0.8 }}
                     />
-                  </Box>
+                  </div>
                 </Box>
               )}
               <Box
@@ -386,93 +453,31 @@ const AddItem = () => {
                     Image :
                   </p>
                   <Paper style={{ width: "47%" }}>
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      style={{
-                        height: "20vh",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <IconButton>
-                        <CameraAlt />
-                      </IconButton>
-                    </Box>
-                  </Paper>
-                </Box>{" "}
-                <Box
-                  // display="flex"
-                  justifyContent="space-between"
-                  style={{ margin: "1rem 0" }}
-                >
-                  <p
-                    style={{
-                      fontSize: "1rem",
-                      color: "#282b3c",
-                      fontWeight: 600,
-                      textAlign: "center",
-                    }}
-                  >
-                    Custom Fields :
-                  </p>
-                  {/* <FormControl
-                  style={{
-                    // position: "absolute",
-                    width: "47%",
-                  }}
-                >
-                  <Select value={fields} multiple onChange={handleChange}>
-                    {customFields &&
-                      customFields.map((i, k) => (
-                        <MenuItem key={k} value={i.custom_field_id}>
-                          {i.name_en} {i.name_ar}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl> */}
-
-                  {customFields &&
-                    customFields.map((i, k) => (
-                      <Box key={k}>
-                        <p
-                          style={{
-                            fontSize: "1rem",
-                            color: "#282b3c",
-                            fontWeight: 600,
-                          }}
-                        >
-                          {i.name_en}
-                        </p>
-
-                        <Box
-                          display="flex"
-                          justifyContent="space-between"
-                          style={{ margin: "1rem 0" }}
-                        >
-                          <TextField
-                            variant="outlined"
-                            label="value_en"
-                            required
-                            inputRef={register}
-                            name={`value_en${k + 1}`}
-                            // value={name_en}
-                            // onChange={(e) => setNameEn(e.target.value)}
-                            style={{ width: "47%" }}
+                    <label htmlFor="icon-button-file">
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        style={{
+                          height: "20vh",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {file ? (
+                          <img
+                            style={{
+                              height: "20vh",
+                              // width: "6rem",
+                            }}
+                            alt="img"
+                            src={file}
                           />
-                          <TextField
-                            variant="outlined"
-                            label="value_ar"
-                            required
-                            inputRef={register}
-                            name={`value_ar${k + 1}`}
-                            // name={name_ar}
-                            // onChange={(e) => setNameAr(e.target.value)}
-                            style={{ width: "47%" }}
-                          />
-                        </Box>
+                        ) : (
+                          <CameraAlt />
+                        )}
                       </Box>
-                    ))}
+                    </label>
+                  </Paper>
                 </Box>
               </Box>
             </Box>
@@ -484,11 +489,9 @@ const AddItem = () => {
                 marginRight: "2rem",
               }}
             >
-              {/* <Button type="submit"> */}
               <Fab type="submit" variant="extended" color="primary">
                 Save
               </Fab>
-              {/* </Button> */}
             </Box>
           </Paper>
         </Backdrop>

@@ -35,7 +35,7 @@ const addItem = (dispatch) => async (data) => {
     description_en: data.description_en,
     description_ar: data.description_ar,
     item_custom_values: data.item_custom_values,
-    image: "",
+    image: data.image,
     price: data.price,
     status: data.status,
   })
