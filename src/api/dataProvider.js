@@ -9,14 +9,47 @@ const reducer = (state, action) => {
         ...state,
         items: action.payload,
       };
+    case "SET_ITEM_COUNT":
+      return {
+        ...state,
+        items_count: action.payload,
+      };
+    case "SET_PAGE_COUNT":
+      return {
+        ...state,
+        page_count: action.payload,
+      };
     default:
       return state;
   }
 };
 
-const fetchItems = (dispatch) => async () => {
-  await Api("admin/item/list")
+const fetchItems = (dispatch) => async (page, limit) => {
+  var url;
+  if (page && limit ) {
+    url = `admin/item/list?limit=${limit}&&page=${page}`;
+  } else {
+    url = "admin/item/list?limit=10";
+  }
+
+  if (page || limit) {
+    dispatch({
+      type: "SET_ITEMS",
+      payload: null,
+    });
+  }
+
+  await Api(url)
     .then((data) => {
+      dispatch({
+        type: "SET_PAGE_COUNT",
+        payload: JSON.parse(data.request.response)["parameter"]["last_page"],
+      });
+
+      dispatch({
+        type: "SET_ITEM_COUNT",
+        payload: JSON.parse(data.request.response)["parameter"]["total"],
+      });
       dispatch({
         type: "SET_ITEMS",
         payload: data.data.data,
@@ -54,5 +87,7 @@ export const { Context, Provider } = createDataContext(
   },
   {
     items: [],
+    items_count: 0,
+    page_count: 0,
   }
 );

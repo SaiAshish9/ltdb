@@ -17,11 +17,11 @@ const Items = () => {
   };
 
   useEffect(() => {
-    getItems()
+    getItems();
   }, []);
   return (
     <Box>
-      <Box
+      {/* <Box
         display="flex"
         justifyContent="space-between"
         alignItems="center"
@@ -37,8 +37,10 @@ const Items = () => {
           Items
         </p>
         <Box display="flex">
-          <AddItem />
         </Box>
+      </Box> */}
+      <Box style={{ position: "absolute", top: 1, right: "2vw" }}>
+        <AddItem />
       </Box>
       {!loading ? (
         <Box
@@ -51,6 +53,8 @@ const Items = () => {
             style={{
               margin: "auto",
               color: "#151628",
+              position: "relative",
+              top: "10vh",
             }}
           />
         </Box>

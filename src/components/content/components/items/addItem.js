@@ -168,7 +168,22 @@ const AddItem = () => {
           type="file"
         />
 
-        <Fab
+        <p
+          onClick={() => {
+            setOpen(true);
+          }}
+          style={{
+            color: "#fff",
+            cursor: "pointer",
+            fontWeight: "bold",
+            position: "relative",
+            top:-5
+          }}
+        >
+          Add Item
+        </p>
+
+        {/* <Fab
           size="medium"
           onClick={() => {
             setOpen(true);
@@ -176,7 +191,7 @@ const AddItem = () => {
           color="secondary"
         >
           <Add />
-        </Fab>
+        </Fab> */}
         <Backdrop open={open} className={classes.backdrop}>
           <Paper
             style={{
@@ -299,7 +314,7 @@ const AddItem = () => {
                   justifyContent="space-between"
                   style={{ margin: "1rem 0" }}
                 >
-                  {customFields.length>0 && (
+                  {customFields.length > 0 && (
                     <p
                       style={{
                         fontSize: "1rem",

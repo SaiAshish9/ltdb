@@ -10,6 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import TablePagination from "@material-ui/core/TablePagination";
 import Api from "../../../../api";
 import { Context as DataContext } from "../../../../api/dataProvider";
+import { Box, CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles({
   table: {
@@ -25,20 +26,23 @@ export default function SimpleTable({ data }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const {
-    state: { items },
+    state: { items, items_count, page_count },
     fetchItems,
   } = useContext(DataContext);
 
   const convertRows = () => {
     console.log(items);
-    return items.map((i, k) =>
-      createData(
-        i["item_id"],
-        i["name_en"],
-        i["name_ar"],
-        i["created_at"],
-        i["price"],
-        i["status"]
+    return (
+      items &&
+      items.map((i, k) =>
+        createData(
+          i["item_id"],
+          i["name_en"],
+          i["name_ar"],
+          i["created_at"],
+          i["price"],
+          i["status"]
+        )
       )
     );
   };
@@ -48,32 +52,28 @@ export default function SimpleTable({ data }) {
   useEffect(() => {
     setRows(null);
     setRows(convertRows());
-    // console.log(rows && rows.splice(8))
   }, [items, fetchItems]);
 
-  const [rowsPerPage, setRowsPerPage] = useState(8);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    setPage(page + 1);
+    fetchItems(page+1, +event.target.value);
+    setPage(0);
   };
 
   const handleChangePage = (event, newPage) => {
-    Api(`admin/user/list?page=${newPage + 1}`)
-      .then((data) => {
-        console.log(data.data.data);
-        setRows(convertRows(data.data.data));
-        setPage(newPage);
-      })
-      .catch((error) => console.log(error));
+    setPage(newPage);
+    console.log(newPage);
+    fetchItems(newPage + 1, rowsPerPage);
   };
 
   return (
     <React.Fragment>
       <TableContainer
         style={{
-          height: "60vh",
-          width: "100%"
+          height: "83vh",
+          width: "100%",
         }}
         elevation={0}
         component={Paper}
@@ -88,7 +88,7 @@ export default function SimpleTable({ data }) {
               style={{
                 background: "#f4f4f4",
                 height: "3.4rem",
-                width: "85vw"
+                width: "85vw",
               }}
             >
               <TableCell
@@ -147,6 +147,22 @@ export default function SimpleTable({ data }) {
               </TableCell>
             </TableRow>
           </TableHead>
+
+          {!items && (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              style={{ height: "70vh", width: "85vw" }}
+            >
+              <CircularProgress
+                style={{
+                  color: "#151628",
+                }}
+              />
+            </Box>
+          )}
+
           <TableBody>
             {rows &&
               rows.map((row, i) => (
@@ -186,34 +202,15 @@ export default function SimpleTable({ data }) {
                   </TableCell>
                 </TableRow>
               ))}
-            {/* 
-            {items &&
-              [...Array(items.length - 16).keys()].map((i, k) => (
-                <TableRow
-                  elevation={0}
-                  style={{
-                    height: "3.5rem",
-                    border: "none",
-                  }}
-                  key={k}
-                >
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                </TableRow>
-              ))} */}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10]}
         component="div"
-        count={6}
         rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[5, 10, 20]}
         page={page}
+        count={items_count}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
