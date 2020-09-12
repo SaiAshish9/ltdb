@@ -136,20 +136,16 @@ const AddItem = () => {
       item_custom_values: y,
     });
     await fetchItems();
+    setSubCategories(null);
+    setCategories(null);
+    setNameEn("");
+    setNameAr("");
+    setBrandValue(null);
+    setDescription(null);
+    setCustomFields(null);
+    setPrice(0);
+    setFile(null);
     setOpen(false);
-    console.log({
-      category_id: subCategories[subValue]["category_id"],
-      sub_category_id: subCategories[subValue]["sub_category_id"],
-      brand_id: data[brandValue]["brand_id"],
-      name_en: name_en,
-      name_ar: name_ar,
-      description_en: description.desc,
-      description_ar: description.desc_ar,
-      image: "",
-      price: price ? +price : 0,
-      status: 1,
-      item_custom_values: y,
-    });
   };
 
   return (
@@ -177,7 +173,7 @@ const AddItem = () => {
             cursor: "pointer",
             fontWeight: "bold",
             position: "relative",
-            top:-5
+            top: -5,
           }}
         >
           Add Item
@@ -314,7 +310,7 @@ const AddItem = () => {
                   justifyContent="space-between"
                   style={{ margin: "1rem 0" }}
                 >
-                  {customFields.length > 0 && (
+                  { customFields && customFields.length > 0 && (
                     <p
                       style={{
                         fontSize: "1rem",
