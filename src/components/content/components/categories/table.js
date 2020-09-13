@@ -246,24 +246,7 @@ function SimpleTable({ data }) {
                 </TableRow>
               ))}
 
-            {[...Array(7 - rows.length).keys()].map((i, k) => (
-              <TableRow
-                elevation={0}
-                style={{
-                  height: "3.5rem",
-                  border: "none",
-                }}
-                key={k}
-              >
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            ))}
+            
           </TableBody>
         </Table>
       </TableContainer>
