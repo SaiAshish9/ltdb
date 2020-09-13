@@ -135,7 +135,6 @@ const AddItem = () => {
       status: 1,
       item_custom_values: y,
     });
-    await fetchItems();
     setSubCategories(null);
     setCategories(null);
     setNameEn("");
@@ -145,6 +144,7 @@ const AddItem = () => {
     setCustomFields(null);
     setPrice(0);
     setFile(null);
+    await fetchItems();
     setOpen(false);
   };
 

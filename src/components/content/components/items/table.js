@@ -8,9 +8,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import TablePagination from "@material-ui/core/TablePagination";
-import Api from "../../../../api";
 import { Context as DataContext } from "../../../../api/dataProvider";
-import { Box, CircularProgress } from "@material-ui/core";
+import { Box, CircularProgress, Snackbar } from "@material-ui/core";
 
 const useStyles = makeStyles({
   table: {
@@ -26,7 +25,7 @@ export default function SimpleTable({ data }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const {
-    state: { items, items_count, page_count },
+    state: { items, items_count, page_count, message },
     fetchItems,
   } = useContext(DataContext);
 
@@ -48,6 +47,7 @@ export default function SimpleTable({ data }) {
   };
 
   const [rows, setRows] = useState(null);
+  const [openSnackbar, setOpenSnackbar] = useState(true);
 
   useEffect(() => {
     setRows(null);
@@ -58,7 +58,7 @@ export default function SimpleTable({ data }) {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    fetchItems(page+1, +event.target.value);
+    fetchItems(page + 1, +event.target.value);
     setPage(0);
   };
 
@@ -78,6 +78,18 @@ export default function SimpleTable({ data }) {
         elevation={0}
         component={Paper}
       >
+        {message && (
+          <Snackbar
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            open={openSnackbar}
+            message={message}
+            onClose={() => {
+              setOpenSnackbar(false);
+            }}
+            autoHideDuration={1000}
+          />
+        )}
+
         <Table
           style={{ width: "100%" }}
           className={classes.table}

@@ -19,6 +19,11 @@ const reducer = (state, action) => {
         ...state,
         page_count: action.payload,
       };
+    case "SET_MESSAGE":
+      return {
+        ...state,
+        message: action.payload,
+      };
     default:
       return state;
   }
@@ -26,7 +31,7 @@ const reducer = (state, action) => {
 
 const fetchItems = (dispatch) => async (page, limit) => {
   var url;
-  if (page && limit ) {
+  if (page && limit) {
     url = `admin/item/list?limit=${limit}&&page=${page}`;
   } else {
     url = "admin/item/list?limit=10";
@@ -73,10 +78,20 @@ const addItem = (dispatch) => async (data) => {
     status: data.status,
   })
     .then(async (data) => {
-      console.log(data);
+      // console.log(data);
+      dispatch({
+        type: "SET_MESSAGE",
+        payload: "Item Added Successfully",
+      });
       await fetchItems();
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      dispatch({
+        type: "SET_MESSAGE",
+        payload: "Some error occurred while adding new item",
+      });
+      console.log(error);
+    });
 };
 
 export const { Context, Provider } = createDataContext(
@@ -89,5 +104,6 @@ export const { Context, Provider } = createDataContext(
     items: [],
     items_count: 0,
     page_count: 0,
+    message: null,
   }
 );

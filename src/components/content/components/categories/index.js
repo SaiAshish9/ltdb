@@ -23,22 +23,7 @@ const Category = () => {
 
   return (
     <div>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        style={{ padding: "1rem 2rem" }}
-      >
-        <p
-          style={{
-            color: "#282b3c",
-            fontWeight: 600,
-            fontSize: "1.5rem",
-          }}
-        >
-          Category List
-        </p>
-        {/* <Box display="flex">
+      {/* <Box display="flex">
           <Fab
             size="medium"
             color="secondary"
@@ -54,25 +39,24 @@ const Category = () => {
             <ExpandMoreIcon />
           </Fab>
         </Box> */}
-        <Box
-          display="flex"
-          flexDirection="row-reverse"
-          style={{ padding: "0 2rem" }}
-        >
-          <Search />
-        </Box>
-      </Box>
 
+      <Box
+        display="flex"
+        flexDirection="row-reverse"
+        style={{ padding: "0 2rem", position: "absolute", right: 2, top: "2vh" }}
+      >
+        <Search />
+      </Box>
       <div
         style={{
-          marginTop: "20vh",
+          // marginTop: "20vh",
           position: "absolute",
           bottom: 0,
           display: loading ? "flex" : "",
           alignItems: "center",
           justifyContent: "center",
           width: "85%",
-          height: loading ? "60vh" : "",
+          height: loading ? "90vh" : "",
           background: "#fff",
         }}
       >
