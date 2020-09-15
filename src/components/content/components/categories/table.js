@@ -111,7 +111,7 @@ function SimpleTable({ data }) {
   return (
     <React.Fragment>
       <TableContainer
-        style={{ height: "83vh" }}
+        style={{ height: "90vh" }}
         elevation={0}
         component={Paper}
       >
@@ -250,7 +250,7 @@ function SimpleTable({ data }) {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
+      {/* <TablePagination
         style={{ background: "#fff" }}
         rowsPerPageOptions={[5, 10]}
         component="div"
@@ -259,7 +259,7 @@ function SimpleTable({ data }) {
         page={page}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
+      /> */}
       <Popup
         categoryId={categoryId}
         fetchSubCategories={fetchSubCategories}

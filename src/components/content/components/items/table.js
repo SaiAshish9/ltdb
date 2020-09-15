@@ -9,13 +9,19 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import TablePagination from "@material-ui/core/TablePagination";
 import { Context as DataContext } from "../../../../api/dataProvider";
-import { Box, CircularProgress, Snackbar } from "@material-ui/core";
+import { Box, CircularProgress, Snackbar, IconButton } from "@material-ui/core";
+import moment from "moment";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import Popup from "./popup";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 650,
   },
-});
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+  },
+}));
 
 function createData(name, calories, fat, carbs, protein, status) {
   return { name, calories, fat, carbs, protein, status };
@@ -24,9 +30,12 @@ function createData(name, calories, fat, carbs, protein, status) {
 export default function SimpleTable({ data }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
+  const [open, setOpen] = useState(false);
+
   const {
     state: { items, items_count, page_count, message },
     fetchItems,
+    toggleItemStatus,
   } = useContext(DataContext);
 
   const convertRows = () => {
@@ -94,6 +103,7 @@ export default function SimpleTable({ data }) {
           style={{ width: "100%" }}
           className={classes.table}
           aria-label="simple table"
+          size="small"
         >
           <TableHead>
             <TableRow
@@ -157,6 +167,13 @@ export default function SimpleTable({ data }) {
               >
                 Status
               </TableCell>
+              <TableCell
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "0.8rem",
+                  color: "#282b3c",
+                }}
+              ></TableCell>
             </TableRow>
           </TableHead>
 
@@ -204,13 +221,37 @@ export default function SimpleTable({ data }) {
                     {row.fat}
                   </TableCell>
                   <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                    {row.carbs}
+                    {moment(row.carbs).format("DD MMM YYYY")}
                   </TableCell>
                   <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
                     {row.protein}
                   </TableCell>
-                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                    {row.status}
+                  <TableCell
+                    onClick={() => {
+                      console.log(row.name, +row.status === 1 ? 0 : 1);
+                      toggleItemStatus(row.name, +row.status === 1 ? 0 : 1);
+                    }}
+                    style={{
+                      cursor: "pointer",
+                      color: row.status !== "1" ? "red" : "green",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {row.status === "1" ? "Active" : "InActive"}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      color: "#8095a1",
+                      fontWeight: 500,
+                    }}
+                  >
+                    <IconButton
+                      onClick={() => {
+                        setOpen(true);
+                      }}
+                    >
+                      <InfoOutlinedIcon style={{ cursor: "pointer" }} />{" "}
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -226,6 +267,7 @@ export default function SimpleTable({ data }) {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
+      <Popup classes={classes} open={open} setOpen={setOpen} />
     </React.Fragment>
   );
 }

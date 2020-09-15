@@ -10,10 +10,9 @@ import Paper from "@material-ui/core/Paper";
 import TablePagination from "@material-ui/core/TablePagination";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import axios from "axios";
-import Backdrop from "@material-ui/core/Backdrop";
 import IconButton from "@material-ui/core/IconButton";
-import Box from "@material-ui/core/Box";
-import { Clear } from "@material-ui/icons";
+import moment from "moment";
+import Popup from "./popup";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -92,11 +91,7 @@ export default function SimpleTable({ data }) {
         elevation={0}
         component={Paper}
       >
-        <Table
-          className={classes.table}
-          aria-label="simple table"
-          size="small"
-        >
+        <Table className={classes.table} aria-label="simple table" size="small">
           <TableHead>
             <TableRow
               style={{
@@ -227,36 +222,31 @@ export default function SimpleTable({ data }) {
                     }}
                   >
                     {" "}
-                    {row.protein}
+                    {moment(row.protein).format("DD MMM YYYY")}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      cursor: "pointer",
+                      color: row.status !== "1" ? "red" : "green",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {row.status === "1" ? "Active" : "InActive"}
                   </TableCell>
                   <TableCell
                     style={{
                       color: "#8095a1",
                       fontWeight: 500,
-                      maxHeight: "3.4rem",
                     }}
                   >
-                    {" "}
-                    {row.status}
-                  </TableCell>
-                  <TableCell
-                    style={{
-                      color: "#8095a1",
-                      fontWeight: 500,
-                      maxHeight: "3.4rem",
-                    }}
-                  >
-                    {" "}
-                    {/* {i === 0 && ( */}
                     <IconButton
-                      style={{ height: "2rem" }}
+                      // style={{ height: "2rem" }}
                       onClick={() => {
                         setOpen(true);
                       }}
                     >
                       <InfoOutlinedIcon style={{ cursor: "pointer" }} />{" "}
                     </IconButton>
-                    {/* )} */}
                   </TableCell>
                 </TableRow>
               ))}
@@ -264,7 +254,7 @@ export default function SimpleTable({ data }) {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10]}
+        rowsPerPageOptions={[10]}
         component="div"
         count={20}
         rowsPerPage={rowsPerPage}
@@ -272,28 +262,7 @@ export default function SimpleTable({ data }) {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
-      <Backdrop open={open} className={classes.backdrop}>
-        <Paper
-          style={{
-            height: "80vh",
-            width: "80vw",
-            position: "absolute",
-            top: "10vh",
-            background: "#fff",
-            padding: "2rem",
-          }}
-        >
-          <Box display="flex" flexDirection="row-reverse">
-            <IconButton
-              onClick={() => {
-                setOpen(false);
-              }}
-            >
-              <Clear />
-            </IconButton>
-          </Box>
-        </Paper>
-      </Backdrop>
+      <Popup classes={classes} open={open} setOpen={setOpen} />
     </React.Fragment>
   );
 }

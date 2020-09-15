@@ -81,7 +81,9 @@ export default function DenseTable({
                 <TableCell style={{ color: "#4c5172", fontWeight: 600 }}>
                   Custom Fields
                 </TableCell>
-                <TableCell></TableCell>
+                <TableCell>
+                  Action
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -114,6 +116,7 @@ export default function DenseTable({
                         color: "#a197a3",
                         display: "flex",
                         alignItems: "center",
+                        paddingLeft:"20%"
                       }}
                     >
                       <IconButton
@@ -127,6 +130,8 @@ export default function DenseTable({
                       >
                         <VisibilityOutlinedIcon />
                       </IconButton>
+                    </TableCell>
+                    <TableCell>
                       <IconButton
                         onClick={() => {
                           setCurrent(false);
@@ -137,16 +142,6 @@ export default function DenseTable({
                         style={{ color: "orange" }}
                       >
                         <EditOutlinedIcon />
-                      </IconButton>
-                    </TableCell>
-                    <TableCell>
-                      <IconButton
-                        onClick={() => {
-                          console.log(row);
-                        }}
-                        style={{ color: "red" }}
-                      >
-                        <DeleteOutlineIcon />
                       </IconButton>
                     </TableCell>
                   </TableRow>

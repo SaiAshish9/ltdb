@@ -63,6 +63,26 @@ const fetchItems = (dispatch) => async (page, limit) => {
     .catch((error) => console.log(error));
 };
 
+const toggleItemStatus = (dispatch) => async (id, action) => {
+  const x = {
+    items: [id],
+    action_type: action,
+  };
+  // dispatch({
+  //   type: "SET_ITEMS",
+  //   payload: null,
+  // });
+
+  await Api.post(
+    `admin/item/block-unblock`,
+    { ...x }
+    // `admin/item/block-unblock?items=${[id]}&&action_type=${action}`
+  ).then(async (data) => {
+    console.log(data);
+    await fetchItems();
+  });
+};
+
 const addItem = (dispatch) => async (data) => {
   await Api.post("admin/item/add", {
     category_id: data.category_id,
@@ -78,7 +98,6 @@ const addItem = (dispatch) => async (data) => {
     status: data.status,
   })
     .then(async (data) => {
-      // console.log(data);
       dispatch({
         type: "SET_MESSAGE",
         payload: "Item Added Successfully",
@@ -99,6 +118,7 @@ export const { Context, Provider } = createDataContext(
   {
     fetchItems,
     addItem,
+    toggleItemStatus,
   },
   {
     items: [],
