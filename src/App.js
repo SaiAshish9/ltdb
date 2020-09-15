@@ -20,6 +20,7 @@ const App = ({ token }) => {
     </DataProvider>
   );
 };
+//test comment
 
 const mapStateToProps = (state) => ({
   token: state.auth.user && state.auth.user.token,
