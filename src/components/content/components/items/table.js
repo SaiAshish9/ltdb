@@ -36,6 +36,7 @@ export default function SimpleTable({ data }) {
     state: { items, items_count, page_count, message },
     fetchItems,
     toggleItemStatus,
+    fetchItem,
   } = useContext(DataContext);
 
   const convertRows = () => {
@@ -246,7 +247,8 @@ export default function SimpleTable({ data }) {
                     }}
                   >
                     <IconButton
-                      onClick={() => {
+                      onClick={async () => {
+                        await fetchItem(row.name);
                         setOpen(true);
                       }}
                     >

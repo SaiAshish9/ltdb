@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Backdrop,
   Paper,
@@ -9,109 +9,188 @@ import {
   Fab,
 } from "@material-ui/core";
 import Img from "../../../../assets/thumbnail1.png";
-
+import { Context as DataContext } from "../../../../api/dataProvider";
+import moment from "moment";
 import Clear from "@material-ui/icons/Clear";
 
 const Popup = ({ classes, open, setOpen }) => {
+  const {
+    state: { item_details },
+  } = useContext(DataContext);
+
   return (
     <Backdrop open={open} className={classes.backdrop}>
-      <Paper
-        style={{
-          height: "80vh",
-          width: "60vw",
-          position: "absolute",
-          top: "5vh",
-          background: "#fff",
-          padding: "2rem",
-        }}
-      >
-        <Box display="flex" flexDirection="row-reverse">
-          <IconButton
-            onClick={() => {
-              setOpen(false);
-            }}
-          >
-            <Clear />
-          </IconButton>
-        </Box>
-        <Box
+      {item_details && (
+        <Paper
           style={{
+            height: "80vh",
+            overflowY: "scroll",
+            width: "60vw",
+            position: "absolute",
+            top: "5vh",
+            background: "#fff",
             padding: "2rem",
-            // width: "80%",
           }}
         >
-          <Box display="flex" justifyContent="space-between">
-            <Avatar
-              src={Img}
-              style={{ width: "150px", height: "150px", marginRight: "2rem" }}
-              variant="rounded"
+          <Box display="flex" flexDirection="row-reverse">
+            <IconButton
+              onClick={() => {
+                setOpen(false);
+              }}
             >
-              H
-            </Avatar>
+              <Clear />
+            </IconButton>
+          </Box>
+          <Box
+            style={{
+              padding: "2rem",
+              // width: "80%",
+            }}
+          >
+            <Box display="flex" justifyContent="space-between">
+              <Avatar
+                src={Img}
+                style={{ width: "150px", height: "150px", marginRight: "2rem" }}
+                variant="rounded"
+              >
+                H
+              </Avatar>
+              <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="space-between"
+              >
+                <TextField
+                  defaultValue={item_details && item_details.name_en}
+                  variant="outlined"
+                  label="Name_en"
+                />
+                <TextField
+                  defaultValue={item_details && item_details.name_ar}
+                  variant="outlined"
+                  label="Name_ar"
+                />
+              </Box>
+              <TextField
+                rows={7}
+                multiline
+                label="Description_en"
+                variant="outlined"
+                value={item_details && item_details.description_en}
+              />
+              <TextField
+                rows={7}
+                multiline
+                label="Description_ar"
+                variant="outlined"
+                defaultValue={item_details && item_details.description_ar}
+              />
+            </Box>
             <Box
               display="flex"
-              flexDirection="column"
               justifyContent="space-between"
+              style={{ margin: "2rem 0" }}
             >
-              <TextField variant="outlined" label="Name_en" />
-              <TextField variant="outlined" label="Name_ar" />
+              <TextField
+                defaultValue={
+                  item_details && item_details.price ? item_details.price : null
+                }
+                variant="outlined"
+                label="Price"
+                type="number"
+              />
+              <TextField
+                defaultValue={
+                  item_details && item_details.status === 1
+                    ? "Active"
+                    : "InActive"
+                }
+                variant="outlined"
+                label="Status"
+              />
+              <TextField
+                variant="outlined"
+                id="date"
+                label="created_at"
+                // type="date"
+                value={
+                  item_details &&
+                  moment(new Date(item_details.created_at)).format(
+                    "DD MMM YYYY"
+                  )
+                  // moment(item_details.created_at).format("DD MM YYYY")
+                }
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
             </Box>
-            <TextField
-              rows={7}
-              multiline
-              label="Description_en"
-              variant="outlined"
-            />
-            <TextField
-              rows={7}
-              multiline
-              label="Description_ar"
-              variant="outlined"
-            />
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              style={{ margin: "2rem 0" }}
+            >
+              <TextField
+                variant="outlined"
+                defaultValue={item_details && item_details.link_item_id}
+                label="link_item_id"
+                type="number"
+              />
+              <TextField
+                variant="outlined"
+                defaultValue={item_details && item_details.category_id}
+                label="category"
+              />
+              <TextField
+                variant="outlined"
+                defaultValue={item_details && item_details.sub_category_id}
+                label="sub-category"
+              />
+            </Box>
+            <Box display="flex" alignItems="center" justifyContent="center">
+              <p style={{ fontWeight: "bold" }}>Custom Fields</p>
+            </Box>
+
+            {item_details &&
+              item_details.custom_fields_values.map((i, k) => (
+                <Box
+                  key={k}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  style={{ margin: "2rem 0" }}
+                >
+                  <p>{i.name_en}</p>
+
+                  <TextField
+                    variant="outlined"
+                    label="value_en"
+                    defaultValue={i.value_en}
+                  />
+                  <TextField
+                    variant="outlined"
+                    label="value_ar"
+                    defaultValue={i.value_ar}
+                  />
+                </Box>
+              ))}
+
+            <Box display="flex" flexDirection="row-reverse">
+              <Fab
+                onClick={() => {
+                  console.log(item_details);
+                }}
+                disabled
+                type="submit"
+                variant="extended"
+                color="primary"
+              >
+                Save
+              </Fab>
+            </Box>
           </Box>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            style={{ margin: "2rem 0" }}
-          >
-            <TextField variant="outlined" label="Price" type="number" />
-            <TextField variant="outlined" label="Status" />
-            <TextField
-              variant="outlined"
-              id="date"
-              label="Date Of Birth"
-              type="date"
-              defaultValue="2017-05-24"
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-          </Box>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            style={{ margin: "2rem 0" }}
-          >
-            <TextField variant="outlined" label="link_item_id" type="number" />
-            <TextField variant="outlined" label="category" />
-            <TextField variant="outlined" label="sub-category" />
-          </Box>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            style={{ margin: "2rem 0" }}
-          >
-            <TextField variant="outlined" label="custom_field_1" />
-            <TextField variant="outlined" label="custom_field_2" />
-            <TextField variant="outlined" label="custom_field_3" />
-          </Box>
-          <Box display="flex" flexDirection="row-reverse">
-            <Fab type="submit" variant="extended" color="primary">
-              Save
-            </Fab>
-          </Box>
-        </Box>
-      </Paper>
+        </Paper>
+      )}
     </Backdrop>
   );
 };

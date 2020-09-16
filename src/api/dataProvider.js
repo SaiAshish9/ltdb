@@ -10,6 +10,11 @@ const reducer = (state, action) => {
         ...state,
         items: action.payload,
       };
+    case "SET_ITEM":
+      return {
+        ...state,
+        item_details: action.payload,
+      };
     case "SET_ITEM_COUNT":
       return {
         ...state,
@@ -103,6 +108,24 @@ const toggleItemStatus = (dispatch) => async (id, action) => {
   });
 };
 
+const fetchItem = (dispatch) => async (id) => {
+  dispatch({
+    type: "SET_ITEM",
+    payload: null,
+  });
+  await Api(`admin/item/getitem?item_id=${id}`)
+    .then((data) => {
+      // console.log(data.data.data);
+      dispatch({
+        type: "SET_ITEM",
+        payload: data.data.data,
+      });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
 const addItem = (dispatch) => async (data) => {
   const config = {
     bucketName: "lootbox-s3",
@@ -110,7 +133,6 @@ const addItem = (dispatch) => async (data) => {
     accessKeyId: "AKIA3JWMPNMIYUFSR54M",
     secretAccessKey: "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",
   };
-
 
   S3FileUpload.uploadFile(data.image, config)
     .then((data) => console.log(data))
@@ -152,6 +174,7 @@ export const { Context, Provider } = createDataContext(
     addItem,
     toggleItemStatus,
     fetchUser,
+    fetchItem,
   },
   {
     items: [],
@@ -159,5 +182,6 @@ export const { Context, Provider } = createDataContext(
     page_count: 0,
     message: null,
     user_profile: null,
+    item_details: null,
   }
 );
