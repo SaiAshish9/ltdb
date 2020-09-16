@@ -1,6 +1,7 @@
 import createDataContext from "./createDataContext";
 import Api from "../api";
 import Cookie from "js-cookie";
+import S3FileUpload from "react-s3";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -103,33 +104,45 @@ const toggleItemStatus = (dispatch) => async (id, action) => {
 };
 
 const addItem = (dispatch) => async (data) => {
-  await Api.post("admin/item/add", {
-    category_id: data.category_id,
-    sub_category_id: data.sub_category_id,
-    brand_id: data.brand_id,
-    name_en: data.name_en,
-    name_ar: data.name_ar,
-    description_en: data.description_en,
-    description_ar: data.description_ar,
-    item_custom_values: data.item_custom_values,
-    image: data.image,
-    price: data.price,
-    status: data.status,
-  })
-    .then(async (data) => {
-      dispatch({
-        type: "SET_MESSAGE",
-        payload: "Item Added Successfully",
-      });
-      await fetchItems();
-    })
-    .catch((error) => {
-      dispatch({
-        type: "SET_MESSAGE",
-        payload: "Some error occurred while adding new item",
-      });
-      console.log(error);
-    });
+  const config = {
+    bucketName: "lootbox-s3",
+    region: "us-east-2",
+    accessKeyId: "AKIA3JWMPNMIYUFSR54M",
+    secretAccessKey: "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",
+  };
+
+
+  S3FileUpload.uploadFile(data.image, config)
+    .then((data) => console.log(data))
+    .catch((err) => console.error(err));
+
+  // await Api.post("admin/item/add", {
+  //   category_id: data.category_id,
+  //   sub_category_id: data.sub_category_id,
+  //   brand_id: data.brand_id,
+  //   name_en: data.name_en,
+  //   name_ar: data.name_ar,
+  //   description_en: data.description_en,
+  //   description_ar: data.description_ar,
+  //   item_custom_values: data.item_custom_values,
+  //   image: data.image,
+  //   price: data.price,
+  //   status: data.status,
+  // })
+  //   .then(async (data) => {
+  //     dispatch({
+  //       type: "SET_MESSAGE",
+  //       payload: "Item Added Successfully",
+  //     });
+  //     await fetchItems();
+  //   })
+  //   .catch((error) => {
+  //     dispatch({
+  //       type: "SET_MESSAGE",
+  //       payload: "Some error occurred while adding new item",
+  //     });
+  //     console.log(error);
+  //   });
 };
 
 export const { Context, Provider } = createDataContext(

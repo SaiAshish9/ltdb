@@ -123,7 +123,19 @@ const AddItem = () => {
   };
 
   const handleSave = async (y) => {
-    console.log(y);
+    console.log({
+      category_id: subCategories[subValue]["category_id"],
+      sub_category_id: subCategories[subValue]["sub_category_id"],
+      brand_id: data[brandValue]["brand_id"],
+      name_en: name_en,
+      name_ar: name_ar,
+      description_en: desc_en,
+      description_ar: desc_ar,
+      image: file,
+      price: price ? +price : 0,
+      status: 1,
+      item_custom_values: y,
+    });
     await addItem({
       category_id: subCategories[subValue]["category_id"],
       sub_category_id: subCategories[subValue]["sub_category_id"],
