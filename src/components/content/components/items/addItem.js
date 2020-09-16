@@ -310,7 +310,7 @@ const AddItem = () => {
                   justifyContent="space-between"
                   style={{ margin: "1rem 0" }}
                 >
-                  { customFields && customFields.length > 0 && (
+                  {customFields && customFields.length > 0 && (
                     <p
                       style={{
                         fontSize: "1rem",
@@ -382,46 +382,45 @@ const AddItem = () => {
                   style={{ width: "47%" }}
                 />
               </Box>
-              {description && (
-                <Box display="flex" justifyContent="space-between">
-                  <div style={{ width: "47%" }}>
-                    <p
-                      style={{
-                        fontSize: "1rem",
-                        color: "#282b3c",
-                        fontWeight: 600,
-                      }}
-                    >
-                      Description_en :
-                    </p>
-                    <TextField
-                      multiline
-                      rows={4}
-                      variant="outlined"
-                      // defaultValue={description.desc}
-                      style={{ width: "100%", opacity: 0.8 }}
-                    />
-                  </div>
-                  <div style={{ width: "47%" }}>
-                    <p
-                      style={{
-                        fontSize: "1rem",
-                        color: "#282b3c",
-                        fontWeight: 600,
-                      }}
-                    >
-                      Description_ar :
-                    </p>
-                    <TextField
-                      multiline
-                      rows={4}
-                      // defaultValue={description.desc_ar}
-                      variant="outlined"
-                      style={{ width: "100%", opacity: 0.8 }}
-                    />
-                  </div>
-                </Box>
-              )}
+
+              <Box display="flex" justifyContent="space-between">
+                <div style={{ width: "47%" }}>
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      color: "#282b3c",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Description_en :
+                  </p>
+                  <TextField
+                    multiline
+                    rows={4}
+                    variant="outlined"
+                    // defaultValue={description.desc}
+                    style={{ width: "100%", opacity: 0.8 }}
+                  />
+                </div>
+                <div style={{ width: "47%" }}>
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      color: "#282b3c",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Description_ar :
+                  </p>
+                  <TextField
+                    multiline
+                    rows={4}
+                    // defaultValue={description.desc_ar}
+                    variant="outlined"
+                    style={{ width: "100%", opacity: 0.8 }}
+                  />
+                </div>
+              </Box>
               <Box
                 display="flex"
                 flexDirection="column"

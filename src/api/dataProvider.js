@@ -24,6 +24,11 @@ const reducer = (state, action) => {
         ...state,
         message: action.payload,
       };
+    case "SET_USER_PROFILE":
+      return {
+        ...state,
+        user_profile: action.payload,
+      };
     default:
       return state;
   }
@@ -63,21 +68,35 @@ const fetchItems = (dispatch) => async (page, limit) => {
     .catch((error) => console.log(error));
 };
 
+const fetchUser = (dispatch) => async (id) => {
+  dispatch({
+    type: "SET_USER_PROFILE",
+    payload: null,
+  });
+  await Api.post(`admin/user/getuser`, {
+    user_id: id,
+  })
+    .then((data) => {
+      dispatch({
+        type: "SET_USER_PROFILE",
+        payload: data.data.data,
+      });
+    })
+    .catch((e) => {
+      console.log(e);
+      dispatch({
+        type: "SET_USER_PROFILE",
+        payload: null,
+      });
+    });
+};
+
 const toggleItemStatus = (dispatch) => async (id, action) => {
   const x = {
     items: [id],
     action_type: action,
   };
-  // dispatch({
-  //   type: "SET_ITEMS",
-  //   payload: null,
-  // });
-
-  await Api.post(
-    `admin/item/block-unblock`,
-    { ...x }
-    // `admin/item/block-unblock?items=${[id]}&&action_type=${action}`
-  ).then(async (data) => {
+  await Api.post(`admin/item/block-unblock`, { ...x }).then(async (data) => {
     console.log(data);
     await fetchItems();
   });
@@ -119,11 +138,13 @@ export const { Context, Provider } = createDataContext(
     fetchItems,
     addItem,
     toggleItemStatus,
+    fetchUser,
   },
   {
     items: [],
     items_count: 0,
     page_count: 0,
     message: null,
+    user_profile: null,
   }
 );

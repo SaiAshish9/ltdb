@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -13,6 +13,7 @@ import axios from "axios";
 import IconButton from "@material-ui/core/IconButton";
 import moment from "moment";
 import Popup from "./popup";
+import { Context as DataContext } from "../../../../api/dataProvider";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -31,6 +32,7 @@ export default function SimpleTable({ data }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
+  const { fetchUser } = useContext(DataContext);
 
   const convertRows = (data) => {
     return data.map((i, k) =>
@@ -240,8 +242,8 @@ export default function SimpleTable({ data }) {
                     }}
                   >
                     <IconButton
-                      // style={{ height: "2rem" }}
-                      onClick={() => {
+                      onClick={async () => {
+                        await fetchUser(row.name);
                         setOpen(true);
                       }}
                     >

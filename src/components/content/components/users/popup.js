@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Backdrop,
   Paper,
@@ -16,6 +16,8 @@ import {
 } from "@material-ui/core";
 import { Clear } from "@material-ui/icons";
 import Img from "../../../../assets/thumbnail1.png";
+import { Context as DataContext } from "../../../../api/dataProvider";
+import moment from "moment";
 
 const Popup = ({ classes, open, setOpen }) => {
   const [value, setValue] = useState("male");
@@ -23,109 +25,153 @@ const Popup = ({ classes, open, setOpen }) => {
   const handleChange = (event) => {
     setValue(event.target.value);
   };
+  const {
+    state: { user_profile },
+  } = useContext(DataContext);
 
   return (
     <Backdrop open={open} className={classes.backdrop}>
-      <Paper
-        style={{
-          height: "80vh",
-          width: "50vw",
-          position: "absolute",
-          top: "5vh",
-          background: "#fff",
-          padding: "2rem",
-        }}
-      >
-        <Box display="flex" flexDirection="row-reverse">
-          <IconButton
-            onClick={() => {
-              setOpen(false);
-            }}
-          >
-            <Clear />
-          </IconButton>
-        </Box>
-        <Box style={{ padding: "2rem" }} display="flex">
-          <Avatar
-            src={Img}
-            style={{ width: "150px", height: "150px", marginRight: "2rem" }}
-            variant="rounded"
-          >
-            H
-          </Avatar>
-          <Box
-            display="flex"
-            flexDirection="column"
-            justifyContent="space-between"
-          >
-            <Box display="flex">
+      {user_profile && (
+        <Paper
+          style={{
+            height: "80vh",
+            width: "50vw",
+            position: "absolute",
+            top: "5vh",
+            background: "#fff",
+            padding: "2rem",
+          }}
+        >
+          <Box display="flex" flexDirection="row-reverse">
+            <IconButton
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              <Clear />
+            </IconButton>
+          </Box>
+          <Box style={{ padding: "2rem" }} display="flex">
+            <Box>
+              <Avatar
+                src={
+                  user_profile &&
+                  user_profile.profile_image &&
+                  user_profile.profile_image.length > 0
+                    ? user_profile.profile_image
+                    : Img
+                }
+                style={{
+                  width: "150px",
+                  height: "150px",
+                  marginRight: "2rem",
+                  marginBottom: "2rem",
+                }}
+                variant="rounded"
+              >
+                H
+              </Avatar>
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Gender</FormLabel>
+                <RadioGroup
+                  aria-label="gender"
+                  name="gender1"
+                  value={
+                    user_profile && user_profile.gender === "1"
+                      ? "male"
+                      : "female"
+                  }
+                  onChange={handleChange}
+                >
+                  <FormControlLabel
+                    value="female"
+                    control={<Radio disabled={true} />}
+                    label="Female"
+                  />
+                  <FormControlLabel
+                    value="male"
+                    control={<Radio disabled={true} />}
+                    label="Male"
+                  />
+                </RadioGroup>
+              </FormControl>
               <TextField
-                label="First Name"
+                id="date"
+                label="created_at"
+                disabled={true}
+                style={{ margin: "4rem 0" }}
+                defaultValue={
+                  user_profile &&
+                  moment(new Date(user_profile.created_at)).format(
+                    "DD MMM YYYY"
+                  )
+                }
+                className={classes.textField}
+              />
+              <FormGroup aria-label="position" row>
+                <FormControlLabel
+                  value="top"
+                  disabled={true}
+                  control={
+                    <Checkbox
+                      checked={
+                        user_profile && user_profile.is_google_login === "1"
+                      }
+                      color="primary"
+                    />
+                  }
+                  label="Google Signed-in"
+                  labelPlacement="end"
+                />
+              </FormGroup>
+            </Box>
+
+            <Box
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-between"
+            >
+              <Box display="flex">
+                <TextField
+                  label="First Name"
+                  disabled={true}
+                  value={user_profile && user_profile.first_name}
+                  variant="outlined"
+                  style={{ marginRight: "1rem" }}
+                />
+                <TextField
+                  disabled={true}
+                  value={user_profile && user_profile.last_name}
+                  label="Last Name"
+                  variant="outlined"
+                />
+              </Box>
+              <TextField
+                value={user_profile && user_profile.full_name}
+                label="Full Name"
+                disabled={true}
                 variant="outlined"
+              />
+              <TextField
+                label="Email Address"
+                value={user_profile && user_profile.email}
+                variant="outlined"
+                disabled={true}
                 style={{ marginRight: "1rem" }}
               />
-              <TextField label="Last Name" variant="outlined" />
-            </Box>
-            <TextField label="Full Name" variant="outlined" />
-          </Box>
-        </Box>
-        <Box display="flex" style={{ padding: "2rem" }}>
-          <TextField
-            label="Email Address"
-            variant="outlined"
-            style={{ marginRight: "1rem" }}
-          />
-          <TextField label="Phone Number" variant="outlined" />
-        </Box>
-        <Box
-          display="flex"
-          alignItems="center"
-          //   justifyContent="space-between"
-          style={{ padding: "2rem" }}
-        >
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Gender</FormLabel>
-            <RadioGroup
-              aria-label="gender"
-              name="gender1"
-              value={value}
-              onChange={handleChange}
-            >
-              <FormControlLabel
-                value="female"
-                control={<Radio />}
-                label="Female"
+              <TextField
+                disabled={true}
+                value={user_profile && user_profile.phone}
+                label="Phone Number"
+                variant="outlined"
+                style={{
+                  color: "#000",
+                }}
               />
-              <FormControlLabel value="male" control={<Radio />} label="Male" />
-            </RadioGroup>
-          </FormControl>
-          <TextField
-            id="date"
-            label="Date Of Birth"
-            type="date"
-            style={{ marginLeft: "4rem" }}
-            defaultValue="2017-05-24"
-            className={classes.textField}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        </Box>
-        <Box
-          justifyContent="space-between"
-          display="flex"
-          style={{ padding: " 0 2rem" }}
-        >
-          <FormGroup aria-label="position" row>
-            <FormControlLabel
-              value="top"
-              control={<Checkbox color="primary" />}
-              label="Google Signed-in"
-              labelPlacement="end"
-            />
-          </FormGroup>
-        </Box>
-      </Paper>
+            </Box>
+          </Box>
+        </Paper>
+      )}
     </Backdrop>
   );
 };
