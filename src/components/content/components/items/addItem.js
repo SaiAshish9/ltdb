@@ -36,6 +36,8 @@ const AddItem = () => {
   const [price, setPrice] = useState(null);
   const [name_en, setNameEn] = useState("");
   const [name_ar, setNameAr] = useState("");
+  const [desc_en, setDescEn] = useState("");
+  const [desc_ar, setDescAr] = useState("");
   const { addItem, fetchItems } = useContext(DataContext);
   const [customFields, setCustomFields] = useState([]);
   // const [customFieldValue, setCustomFieldValue] = useState();
@@ -128,8 +130,8 @@ const AddItem = () => {
       brand_id: data[brandValue]["brand_id"],
       name_en: name_en,
       name_ar: name_ar,
-      description_en: description.desc,
-      description_ar: description.desc_ar,
+      description_en: desc_en,
+      description_ar: desc_ar,
       image: file,
       price: price ? +price : 0,
       status: 1,
@@ -139,6 +141,8 @@ const AddItem = () => {
     setCategories(null);
     setNameEn("");
     setNameAr("");
+    setDescEn("");
+    setDescAr("");
     setBrandValue(null);
     setDescription(null);
     setCustomFields(null);
@@ -398,6 +402,8 @@ const AddItem = () => {
                     multiline
                     rows={4}
                     variant="outlined"
+                    value={desc_en}
+                    onChange={(e) => setDescEn(e.target.value)}
                     // defaultValue={description.desc}
                     style={{ width: "100%", opacity: 0.8 }}
                   />
@@ -415,6 +421,8 @@ const AddItem = () => {
                   <TextField
                     multiline
                     rows={4}
+                    value={desc_ar}
+                    onChange={(e) => setDescAr(e.target.value)}
                     // defaultValue={description.desc_ar}
                     variant="outlined"
                     style={{ width: "100%", opacity: 0.8 }}
