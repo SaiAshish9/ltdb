@@ -231,7 +231,7 @@ export default function SimpleTable({ data }) {
                     onClick={async () => {
                       console.log(row.item_id, +row.status === 1 ? 0 : 1);
                       await toggleItemStatus(row.item_id, +row.status === 1 ? 0 : 1);
-                      await fetchItems()
+                      await fetchItems(page + 1)
                     }}
                     style={{
                       cursor: "pointer",
@@ -249,7 +249,7 @@ export default function SimpleTable({ data }) {
                   >
                     <IconButton
                       onClick={async () => {
-                        await fetchItem(row.name);
+                        await fetchItem(row.item_id);
                         setOpen(true);
                       }}
                     >

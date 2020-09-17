@@ -204,7 +204,7 @@ export default function SimpleTable({ data }) {
                         x.user_id,
                         +x.status === 1 ? 0 : 1
                       );
-                      await fetchUsers();
+                      await fetchUsers(page+1);
                     }}
                     style={{
                       cursor: "pointer",
