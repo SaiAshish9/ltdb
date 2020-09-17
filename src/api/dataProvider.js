@@ -10,6 +10,11 @@ const reducer = (state, action) => {
         ...state,
         items: action.payload,
       };
+    case "SET_USERS":
+      return {
+        ...state,
+        users: action.payload,
+      };
     case "SET_ITEM":
       return {
         ...state,
@@ -19,6 +24,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         items_count: action.payload,
+      };
+    case "SET_USERS_COUNT":
+      return {
+        ...state,
+        user_count: action.payload,
       };
     case "SET_PAGE_COUNT":
       return {
@@ -74,6 +84,32 @@ const fetchItems = (dispatch) => async (page, limit) => {
     .catch((error) => console.log(error));
 };
 
+const fetchUsers = (dispatch) => async (page) => {
+  var url;
+  if (page) {
+    url = `admin/user/list?page=${page}&&limit=10`;
+  } else {
+    url = `admin/user/list?limit=10`;
+  }
+  if (page) {
+    dispatch({
+      type: "SET_USERS",
+      payload: null,
+    });
+  }
+
+  await Api(url).then((data) => {
+    dispatch({
+      type: "SET_USERS_COUNT",
+      payload: JSON.parse(data.request.response)["parameter"]["total"],
+    });
+    dispatch({
+      type: "SET_USERS",
+      payload: data.data.data,
+    });
+  });
+};
+
 const fetchUser = (dispatch) => async (id) => {
   dispatch({
     type: "SET_USER_PROFILE",
@@ -89,7 +125,6 @@ const fetchUser = (dispatch) => async (id) => {
       });
     })
     .catch((e) => {
-      console.log(e);
       dispatch({
         type: "SET_USER_PROFILE",
         payload: null,
@@ -115,7 +150,6 @@ const fetchItem = (dispatch) => async (id) => {
   });
   await Api(`admin/item/getitem?item_id=${id}`)
     .then((data) => {
-      // console.log(data.data.data);
       dispatch({
         type: "SET_ITEM",
         payload: data.data.data,
@@ -133,7 +167,7 @@ const addItem = (dispatch) => async (data) => {
     accessKeyId: "AKIA3JWMPNMIYUFSR54M",
     secretAccessKey: "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",
   };
-
+  console.log(data.image);
   S3FileUpload.uploadFile(data.image, config)
     .then((data) => console.log(data))
     .catch((err) => console.error(err));
@@ -174,6 +208,7 @@ export const { Context, Provider } = createDataContext(
     addItem,
     toggleItemStatus,
     fetchUser,
+    fetchUsers,
     fetchItem,
   },
   {
@@ -183,5 +218,7 @@ export const { Context, Provider } = createDataContext(
     message: null,
     user_profile: null,
     item_details: null,
+    users: [],
+    user_count: 0,
   }
 );
