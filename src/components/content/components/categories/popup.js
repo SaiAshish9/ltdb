@@ -27,10 +27,10 @@ const SubCategoryTable = ({
   open,
   openEditDialog,
   setOpenEditDialog,
-  fetchSubCategories
+  fetchSubCategories,
 }) => {
   const [loading, setLoading] = useState(true);
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register, reset } = useForm();
   const [current, setCurrent] = useState(true);
 
   const onSubmit = (values) => {
@@ -52,6 +52,7 @@ const SubCategoryTable = ({
       Api.post("admin/subcategory/add", res)
         .then((data) => {
           setOpen(false);
+          reset();
         })
         .catch((error) => console.log(error));
   };
@@ -75,6 +76,7 @@ const SubCategoryTable = ({
   const handleClose = () => {
     setAnchorEl(null);
     setOpen1(false);
+    reset();
   };
 
   const id = open1 ? "simple-popover" : undefined;
@@ -109,6 +111,7 @@ const SubCategoryTable = ({
             <IconButton
               onClick={() => {
                 setOpen(false);
+                reset();
               }}
             >
               <ClearIcon />

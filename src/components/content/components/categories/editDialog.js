@@ -302,7 +302,6 @@ const EditDialog = ({
                 type="submit"
                 onClick={(e) => {
                   e.stopPropagation();
-                  // onSubmit()
                 }}
                 variant="extended"
                 color="primary"
