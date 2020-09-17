@@ -233,12 +233,13 @@ function SimpleTable({ data }) {
                   </TableCell>
                   <TableCell
                     style={{
-                      paddingLeft: "2rem",
-                      color: "#8095a1",
+                      // paddingLeft: "2rem",
+                      // color: "#8095a1",
+                      color:row.status===1?"green":"red",
                       fontWeight: 500,
                     }}
                   >
-                    {row.status}
+                    {row.status ===1?"Active" :"InActive"   }
                   </TableCell>
                   <TableCell
                     style={{ color: "#8095a1", fontWeight: 500 }}

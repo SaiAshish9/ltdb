@@ -81,9 +81,7 @@ export default function DenseTable({
                 <TableCell style={{ color: "#4c5172", fontWeight: 600 }}>
                   Custom Fields
                 </TableCell>
-                <TableCell>
-                  Action
-                </TableCell>
+                <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -101,22 +99,30 @@ export default function DenseTable({
                     <TableCell style={{ color: "#a197a3" }}>
                       {row.name_ar}
                     </TableCell>
-                    <TableCell style={{ color: "#a197a3" }}>
-                      <Chip
+                    <TableCell
+                      style={{
+                        // paddingLeft: "2rem",
+                        // color: "#8095a1",
+                        color: row.status === 1 ? "green" : "red",
+                        fontWeight: 500,
+                      }}
+                    >
+                      {/* <Chip
                         style={{
                           color: "#6cc07f",
                           background: "#fff",
                           fontWeight: 600,
                         }}
                         label={row.status}
-                      />
+                      /> */}
+                      {row.status === 1 ? "Active" : "InActive"}
                     </TableCell>
                     <TableCell
                       style={{
                         color: "#a197a3",
                         display: "flex",
                         alignItems: "center",
-                        paddingLeft:"20%"
+                        paddingLeft: "20%",
                       }}
                     >
                       <IconButton

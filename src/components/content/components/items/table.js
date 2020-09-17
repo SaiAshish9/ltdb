@@ -37,6 +37,7 @@ export default function SimpleTable({ data }) {
     fetchItems,
     toggleItemStatus,
     fetchItem,
+    clearMessage,
   } = useContext(DataContext);
 
   const convertRows = () => {
@@ -230,8 +231,12 @@ export default function SimpleTable({ data }) {
                   <TableCell
                     onClick={async () => {
                       console.log(row.item_id, +row.status === 1 ? 0 : 1);
-                      await toggleItemStatus(row.item_id, +row.status === 1 ? 0 : 1);
-                      await fetchItems(page + 1)
+                      await toggleItemStatus(
+                        row.item_id,
+                        +row.status === 1 ? 0 : 1
+                      );
+                      await fetchItems(page + 1);
+                      await clearMessage()
                     }}
                     style={{
                       cursor: "pointer",

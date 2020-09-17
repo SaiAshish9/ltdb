@@ -137,12 +137,24 @@ const toggleItemStatus = (dispatch) => async (id, action) => {
     items: [id],
     action_type: action,
   };
+
   await Api.post(`admin/item/block-unblock`, { ...x }).then(async (data) => {
     console.log(data);
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: "Item Updated Successfully",
+    });
   });
+
   fetchItems();
 };
 
+const clearMessage = (dispatch) => async () => {
+  dispatch({
+    type: "SET_MESSAGE",
+    payload: null,
+  });
+};
 
 const toggleUserStatus = (dispatch) => async (id, action) => {
   const x = {
@@ -151,6 +163,10 @@ const toggleUserStatus = (dispatch) => async (id, action) => {
   };
   await Api.post(`admin/user/block-unblock`, { ...x }).then(async (data) => {
     console.log(data);
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: "User Updated Successfully",
+    });
   });
   fetchUsers();
 };
@@ -182,6 +198,9 @@ const addItem = (dispatch) => async (data) => {
   console.log(data.image);
   S3FileUpload.uploadFile(data.image, config)
     .then((data) => console.log(data))
+    // {
+    //   image:"s3 url"
+    // }
     .catch((err) => console.error(err));
 
   // await Api.post("admin/item/add", {
@@ -222,7 +241,8 @@ export const { Context, Provider } = createDataContext(
     fetchUser,
     fetchUsers,
     fetchItem,
-    toggleUserStatus
+    toggleUserStatus,
+    clearMessage,
   },
   {
     items: [],

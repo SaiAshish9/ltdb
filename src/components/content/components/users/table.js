@@ -12,6 +12,7 @@ import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import IconButton from "@material-ui/core/IconButton";
 import moment from "moment";
 import Popup from "./popup";
+import { Snackbar } from "@material-ui/core";
 import { Context as DataContext } from "../../../../api/dataProvider";
 
 const useStyles = makeStyles((theme) => ({
@@ -32,11 +33,13 @@ export default function SimpleTable({ data }) {
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
   const {
-    state: { users, user_count },
+    state: { users, user_count, message },
     fetchUser,
     fetchUsers,
     toggleUserStatus,
+    clearMessage,
   } = useContext(DataContext);
+  const [openSnackbar, setOpenSnackbar] = useState(true);
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -65,6 +68,17 @@ export default function SimpleTable({ data }) {
         elevation={0}
         component={Paper}
       >
+        {message && (
+          <Snackbar
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            open={openSnackbar}
+            message={message}
+            onClose={() => {
+              setOpenSnackbar(false);
+            }}
+            autoHideDuration={1000}
+          />
+        )}
         <Table className={classes.table} aria-label="simple table" size="small">
           <TableHead>
             <TableRow
@@ -204,7 +218,8 @@ export default function SimpleTable({ data }) {
                         x.user_id,
                         +x.status === 1 ? 0 : 1
                       );
-                      await fetchUsers(page+1);
+                      await fetchUsers(page + 1);
+                      await clearMessage();
                     }}
                     style={{
                       cursor: "pointer",
