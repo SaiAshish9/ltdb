@@ -9,7 +9,6 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import TablePagination from "@material-ui/core/TablePagination";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
-import axios from "axios";
 import IconButton from "@material-ui/core/IconButton";
 import moment from "moment";
 import Popup from "./popup";
@@ -36,14 +35,15 @@ export default function SimpleTable({ data }) {
     state: { users, user_count },
     fetchUser,
     fetchUsers,
+    toggleUserStatus,
   } = useContext(DataContext);
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    fetchUsers(page+1)
-    setPage(0)
+    fetchUsers(page + 1);
+    setPage(0);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -199,13 +199,20 @@ export default function SimpleTable({ data }) {
                     {moment(x.created_at).format("DD MMM YYYY")}
                   </TableCell>
                   <TableCell
+                    onClick={async () => {
+                      await toggleUserStatus(
+                        x.user_id,
+                        +x.status === 1 ? 0 : 1
+                      );
+                      await fetchUsers();
+                    }}
                     style={{
                       cursor: "pointer",
-                      color: x.status !== "1" ? "red" : "green",
+                      color: x.status !== 1 ? "red" : "green",
                       fontWeight: 500,
                     }}
                   >
-                    {x.status === "1" ? "Active" : "InActive"}
+                    {x.status === 1 ? "Active" : "InActive"}
                   </TableCell>
                   <TableCell
                     style={{

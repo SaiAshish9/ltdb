@@ -139,8 +139,20 @@ const toggleItemStatus = (dispatch) => async (id, action) => {
   };
   await Api.post(`admin/item/block-unblock`, { ...x }).then(async (data) => {
     console.log(data);
-    await fetchItems();
   });
+  fetchItems();
+};
+
+
+const toggleUserStatus = (dispatch) => async (id, action) => {
+  const x = {
+    users: [id],
+    action_type: action,
+  };
+  await Api.post(`admin/user/block-unblock`, { ...x }).then(async (data) => {
+    console.log(data);
+  });
+  fetchUsers();
 };
 
 const fetchItem = (dispatch) => async (id) => {
@@ -210,6 +222,7 @@ export const { Context, Provider } = createDataContext(
     fetchUser,
     fetchUsers,
     fetchItem,
+    toggleUserStatus
   },
   {
     items: [],

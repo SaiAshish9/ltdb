@@ -194,8 +194,8 @@ export default function SimpleTable({ data }) {
           )}
 
           <TableBody>
-            {rows &&
-              rows.map((row, i) => (
+            {items &&
+              items.map((row, i) => (
                 <TableRow
                   elevation={0}
                   style={{
@@ -203,7 +203,7 @@ export default function SimpleTable({ data }) {
                     padding: "0px",
                     border: "none",
                   }}
-                  key={row.name}
+                  key={row.item_id}
                 >
                   <TableCell
                     style={{
@@ -213,32 +213,33 @@ export default function SimpleTable({ data }) {
                     component="th"
                     scope="row"
                   >
-                    {row.name}
+                    {row.item_id}
                   </TableCell>
                   <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                    {row.calories}
+                    {row.name_en}
                   </TableCell>
                   <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                    {row.fat}
+                    {row.name_ar}
                   </TableCell>
                   <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                    {moment(row.carbs).format("DD MMM YYYY")}
+                    {moment(row.created_at).format("DD MMM YYYY")}
                   </TableCell>
                   <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                    {row.protein}
+                    {row.price}
                   </TableCell>
                   <TableCell
-                    onClick={() => {
-                      console.log(row.name, +row.status === 1 ? 0 : 1);
-                      toggleItemStatus(row.name, +row.status === 1 ? 0 : 1);
+                    onClick={async () => {
+                      console.log(row.item_id, +row.status === 1 ? 0 : 1);
+                      await toggleItemStatus(row.item_id, +row.status === 1 ? 0 : 1);
+                      await fetchItems()
                     }}
                     style={{
                       cursor: "pointer",
-                      color: row.status !== "1" ? "red" : "green",
+                      color: row.status !== 1 ? "red" : "green",
                       fontWeight: 500,
                     }}
                   >
-                    {row.status === "1" ? "Active" : "InActive"}
+                    {row.status === 1 ? "Active" : "InActive"}
                   </TableCell>
                   <TableCell
                     style={{
