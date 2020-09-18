@@ -11,6 +11,7 @@ import {
   MenuItem,
   Avatar,
   FormControl,
+  CircularProgress,
 } from "@material-ui/core";
 import S3 from "react-aws-s3";
 import { Add, Clear, CameraAlt } from "@material-ui/icons";
@@ -48,6 +49,7 @@ const AddItem = () => {
   // const [valueData, setValueData] = useState(null);
   const [file, setFile] = useState(null);
   const [imgFile, setImgFile] = useState(null);
+  const [disabled, setDisabled] = useState(false);
 
   const handleImgChange = (e) => {
     var file1 = e.target.files[0];
@@ -139,6 +141,7 @@ const AddItem = () => {
       status: 1,
       item_custom_values: y,
     });
+    setDisabled(true);
     await addItem({
       category_id: subCategories[subValue]["category_id"],
       sub_category_id: subCategories[subValue]["sub_category_id"],
@@ -164,6 +167,7 @@ const AddItem = () => {
     setPrice(0);
     setFile(null);
     await fetchItems();
+    setDisabled(false);
     setOpen(false);
   };
 
@@ -232,6 +236,7 @@ const AddItem = () => {
             <Box display="flex" flexDirection="row-reverse">
               <IconButton
                 onClick={() => {
+                  setDisabled(false);
                   setOpen(false);
                 }}
               >
@@ -533,9 +538,13 @@ const AddItem = () => {
                 marginRight: "2rem",
               }}
             >
-              <Fab type="submit" variant="extended" color="primary">
-                Save
-              </Fab>
+              {disabled ? (
+                <CircularProgress />
+              ) : (
+                <Fab type="submit" variant="extended" color="primary">
+                  Save
+                </Fab>
+              )}
             </Box>
           </Paper>
         </Backdrop>
