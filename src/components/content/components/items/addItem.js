@@ -12,10 +12,12 @@ import {
   Avatar,
   FormControl,
 } from "@material-ui/core";
+import S3 from "react-aws-s3";
 import { Add, Clear, CameraAlt } from "@material-ui/icons";
 import Api from "../../../../api";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { useForm } from "react-hook-form";
+import { uploadFile } from "react-s3";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -45,6 +47,7 @@ const AddItem = () => {
   const { register, handleSubmit } = useForm();
   // const [valueData, setValueData] = useState(null);
   const [file, setFile] = useState(null);
+  const [imgFile, setImgFile] = useState(null);
 
   const handleImgChange = (e) => {
     var file1 = e.target.files[0];
@@ -144,7 +147,7 @@ const AddItem = () => {
       name_ar: name_ar,
       description_en: desc_en,
       description_ar: desc_ar,
-      image: file,
+      image: imgFile,
       price: price ? +price : 0,
       status: 1,
       item_custom_values: y,
@@ -174,7 +177,28 @@ const AddItem = () => {
       <form onSubmit={handleSubmit(handleSubmit1)}>
         <input
           accept=".png,.jpeg,.jpg"
-          onChange={(e) => handleImgChange(e)}
+          onChange={(e) => {
+            // handleImgChange(e);
+            console.log(e.target.files[0])
+            // console.log(setImgFile(e.target.files[0]));
+            const config = {
+              bucketName: "lootbox-s3",
+              region: "us-east-2",
+              dirName: "media",
+              accessKeyId: "AKIA3JWMPNMIYUFSR54M",
+              secretAccessKey: "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",
+            };
+            // const ReactS3Client = new S3(config);
+            // ReactS3Client.uploadFile(e.target.files[0])
+            //   .then((data) => console.log(data))
+            //   .catch((err) => console.error(err));
+
+            // uploadFile(e.target.files[0], config)
+            //   .then((data) => console.log(data))
+            //   .catch((err) => console.error(err));
+
+            setFile(e.target.files[0]);
+          }}
           style={{ display: "none" }}
           id="icon-button-file"
           type="file"

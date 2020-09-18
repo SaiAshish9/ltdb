@@ -1,7 +1,17 @@
 import createDataContext from "./createDataContext";
 import Api from "../api";
 import Cookie from "js-cookie";
-import S3FileUpload from "react-s3";
+import { uploadFile } from "react-s3";
+// import S3 from "react-aws-s3";
+
+// const config = {
+//   // dirName: "media" /* optional */,
+//   bucketName: "lootbox-s3",
+//   region: "us-east-2",
+//   accessKeyId: "AKIA3JWMPNMIYUFSR54M",
+//   secretAccessKey: "SklpCNgMo4arYfrcDOvLaeFw6xbLxHizCtAQt0YF",
+//   // s3Url: "https:/your-custom-s3-url.com/" /* optional */,
+// };
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -189,19 +199,40 @@ const fetchItem = (dispatch) => async (id) => {
 };
 
 const addItem = (dispatch) => async (data) => {
+
+
+
+   
+
+  //   data.image
+// File {name: "bootsplash_logo@1,5x.png", lastModified: 1596235414323, lastModifiedDate: Sat Aug 01 2020 04:13:34 GMT+0530 (India Standard Time), webkitRelativePath: "", size: 28192, …}
+// lastModified: 1596235414323
+// lastModifiedDate: Sat Aug 01 2020 04:13:34 GMT+0530 (India Standard Time) {}
+// name: "bootsplash_logo@1,5x.png"
+// size: 28192
+// type: "image/png"
+// webkitRelativePath: ""
+
   const config = {
     bucketName: "lootbox-s3",
     region: "us-east-2",
+    dirName: "media",
     accessKeyId: "AKIA3JWMPNMIYUFSR54M",
     secretAccessKey: "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",
   };
-  console.log(data.image);
-  S3FileUpload.uploadFile(data.image, config)
+  uploadFile(data.image, config)
     .then((data) => console.log(data))
-    // {
-    //   image:"s3 url"
-    // }
     .catch((err) => console.error(err));
+
+
+
+
+
+  // const ReactS3Client = new S3(config);
+
+  // ReactS3Client.uploadFile(data.image)
+  //   .then((data) => console.log(data))
+  //   .catch((err) => console.error(err));
 
   // await Api.post("admin/item/add", {
   //   category_id: data.category_id,
