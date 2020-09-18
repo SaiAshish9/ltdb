@@ -178,20 +178,10 @@ const AddItem = () => {
         <input
           accept=".png,.jpeg,.jpg"
           onChange={(e) => {
-            // handleImgChange(e);
-            console.log(e.target.files[0])
+            handleImgChange(e);
+            console.log(e.target.files[0]);
             // console.log(setImgFile(e.target.files[0]));
-            const config = {
-              bucketName: "lootbox-s3",
-              region: "us-east-2",
-              dirName: "media",
-              accessKeyId: "AKIA3JWMPNMIYUFSR54M",
-              secretAccessKey: "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",
-            };
-            // const ReactS3Client = new S3(config);
-            // ReactS3Client.uploadFile(e.target.files[0])
-            //   .then((data) => console.log(data))
-            //   .catch((err) => console.error(err));
+            setImgFile(e.target.files[0]);
 
             // uploadFile(e.target.files[0], config)
             //   .then((data) => console.log(data))

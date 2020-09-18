@@ -49,12 +49,14 @@ const Popup = ({ classes, open, setOpen }) => {
           >
             <Box display="flex" justifyContent="space-between">
               <Avatar
-                src={Img}
+                src={
+                  item_details
+                    ? item_details.image.length > 1 && item_details.image
+                    : Img
+                }
                 style={{ width: "150px", height: "150px", marginRight: "2rem" }}
                 variant="rounded"
-              >
-                H
-              </Avatar>
+              ></Avatar>
               <Box
                 display="flex"
                 flexDirection="column"

@@ -2,7 +2,7 @@ import createDataContext from "./createDataContext";
 import Api from "../api";
 import Cookie from "js-cookie";
 import { uploadFile } from "react-s3";
-// import S3 from "react-aws-s3";
+import S3 from "react-aws-s3";
 
 // const config = {
 //   // dirName: "media" /* optional */,
@@ -199,20 +199,6 @@ const fetchItem = (dispatch) => async (id) => {
 };
 
 const addItem = (dispatch) => async (data) => {
-
-
-
-   
-
-  //   data.image
-// File {name: "bootsplash_logo@1,5x.png", lastModified: 1596235414323, lastModifiedDate: Sat Aug 01 2020 04:13:34 GMT+0530 (India Standard Time), webkitRelativePath: "", size: 28192, …}
-// lastModified: 1596235414323
-// lastModifiedDate: Sat Aug 01 2020 04:13:34 GMT+0530 (India Standard Time) {}
-// name: "bootsplash_logo@1,5x.png"
-// size: 28192
-// type: "image/png"
-// webkitRelativePath: ""
-
   const config = {
     bucketName: "lootbox-s3",
     region: "us-east-2",
@@ -220,47 +206,41 @@ const addItem = (dispatch) => async (data) => {
     accessKeyId: "AKIA3JWMPNMIYUFSR54M",
     secretAccessKey: "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",
   };
-  uploadFile(data.image, config)
-    .then((data) => console.log(data))
+  const ReactS3Client = new S3(config);
+  await ReactS3Client.uploadFile(data.image)
+    .then(async (data1) =>{
+      console.log(data1,data1.location.split("com/")[2])
+      await Api.post("admin/item/add", {
+        category_id: data.category_id,
+        sub_category_id: data.sub_category_id,
+        brand_id: data.brand_id,
+        name_en: data.name_en,
+        name_ar: data.name_ar,
+        description_en: data.description_en,
+        description_ar: data.description_ar,
+        item_custom_values: data.item_custom_values,
+        image: data1.location.split("com/")[1],
+        price: data.price,
+        status: data.status,
+      })
+        .then(async (data) => {
+          dispatch({
+            type: "SET_MESSAGE",
+            payload: "Item Added Successfully",
+          });
+          await fetchItems();
+        })
+        .catch((error) => {
+          dispatch({
+            type: "SET_MESSAGE",
+            payload: "Some error occurred while adding new item",
+          });
+          console.log(error);
+        });
+    })
     .catch((err) => console.error(err));
 
-
-
-
-
-  // const ReactS3Client = new S3(config);
-
-  // ReactS3Client.uploadFile(data.image)
-  //   .then((data) => console.log(data))
-  //   .catch((err) => console.error(err));
-
-  // await Api.post("admin/item/add", {
-  //   category_id: data.category_id,
-  //   sub_category_id: data.sub_category_id,
-  //   brand_id: data.brand_id,
-  //   name_en: data.name_en,
-  //   name_ar: data.name_ar,
-  //   description_en: data.description_en,
-  //   description_ar: data.description_ar,
-  //   item_custom_values: data.item_custom_values,
-  //   image: data.image,
-  //   price: data.price,
-  //   status: data.status,
-  // })
-  //   .then(async (data) => {
-  //     dispatch({
-  //       type: "SET_MESSAGE",
-  //       payload: "Item Added Successfully",
-  //     });
-  //     await fetchItems();
-  //   })
-  //   .catch((error) => {
-  //     dispatch({
-  //       type: "SET_MESSAGE",
-  //       payload: "Some error occurred while adding new item",
-  //     });
-  //     console.log(error);
-  //   });
+ 
 };
 
 export const { Context, Provider } = createDataContext(
