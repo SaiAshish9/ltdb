@@ -20,6 +20,11 @@ const reducer = (state, action) => {
         ...state,
         items: action.payload,
       };
+    case "SET_GAMES":
+      return {
+        ...state,
+        games: action.payload,
+      };
     case "SET_USERS":
       return {
         ...state,
@@ -74,7 +79,6 @@ const fetchItems = (dispatch) => async (page, limit) => {
       payload: null,
     });
   }
-
   await Api(url)
     .then((data) => {
       dispatch({
@@ -92,6 +96,42 @@ const fetchItems = (dispatch) => async (page, limit) => {
       });
     })
     .catch((error) => console.log(error));
+};
+
+const fetchGames = (dispatch) => async (page, limit) => {
+  var url;
+  if (page && limit) {
+    url = `admin/game/get-game-list?limit=${limit}&&page=${page}`;
+  } else {
+    url = "admin/game/get-game-list?limit=10&&page=1";
+  }
+
+  if (page || limit) {
+    dispatch({
+      type: "SET_GAMES",
+      payload: null,
+    });
+  }
+
+   await Api(url)
+     .then((data) => {
+      //  dispatch({
+      //    type: "SET_PAGE_COUNT",
+      //    payload: JSON.parse(data.request.response)["parameter"]["last_page"],
+      //  });
+
+      //  dispatch({
+      //    type: "SET_ITEM_COUNT",
+      //    payload: JSON.parse(data.request.response)["parameter"]["total"],
+      //  });
+      console.log(data.data.data)
+       dispatch({
+         type: "SET_GAMES",
+         payload: data.data.data,
+       });
+     })
+     .catch((error) => console.log(error));
+
 };
 
 const fetchUsers = (dispatch) => async (page) => {
@@ -208,8 +248,8 @@ const addItem = (dispatch) => async (data) => {
   };
   const ReactS3Client = new S3(config);
   await ReactS3Client.uploadFile(data.image)
-    .then(async (data1) =>{
-      console.log(data1,data1.location.split("com/")[2])
+    .then(async (data1) => {
+      console.log(data1, data1.location.split("com/")[2]);
       await Api.post("admin/item/add", {
         category_id: data.category_id,
         sub_category_id: data.sub_category_id,
@@ -239,8 +279,6 @@ const addItem = (dispatch) => async (data) => {
         });
     })
     .catch((err) => console.error(err));
-
- 
 };
 
 export const { Context, Provider } = createDataContext(
@@ -254,6 +292,7 @@ export const { Context, Provider } = createDataContext(
     fetchItem,
     toggleUserStatus,
     clearMessage,
+    fetchGames,
   },
   {
     items: [],
@@ -263,6 +302,7 @@ export const { Context, Provider } = createDataContext(
     user_profile: null,
     item_details: null,
     users: [],
+    games: [],
     user_count: 0,
   }
 );
