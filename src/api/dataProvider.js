@@ -113,8 +113,8 @@ const fetchGames = (dispatch) => async (page, limit) => {
     });
   }
 
-   await Api(url)
-     .then((data) => {
+  await Api(url)
+    .then((data) => {
       //  dispatch({
       //    type: "SET_PAGE_COUNT",
       //    payload: JSON.parse(data.request.response)["parameter"]["last_page"],
@@ -124,14 +124,13 @@ const fetchGames = (dispatch) => async (page, limit) => {
       //    type: "SET_ITEM_COUNT",
       //    payload: JSON.parse(data.request.response)["parameter"]["total"],
       //  });
-      console.log(data.data.data)
-       dispatch({
-         type: "SET_GAMES",
-         payload: data.data.data,
-       });
-     })
-     .catch((error) => console.log(error));
-
+      console.log(data.data.data);
+      dispatch({
+        type: "SET_GAMES",
+        payload: data.data.data,
+      });
+    })
+    .catch((error) => console.log(error));
 };
 
 const fetchUsers = (dispatch) => async (page) => {
@@ -187,16 +186,18 @@ const toggleItemStatus = (dispatch) => async (id, action) => {
     items: [id],
     action_type: action,
   };
+  clearMessage();
 
   await Api.post(`admin/item/block-unblock`, { ...x }).then(async (data) => {
     console.log(data);
-    dispatch({
-      type: "SET_MESSAGE",
-      payload: "Item Updated Successfully",
-    });
   });
 
-  fetchItems();
+  dispatch({
+    type: "SET_MESSAGE",
+    payload: "Item Updated Successfully",
+  });
+
+  await fetchItems();
 };
 
 const clearMessage = (dispatch) => async () => {
@@ -211,14 +212,15 @@ const toggleUserStatus = (dispatch) => async (id, action) => {
     users: [id],
     action_type: action,
   };
+  clearMessage()
   await Api.post(`admin/user/block-unblock`, { ...x }).then(async (data) => {
     console.log(data);
-    dispatch({
-      type: "SET_MESSAGE",
-      payload: "User Updated Successfully",
-    });
   });
-  fetchUsers();
+  dispatch({
+    type: "SET_MESSAGE",
+    payload: "User Updated Successfully",
+  });
+  await fetchUsers();
 };
 
 const fetchItem = (dispatch) => async (id) => {

@@ -149,7 +149,7 @@ export default function SimpleTable({ data }) {
                   color: "#282b3c",
                 }}
               >
-                Created_At
+                Created At
               </TableCell>
               <TableCell
                 style={{
@@ -236,7 +236,7 @@ export default function SimpleTable({ data }) {
                         +row.status === 1 ? 0 : 1
                       );
                       await fetchItems(page + 1);
-                      await clearMessage()
+                      await clearMessage();
                     }}
                     style={{
                       cursor: "pointer",

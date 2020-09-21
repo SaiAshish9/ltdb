@@ -33,7 +33,7 @@ const AddItem = () => {
   const [categories, setCategories] = useState(null);
   const [subCategories, setSubCategories] = useState(null);
   const [subValue, setSubValue] = useState(0);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(null);
   const [brandValue, setBrandValue] = useState(0);
   const [description, setDescription] = useState(null);
   const [price, setPrice] = useState(null);
@@ -299,6 +299,7 @@ const AddItem = () => {
                       value={subValue}
                       onChange={(e) => {
                         if (value !== 0) setSubValue(e.target.value);
+                        setCustomFields(null)
                         fetchCustomFields();
                       }}
                     >
