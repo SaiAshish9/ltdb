@@ -60,6 +60,11 @@ const reducer = (state, action) => {
         ...state,
         user_profile: action.payload,
       };
+    case "SET_RESOLUTION_LIST":
+      return {
+        ...state,
+        resolution_list: action.payload,
+      };
     default:
       return state;
   }
@@ -212,7 +217,7 @@ const toggleUserStatus = (dispatch) => async (id, action) => {
     users: [id],
     action_type: action,
   };
-  clearMessage()
+  clearMessage();
   await Api.post(`admin/user/block-unblock`, { ...x }).then(async (data) => {
     console.log(data);
   });
@@ -283,6 +288,49 @@ const addItem = (dispatch) => async (data) => {
     .catch((err) => console.error(err));
 };
 
+const fetchResolutions = (dispatch) => () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const {
+        data: { data },
+      } = await Api("admin/game/resolution-list");
+      dispatch({
+        type: "SET_RESOLUTION_LIST",
+        payload: data,
+      });
+      resolve(data);
+    } catch (e) {
+      console.log(e);
+      reject(e);
+    }
+  });
+};
+
+const uploadImage = async (bucket, file) => {
+  const config = {
+    bucketName: "lootbox-s3",
+    region: "us-east-2",
+    dirName: bucket,
+    accessKeyId: "AKIA3JWMPNMIYUFSR54M",
+    secretAccessKey: "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",
+  };
+  const ReactS3Client = new S3(config);
+  const data1 = await ReactS3Client.uploadFile(file);
+  return data1.key;
+};
+
+const addGame = (dispatch) => async (data) => {
+  const image = await uploadImage("games", data.imgFile);
+  await Api.post("admin/game/add", {
+    name_en: data.name_en,
+    name_ar: data.name_ar,
+    resolution: data.value,
+    image,
+    status: 1,
+  }).then((data) => console.log(data));
+  await fetchGames();
+};
+
 export const { Context, Provider } = createDataContext(
   reducer,
   {
@@ -294,7 +342,10 @@ export const { Context, Provider } = createDataContext(
     fetchItem,
     toggleUserStatus,
     clearMessage,
+    fetchResolutions,
     fetchGames,
+    // uploadImage,
+    addGame,
   },
   {
     items: [],
@@ -306,5 +357,6 @@ export const { Context, Provider } = createDataContext(
     users: [],
     games: [],
     user_count: 0,
+    resolution_list: null,
   }
 );

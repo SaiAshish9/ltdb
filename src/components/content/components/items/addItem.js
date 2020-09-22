@@ -299,7 +299,7 @@ const AddItem = () => {
                       value={subValue}
                       onChange={(e) => {
                         if (value !== 0) setSubValue(e.target.value);
-                        setCustomFields(null)
+                        setCustomFields(null);
                         fetchCustomFields();
                       }}
                     >

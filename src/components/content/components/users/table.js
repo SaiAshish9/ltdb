@@ -183,11 +183,13 @@ export default function SimpleTable({ data }) {
                       color: "#8095a1",
                       fontWeight: 500,
                       maxHeight: "3.4rem",
+                      textAlign:"center"
                     }}
                     component="th"
                     scope="row"
                   >
-                    {x.user_id}
+                    {i + 1}
+                    {/* {x.user_id} */}
                   </TableCell>
                   <TableCell
                     style={{

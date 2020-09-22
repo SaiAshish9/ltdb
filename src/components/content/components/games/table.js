@@ -106,6 +106,16 @@ export default function SimpleTable({ data }) {
                   textAlign: "center",
                 }}
               >
+                S No.
+              </TableCell>
+              <TableCell
+                style={{
+                  fontWeight: "bolder",
+                  fontSize: "0.8rem",
+                  color: "#282b3c",
+                  textAlign: "center",
+                }}
+              >
                 Name
               </TableCell>
               <TableCell
@@ -158,7 +168,7 @@ export default function SimpleTable({ data }) {
 
           <TableBody>
             {games &&
-              games.map((row, i) => (
+              games.map((row, k) => (
                 <TableRow
                   elevation={0}
                   style={{
@@ -168,6 +178,15 @@ export default function SimpleTable({ data }) {
                   }}
                   key={row.game_id}
                 >
+                  <TableCell
+                    style={{
+                      textAlign: "center",
+                      color: "#8095a1",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {k + 1}
+                  </TableCell>
                   <TableCell
                     style={{
                       textAlign: "center",

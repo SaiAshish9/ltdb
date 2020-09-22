@@ -122,7 +122,8 @@ export default function SimpleTable({ data }) {
                   color: "#282b3c",
                 }}
               >
-                Item Id
+                S No
+                {/* Item Id */}
               </TableCell>
               <TableCell
                 style={{
@@ -214,7 +215,8 @@ export default function SimpleTable({ data }) {
                     component="th"
                     scope="row"
                   >
-                    {row.item_id}
+                    {i + 1}
+                    {/* {row.item_id} */}
                   </TableCell>
                   <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
                     {row.name_en}
