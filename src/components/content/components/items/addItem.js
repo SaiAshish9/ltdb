@@ -13,7 +13,6 @@ import {
   FormControl,
   CircularProgress,
 } from "@material-ui/core";
-import S3 from "react-aws-s3";
 import { Add, Clear, CameraAlt } from "@material-ui/icons";
 import Api from "../../../../api";
 import { Context as DataContext } from "../../../../api/dataProvider";
@@ -32,7 +31,7 @@ const AddItem = () => {
   const [data, setData] = useState(null);
   const [categories, setCategories] = useState(null);
   const [subCategories, setSubCategories] = useState(null);
-  const [subValue, setSubValue] = useState(0);
+  const [subValue, setSubValue] = useState("a");
   const [value, setValue] = useState(null);
   const [brandValue, setBrandValue] = useState(0);
   const [description, setDescription] = useState(null);
@@ -107,24 +106,22 @@ const AddItem = () => {
       category_id: id,
     }).then((data) => {
       setSubCategories(data.data.data);
-      fetchCustomFields(data.data.data[0]["sub_category_id"]);
+      // if (data) fetchCustomFields(data.data.data[0]["sub_category_id"]);
     });
   };
 
   const fetchCustomFields = async (id) => {
-    await Api.post(`admin/subcategory/subcategory-by-id`, {
-      sub_category_id: ` ${
-        id ? id : subCategories[subValue]["sub_category_id"]
-      }`,
-    }).then((data) => {
-      console.log(data.data.data);
-      setFields(
-        data.data.data.custom_fields.map((i, k) => {
-          return `${i["name_en"]} ${i["name_ar"]} ${i["custom_field_id"]}`;
-        })
-      );
-      setCustomFields(data.data.data.custom_fields);
-    });
+      await Api.post(`admin/subcategory/subcategory-by-id`, {
+        sub_category_id: ` ${subCategories[id]["sub_category_id"]}`,
+      }).then((data) => {
+        console.log(data.data.data);
+        setFields(
+          data.data.data.custom_fields.map((i, k) => {
+            return `${i["name_en"]} ${i["name_ar"]} ${i["custom_field_id"]}`;
+          })
+        );
+        setCustomFields(data.data.data.custom_fields);
+      });
   };
 
   const handleSave = async (y) => {
@@ -298,18 +295,17 @@ const AddItem = () => {
                     <Select
                       value={subValue}
                       onChange={(e) => {
-                        if (value !== 0) setSubValue(e.target.value);
+                        setSubValue(e.target.value);
                         setCustomFields(null);
-                        fetchCustomFields();
+                        if (e.target.value !== "a")
+                          fetchCustomFields(e.target.value);
                       }}
                     >
-                      {subCategories ? (
+                      <MenuItem value={"a"}></MenuItem>
+                      {subCategories &&
                         subCategories.map((i, k) => (
                           <MenuItem value={k}>{i["name_en"]}</MenuItem>
-                        ))
-                      ) : (
-                        <MenuItem value={0}></MenuItem>
-                      )}
+                        ))}
                     </Select>
                   </FormControl>
                 </Box>
