@@ -93,6 +93,7 @@ const AddItem = () => {
             cursor: "pointer",
             fontWeight: "bold",
             position: "relative",
+            zIndex:3,
             top: -5,
           }}
         >

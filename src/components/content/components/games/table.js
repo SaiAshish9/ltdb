@@ -10,8 +10,8 @@ import Paper from "@material-ui/core/Paper";
 import TablePagination from "@material-ui/core/TablePagination";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { Box, CircularProgress, Snackbar, IconButton } from "@material-ui/core";
-import moment from "moment";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
+import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import Popup from "./popup";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,6 +35,7 @@ export default function SimpleTable({ data }) {
   const {
     state: { games, items_count, page_count, message },
     fetchGames,
+    fetchGame,
   } = useContext(DataContext);
 
   const [rows, setRows] = useState(null);
@@ -67,6 +68,7 @@ export default function SimpleTable({ data }) {
       <TableContainer
         style={{
           height: "83vh",
+          maxHeight: "83vh",
           width: "100%",
         }}
         elevation={0}
@@ -147,6 +149,16 @@ export default function SimpleTable({ data }) {
                 }}
               >
                 Action
+              </TableCell>
+              <TableCell
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "0.8rem",
+                  textAlign: "center",
+                  color: "#282b3c",
+                }}
+              >
+                View
               </TableCell>
             </TableRow>
           </TableHead>
@@ -233,11 +245,26 @@ export default function SimpleTable({ data }) {
                   >
                     <IconButton
                       onClick={async () => {
-                        // await fetchItem(row.item_id);
-                        // setOpen(true);
+                        setOpen(true);
                       }}
                     >
                       <EditOutlinedIcon style={{ cursor: "pointer" }} />{" "}
+                    </IconButton>
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      color: "#8095a1",
+                      fontWeight: 500,
+                      textAlign: "center",
+                    }}
+                  >
+                    <IconButton
+                      onClick={async () => {
+                        await fetchGame(row.game_id);
+                        setOpen(true);
+                      }}
+                    >
+                      <VisibilityOutlinedIcon style={{ cursor: "pointer" }} />{" "}
                     </IconButton>
                   </TableCell>
                 </TableRow>

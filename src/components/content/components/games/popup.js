@@ -1,198 +1,250 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
+  Box,
+  Fab,
   Backdrop,
   Paper,
-  Box,
   IconButton,
-  Avatar,
   TextField,
-  Fab,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  CircularProgress,
 } from "@material-ui/core";
-import Img from "../../../../assets/thumbnail1.png";
+import { Clear, CameraAlt } from "@material-ui/icons";
 import { Context as DataContext } from "../../../../api/dataProvider";
-import moment from "moment";
-import Clear from "@material-ui/icons/Clear";
+import { useForm } from "react-hook-form";
+import Thumbnail from "../../../../assets/thumbnail1.png";
 
 const Popup = ({ classes, open, setOpen }) => {
   const {
-    state: { item_details },
+    state: { game_details },
   } = useContext(DataContext);
+
+  const [value, setValue] = useState(0);
+  const [name_en, setNameEn] = useState("");
+  const [name_ar, setNameAr] = useState("");
+  const { register, handleSubmit } = useForm();
+  const [file, setFile] = useState(null);
+  const [imgFile, setImgFile] = useState(null);
+  const [disabled, setDisabled] = useState(false);
+
+  const onSubmit = async (y) => {
+    setOpen(false);
+  };
+
+  const handleImgChange = (e) => {
+    var file1 = e.target.files[0];
+    var reader = new FileReader();
+    reader.onload = (e) => {
+      setFile(reader.result);
+      console.log(file);
+    };
+    reader.readAsDataURL(file1);
+  };
 
   return (
     <Backdrop open={open} className={classes.backdrop}>
-      {item_details && (
-        <Paper
-          style={{
-            height: "80vh",
-            overflowY: "scroll",
-            width: "60vw",
-            position: "absolute",
-            top: "5vh",
-            background: "#fff",
-            padding: "2rem",
-          }}
-        >
-          <Box display="flex" flexDirection="row-reverse">
-            <IconButton
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        style={{ padding: "1rem 2rem" }}
+      >
+        {game_details && (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <input
+              accept=".png,.jpeg,.jpg"
+              onChange={(e) => {
+                handleImgChange(e);
+                setImgFile(e.target.files[0]);
+              }}
+              style={{ display: "none" }}
+              id="icon-button-file"
+              type="file"
+            />
+
+            <p
               onClick={() => {
-                setOpen(false);
+                setOpen(true);
+              }}
+              style={{
+                color: "#fff",
+                cursor: "pointer",
+                fontWeight: "bold",
+                position: "relative",
+                zIndex: 3,
+                top: -5,
               }}
             >
-              <Clear />
-            </IconButton>
-          </Box>
-          <Box
-            style={{
-              padding: "2rem",
-              // width: "80%",
-            }}
-          >
-            <Box display="flex" justifyContent="space-between">
-              <Avatar
-                src={
-                  item_details
-                    ? item_details.image.length > 1 && item_details.image
-                    : Img
-                }
-                style={{ width: "150px", height: "150px", marginRight: "2rem" }}
-                variant="rounded"
-              ></Avatar>
-              <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="space-between"
-              >
-                <TextField
-                  defaultValue={item_details && item_details.name_en}
-                  variant="outlined"
-                  label="Name_en"
-                />
-                <TextField
-                  defaultValue={item_details && item_details.name_ar}
-                  variant="outlined"
-                  label="Name_ar"
-                />
-              </Box>
-              <TextField
-                rows={7}
-                multiline
-                label="Description_en"
-                variant="outlined"
-                value={item_details && item_details.description_en}
-              />
-              <TextField
-                rows={7}
-                multiline
-                label="Description_ar"
-                variant="outlined"
-                defaultValue={item_details && item_details.description_ar}
-              />
-            </Box>
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              style={{ margin: "2rem 0" }}
-            >
-              <TextField
-                defaultValue={
-                  item_details && item_details.price ? item_details.price : null
-                }
-                variant="outlined"
-                label="Price"
-                type="number"
-              />
-              <TextField
-                defaultValue={
-                  item_details && item_details.status === 1
-                    ? "Active"
-                    : "InActive"
-                }
-                variant="outlined"
-                label="Status"
-              />
-              <TextField
-                variant="outlined"
-                id="date"
-                label="created_at"
-                // type="date"
-                value={
-                  item_details &&
-                  moment(new Date(item_details.created_at)).format(
-                    "DD MMM YYYY"
-                  )
-                  // moment(item_details.created_at).format("DD MM YYYY")
-                }
-                InputLabelProps={{
-                  shrink: true,
+              Add Game
+            </p>
+            <Backdrop open={open} className={classes.backdrop}>
+              <Paper
+                style={{
+                  position: "absolute",
+                  top: "7vh",
+                  maxHeight: "80vh",
+                  overflowY: "scroll",
+                  width: "70vw",
+                  padding: "2rem",
                 }}
-              />
-            </Box>
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              style={{ margin: "2rem 0" }}
-            >
-              <TextField
-                variant="outlined"
-                defaultValue={item_details && item_details.link_item_id}
-                label="link_item_id"
-                type="number"
-              />
-              <TextField
-                variant="outlined"
-                defaultValue={item_details && item_details.category_id}
-                label="category"
-              />
-              <TextField
-                variant="outlined"
-                defaultValue={item_details && item_details.sub_category_id}
-                label="sub-category"
-              />
-            </Box>
-            <Box display="flex" alignItems="center" justifyContent="center">
-              <p style={{ fontWeight: "bold" }}>Custom Fields</p>
-            </Box>
-
-            {item_details &&
-              item_details.custom_fields_values.map((i, k) => (
+              >
+                <Box display="flex" flexDirection="row-reverse">
+                  <IconButton
+                    onClick={() => {
+                      setDisabled(false);
+                      setOpen(false);
+                    }}
+                  >
+                    <Clear />
+                  </IconButton>
+                </Box>
                 <Box
-                  key={k}
                   display="flex"
-                  alignItems="center"
                   justifyContent="space-between"
-                  style={{ margin: "2rem 0" }}
+                  style={{ margin: "1rem 0" }}
                 >
-                  <p>{i.name_en}</p>
-
                   <TextField
                     variant="outlined"
-                    label="value_en"
-                    defaultValue={i.value_en}
+                    label="name"
+                    disabled
+                    // value={name_en}
+                    // onChange={(e) => setNameEn(e.target.value)}
+                    style={{ width: "47%" }}
+                    defaultValue={game_details.name_en}
                   />
                   <TextField
                     variant="outlined"
-                    label="value_ar"
-                    defaultValue={i.value_ar}
+                    disabled
+                    label="name_ar"
+                    name={name_ar}
+                    onChange={(e) => setNameAr(e.target.value)}
+                    style={{ width: "47%" }}
+                    defaultValue={game_details.name_ar}
                   />
                 </Box>
-              ))}
 
-            <Box display="flex" flexDirection="row-reverse">
-              <Fab
-                onClick={() => {
-                  console.log(item_details);
-                }}
-                disabled
-                type="submit"
-                variant="extended"
-                color="primary"
-              >
-                Save
-              </Fab>
-            </Box>
-          </Box>
-        </Paper>
-      )}
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="space-between"
+                >
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    style={{ margin: "1rem 0" }}
+                  >
+                    <p
+                      style={{
+                        fontSize: "1rem",
+                        color: "#282b3c",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Image :
+                    </p>
+                    <Paper style={{ width: "47%" }}>
+                      {/* <label htmlFor="icon-button-file"> */}
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        style={{
+                          height: "20vh",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {game_details.image && game_details.image.length > 0 ? (
+                          <img
+                            style={{
+                              height: "20vh",
+                            }}
+                            alt="img"
+                            src={game_details.image}
+                          />
+                        ) : (
+                          <img
+                            style={{
+                              height: "20vh",
+                            }}
+                            alt="img"
+                            src={Thumbnail}
+                          />
+                        )}
+                      </Box>
+                      {/* </label> */}
+                    </Paper>
+                  </Box>
+                </Box>
+
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  style={{ margin: "1rem 0" }}
+                >
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      color: "#282b3c",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Resolution :
+                  </p>
+                  <FormControl style={{ width: "47%" }}>
+                    <Select
+                      value={value}
+                      disabled
+                      onChange={(e) => {
+                        setValue(e.target.value);
+                        console.log(e.target.value);
+                      }}
+                    >
+                      <MenuItem value={0}>
+                        {game_details && game_details.resolution}
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  style={{ margin: "1rem 0" }}
+                >
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      color: "#282b3c",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Status :
+                  </p>
+                  <FormControl style={{ width: "47%" }}>
+                    <Select
+                      value={value}
+                      disabled
+                      onChange={(e) => {
+                        // setValue(e.target.value);
+                        // console.log(e.target.value);
+                      }}
+                    >
+                      <MenuItem value={0}>
+                        {game_details && game_details.status === 1
+                          ? "Active"
+                          : "InActive"}
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Paper>
+            </Backdrop>
+          </form>
+        )}
+      </Box>
     </Backdrop>
   );
 };

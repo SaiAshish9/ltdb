@@ -12,10 +12,10 @@ const Topbar = () => {
         alignItems="center"
         justifyContent="space-between"
         style={{
-          borderRight: "1px solid #504b58",
-          borderBottom: "1px solid #504b58",
+          // borderRight: "1px solid #504b58",
+          // borderBottom: "1px solid #504b58",
           width: "15vw",
-          height: "9.8vh",
+          height: "10vh",
           position: "fixed",
           zIndex: 2,
           background: "#282b3c",

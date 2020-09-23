@@ -8,37 +8,20 @@ const Items = () => {
   const {
     state: { items },
     fetchItems,
+    fetchGames
   } = useContext(DataContext);
   const [loading, isLoading] = useState(false);
 
-  const getItems = async () => {
-    await fetchItems();
+  const getGames = async () => {
+    await fetchGames();
     isLoading(true);
   };
 
   useEffect(() => {
-    getItems();
+    getGames();
   }, []);
   return (
     <Box>
-      {/* <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        style={{ padding: "1rem 2rem" }}
-      >
-        <p
-          style={{
-            color: "#282b3c",
-            fontWeight: 600,
-            fontSize: "1.5rem",
-          }}
-        >
-          Items
-        </p>
-        <Box display="flex">
-        </Box>
-      </Box> */}
       <Box style={{ position: "absolute", top: 1, right: "2vw" }}>
         <AddItem />
       </Box>
@@ -65,6 +48,7 @@ const Items = () => {
             position: "absolute",
             bottom: 0,
             width: "85%",
+            height:"90vh"
           }}
         >
           <Table data={items} />

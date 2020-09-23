@@ -35,6 +35,11 @@ const reducer = (state, action) => {
         ...state,
         item_details: action.payload,
       };
+    case "SET_GAME":
+      return {
+        ...state,
+        game_details: action.payload,
+      };
     case "SET_ITEM_COUNT":
       return {
         ...state,
@@ -245,6 +250,24 @@ const fetchItem = (dispatch) => async (id) => {
     });
 };
 
+const fetchGame = (dispatch) => async (id) => {
+  dispatch({
+    type: "SET_GAME",
+    payload: null,
+  });
+  await Api(`admin/game/getgame?game_id=${id}`)
+    .then((data) => {
+      console.log(data)
+      dispatch({
+        type: "SET_GAME",
+        payload: data.data.data,
+      });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
 const addItem = (dispatch) => async (data) => {
   const config = {
     bucketName: "lootbox-s3",
@@ -346,6 +369,7 @@ export const { Context, Provider } = createDataContext(
     fetchGames,
     // uploadImage,
     addGame,
+    fetchGame,
   },
   {
     items: [],
@@ -354,6 +378,7 @@ export const { Context, Provider } = createDataContext(
     message: null,
     user_profile: null,
     item_details: null,
+    game_details: null,
     users: [],
     games: [],
     user_count: 0,
