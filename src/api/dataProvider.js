@@ -257,7 +257,7 @@ const fetchGame = (dispatch) => async (id) => {
   });
   await Api(`admin/game/getgame?game_id=${id}`)
     .then((data) => {
-      console.log(data)
+      console.log(data);
       dispatch({
         type: "SET_GAME",
         payload: data.data.data,
@@ -343,14 +343,49 @@ const uploadImage = async (bucket, file) => {
 };
 
 const addGame = (dispatch) => async (data) => {
-  const image = await uploadImage("games", data.imgFile);
-  await Api.post("admin/game/add", {
-    name_en: data.name_en,
-    name_ar: data.name_ar,
-    resolution: data.value,
-    image,
-    status: 1,
-  }).then((data) => console.log(data));
+  if (data.imgFile) {
+    if (data.game_id) {
+      console.log(data.imgFile);
+      const image = await uploadImage("games", data.imgFile);
+      await Api.post("admin/game/add", {
+        name_en: data.name_en,
+        name_ar: data.name_ar,
+        resolution: data.value,
+        image,
+        game_id: data.game_id,
+        status: data.status ? data.status : 1,
+      }).then((data) => console.log(data));
+    } else {
+      const image = await uploadImage("games", data.imgFile);
+      await Api.post("admin/game/add", {
+        name_en: data.name_en,
+        name_ar: data.name_ar,
+        resolution: data.value,
+        image,
+        status: data.status ? data.status : 1,
+      }).then((data) => console.log(data));
+    }
+  } else {
+    if (data.game_id) {
+      await Api.post("admin/game/add", {
+        name_en: data.name_en,
+        name_ar: data.name_ar,
+        resolution: data.value,
+        game_id: data.game_id,
+        image: data.file,
+        status: data.status ? data.status : 1,
+      }).then((data) => console.log(data));
+    } else {
+      await Api.post("admin/game/add", {
+        name_en: data.name_en,
+        name_ar: data.name_ar,
+        resolution: data.value,
+        image: data.file,
+        status: data.status ? data.status : 1,
+      }).then((data) => console.log(data));
+    }
+  }
+
   await fetchGames();
 };
 

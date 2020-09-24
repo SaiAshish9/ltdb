@@ -13,6 +13,7 @@ import { Box, CircularProgress, Snackbar, IconButton } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import Popup from "./popup";
+import EditGame from "./editGame";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -31,6 +32,7 @@ export default function SimpleTable({ data }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
 
   const {
     state: { games, items_count, page_count, message },
@@ -245,7 +247,8 @@ export default function SimpleTable({ data }) {
                   >
                     <IconButton
                       onClick={async () => {
-                        setOpen(true);
+                        await fetchGame(row.game_id);
+                        setOpenEditDialog(true);
                       }}
                     >
                       <EditOutlinedIcon style={{ cursor: "pointer" }} />{" "}
@@ -282,6 +285,11 @@ export default function SimpleTable({ data }) {
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
       <Popup classes={classes} open={open} setOpen={setOpen} />
+      <EditGame
+        classes={classes}
+        open={openEditDialog}
+        setOpen={setOpenEditDialog}
+      />
     </React.Fragment>
   );
 }

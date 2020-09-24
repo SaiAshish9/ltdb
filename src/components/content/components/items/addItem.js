@@ -205,6 +205,7 @@ const AddItem = () => {
             fontWeight: "bold",
             position: "relative",
             top: -5,
+            zIndex:3
           }}
         >
           Add Item

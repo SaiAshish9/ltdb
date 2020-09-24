@@ -9,12 +9,10 @@ import {
   TextField,
   Select,
   MenuItem,
-  InputLabel,
   FormControl,
   CircularProgress,
 } from "@material-ui/core";
 import { Clear, CameraAlt } from "@material-ui/icons";
-import Api from "../../../../api";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { useForm } from "react-hook-form";
 
@@ -39,6 +37,7 @@ const AddItem = () => {
     state: { resolution_list },
     fetchResolutions,
     addGame,
+    fetchGames,
   } = useContext(DataContext);
 
   useEffect(() => {
@@ -46,12 +45,15 @@ const AddItem = () => {
   }, []);
 
   const onSubmit = async (y) => {
+    setDisabled(true);
     await addGame({
       name_en,
       name_ar,
       value,
       imgFile,
     });
+    await fetchGames();
+    setDisabled(false);
     setOpen(false);
   };
   const handleImgChange = (e) => {
@@ -93,7 +95,7 @@ const AddItem = () => {
             cursor: "pointer",
             fontWeight: "bold",
             position: "relative",
-            zIndex:3,
+            zIndex: 3,
             top: -5,
           }}
         >

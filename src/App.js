@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, withRouter } from "react-router-dom";
+import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import Dashboard from "./containers/homepage";
 import Login from "./containers/auth/login";
 import { connect } from "react-redux";
@@ -16,6 +16,7 @@ const App = ({ token }) => {
         ) : (
           <Route exact path="/" component={Login} />
         )}
+        {!token && <Redirect to="/" />}
       </Switch>
     </DataProvider>
   );
