@@ -9,6 +9,7 @@ import {
   TextField,
   Select,
   MenuItem,
+  Avatar,
   FormControl,
   CircularProgress,
 } from "@material-ui/core";
@@ -46,16 +47,48 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
           justifyContent="space-between"
           style={{ margin: "1rem 0" }}
         >
+          <p
+            style={{
+              fontSize: "1rem",
+              color: "#282b3c",
+              fontWeight: 600,
+            }}
+          >
+            Select Game :
+          </p>
+          <FormControl style={{ width: "47%" }}>
+            <Select
+              //   value={value}
+              onChange={(e) => {
+                // setValue(e.target.value);
+                console.log(e.target.value);
+              }}
+            >
+              {/* {resolution_list ? (
+                resolution_list.map((i, k) => (
+                  <MenuItem value={i}>{i}</MenuItem>
+                ))
+              ) : (
+                <MenuItem value={0}></MenuItem>
+              )} */}
+            </Select>
+          </FormControl>
+        </Box>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          style={{ margin: "1rem 0" }}
+        >
           <TextField
             variant="outlined"
-            label="name"
+            label="English Name"
             // value={name_en}
             // onChange={(e) => setNameEn(e.target.value)}
             style={{ width: "47%" }}
           />
           <TextField
             variant="outlined"
-            label="name_ar"
+            label="Arabic Name"
             // name={name_ar}
             // onChange={(e) => setNameAr(e.target.value)}
             style={{ width: "47%" }}
@@ -79,7 +112,7 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
                 fontWeight: 600,
               }}
             >
-              Image :
+              Package Image :
             </p>
             <Paper style={{ width: "47%" }}>
               <label htmlFor="icon-button-file">
@@ -107,6 +140,44 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
               </label>
             </Paper>
           </Box>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            style={{ margin: "1rem 0" }}
+          >
+            <p
+              style={{
+                fontSize: "1rem",
+                color: "#282b3c",
+                fontWeight: 600,
+              }}
+            >
+              Cover Images :
+            </p>
+            <Box display="flex" style={{ width: "47%" }}>
+              <Avatar
+                style={{
+                  height: 100,
+                  width: 100,
+                  marginRight: 10,
+                  cursor: "pointer",
+                }}
+                variant="rounded"
+                src="https://image.freepik.com/free-psd/white-macbook-pro-mockup_106244-898.jpg"
+              />
+              <Avatar
+                style={{
+                  height: 100,
+                  width: 100,
+                  marginRight: 10,
+                  cursor: "pointer",
+                }}
+                variant="rounded"
+              >
+                <CameraAlt />
+              </Avatar>
+            </Box>
+          </Box>
         </Box>
 
         <Box
@@ -121,10 +192,44 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
               fontWeight: 600,
             }}
           >
-            Select Resolution :
+            SubCategory :
           </p>
           <FormControl style={{ width: "47%" }}>
             <Select
+              //   value={value}
+              onChange={(e) => {
+                // setValue(e.target.value);
+                console.log(e.target.value);
+              }}
+            >
+              {/* {resolution_list ? (
+                resolution_list.map((i, k) => (
+                  <MenuItem value={i}>{i}</MenuItem>
+                ))
+              ) : (
+                <MenuItem value={0}></MenuItem>
+              )} */}
+            </Select>
+          </FormControl>
+        </Box>
+
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          style={{ margin: "1rem 0" }}
+        >
+          <p
+            style={{
+              fontSize: "1rem",
+              color: "#282b3c",
+              fontWeight: 600,
+            }}
+          >
+            Items :
+          </p>
+          <FormControl style={{ width: "47%" }}>
+            <Select
+              multiple
               //   value={value}
               onChange={(e) => {
                 // setValue(e.target.value);
