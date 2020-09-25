@@ -15,6 +15,7 @@ import {
 import { Clear, CameraAlt } from "@material-ui/icons";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { useForm } from "react-hook-form";
+import AddPackage from "./addPackage";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -33,6 +34,7 @@ const AddItem = () => {
   const [file, setFile] = useState(null);
   const [imgFile, setImgFile] = useState(null);
   const [disabled, setDisabled] = useState(false);
+  const [openPackageForm, setOpenPackageForm] = useState(false);
   const {
     state: { resolution_list },
     fetchResolutions,
@@ -86,21 +88,41 @@ const AddItem = () => {
           type="file"
         />
 
-        <p
-          onClick={() => {
-            setOpen(true);
-          }}
-          style={{
-            color: "#fff",
-            cursor: "pointer",
-            fontWeight: "bold",
-            position: "relative",
-            zIndex: 3,
-            top: -5,
-          }}
-        >
-          Add Game
-        </p>
+        <Box display="flex">
+          <p
+            onClick={() => {
+              setOpen(true);
+            }}
+            style={{
+              color: "#fff",
+              cursor: "pointer",
+              fontWeight: "bold",
+              position: "relative",
+              zIndex: 3,
+              top: -5,
+              marginRight: "1.5rem",
+            }}
+          >
+            Add Game
+          </p>
+
+          <p
+            onClick={() => {
+              setOpenPackageForm(true);
+            }}
+            style={{
+              color: "#fff",
+              cursor: "pointer",
+              fontWeight: "bold",
+              position: "relative",
+              zIndex: 3,
+              top: -5,
+            }}
+          >
+            Add Package
+          </p>
+        </Box>
+
         <Backdrop open={open} className={classes.backdrop}>
           <Paper
             style={{
@@ -242,6 +264,13 @@ const AddItem = () => {
           </Paper>
         </Backdrop>
       </form>
+      <AddPackage
+        classes={classes}
+        setOpen={setOpenPackageForm}
+        open={openPackageForm}
+        disabled={disabled}
+        setDisabled={setDisabled}
+      />
     </Box>
   );
 };

@@ -210,6 +210,28 @@ const toggleItemStatus = (dispatch) => async (id, action) => {
   await fetchItems();
 };
 
+
+const toggleGameStatus = (dispatch) => async (id, action) => {
+  const x = {
+    games: [id],
+    action_type: action,
+  };
+  clearMessage();
+
+  await Api.post(`admin/game/block-unblock`, { ...x }).then(async (data) => {
+    console.log(data);
+  });
+
+  dispatch({
+    type: "SET_MESSAGE",
+    payload: "Game Updated Successfully",
+  });
+
+  await fetchGames();
+};
+
+
+
 const clearMessage = (dispatch) => async () => {
   dispatch({
     type: "SET_MESSAGE",
@@ -405,6 +427,7 @@ export const { Context, Provider } = createDataContext(
     // uploadImage,
     addGame,
     fetchGame,
+    toggleGameStatus,
   },
   {
     items: [],

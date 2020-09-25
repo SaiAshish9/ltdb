@@ -4,6 +4,8 @@ import IconButton from "@material-ui/core/IconButton";
 import Box from "@material-ui/core/Box";
 import {useHistory} from 'react-router-dom'
 import Lootbox from '../../lootbox.png'
+import Logo from "../../logo.png";
+
 const Topbar = () => {
     const history = useHistory()
     return (
@@ -32,11 +34,12 @@ const Topbar = () => {
           }}
         >
           <img
-          src={Lootbox}
+          // src={Lootbox}
+          src={Logo}
           alt="Lootbox"
           style={{
-            width:"2.7rem",
-            height:"2.7rem",
+            width:"3rem",
+            height:"1.8rem",
             cursor:'pointer'
           }}
           />

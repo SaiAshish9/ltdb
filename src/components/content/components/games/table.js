@@ -35,16 +35,11 @@ export default function SimpleTable({ data }) {
   const [openEditDialog, setOpenEditDialog] = useState(false);
 
   const {
-    state: {
-      games,
-      items_count,
-      page_count,
-      message,
-      game_count,
-      game_page_count,
-    },
+    state: { games, message, game_count },
     fetchGames,
     fetchGame,
+    toggleGameStatus,
+    clearMessage,
   } = useContext(DataContext);
 
   const [rows, setRows] = useState(null);
@@ -117,7 +112,8 @@ export default function SimpleTable({ data }) {
                   textAlign: "center",
                 }}
               >
-                S No.
+                {games && "S No."}
+                {/* S No. */}
               </TableCell>
               <TableCell
                 style={{
@@ -206,7 +202,7 @@ export default function SimpleTable({ data }) {
                       fontWeight: 500,
                     }}
                   >
-                    {k + 1 + rowsPerPage * page}
+                    {row.name_en.length>0 && k + 1 + rowsPerPage * page}
                   </TableCell>
                   <TableCell
                     style={{
@@ -228,13 +224,13 @@ export default function SimpleTable({ data }) {
                   </TableCell>
                   <TableCell
                     onClick={async () => {
-                      // console.log(row.item_id, +row.status === 1 ? 0 : 1);
-                      // await toggleItemStatus(
-                      //   row.item_id,
-                      //   +row.status === 1 ? 0 : 1
-                      // );
-                      // await fetchItems(page + 1);
-                      // await clearMessage();
+                      console.log(row.game_id, +row.status === 1 ? 0 : 1);
+                      await toggleGameStatus(
+                        row.game_id,
+                        +row.status === 1 ? 0 : 1
+                      );
+                      await fetchGames(page + 1);
+                      await clearMessage();
                     }}
                     style={{
                       cursor: "pointer",
