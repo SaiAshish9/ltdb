@@ -35,7 +35,14 @@ export default function SimpleTable({ data }) {
   const [openEditDialog, setOpenEditDialog] = useState(false);
 
   const {
-    state: { games, items_count, page_count, message },
+    state: {
+      games,
+      items_count,
+      page_count,
+      message,
+      game_count,
+      game_page_count,
+    },
     fetchGames,
     fetchGame,
   } = useContext(DataContext);
@@ -199,7 +206,7 @@ export default function SimpleTable({ data }) {
                       fontWeight: 500,
                     }}
                   >
-                    {k + 1}
+                    {k + 1 + rowsPerPage * page}
                   </TableCell>
                   <TableCell
                     style={{
@@ -278,9 +285,9 @@ export default function SimpleTable({ data }) {
       <TablePagination
         component="div"
         rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 20]}
+        rowsPerPageOptions={[5, 10]}
         page={page}
-        count={items_count}
+        count={game_count}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />

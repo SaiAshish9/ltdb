@@ -1,17 +1,7 @@
 import createDataContext from "./createDataContext";
 import Api from "../api";
 import Cookie from "js-cookie";
-import { uploadFile } from "react-s3";
 import S3 from "react-aws-s3";
-
-// const config = {
-//   // dirName: "media" /* optional */,
-//   bucketName: "lootbox-s3",
-//   region: "us-east-2",
-//   accessKeyId: "AKIA3JWMPNMIYUFSR54M",
-//   secretAccessKey: "SklpCNgMo4arYfrcDOvLaeFw6xbLxHizCtAQt0YF",
-//   // s3Url: "https:/your-custom-s3-url.com/" /* optional */,
-// };
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -70,6 +60,16 @@ const reducer = (state, action) => {
         ...state,
         resolution_list: action.payload,
       };
+    case "SET_GAME_PAGE_COUNT":
+      return {
+        ...state,
+        game_page_count: action.payload,
+      };
+    case "SET_GAME_COUNT":
+      return {
+        ...state,
+        game_count: action.payload,
+      };
     default:
       return state;
   }
@@ -125,15 +125,15 @@ const fetchGames = (dispatch) => async (page, limit) => {
 
   await Api(url)
     .then((data) => {
-      //  dispatch({
-      //    type: "SET_PAGE_COUNT",
-      //    payload: JSON.parse(data.request.response)["parameter"]["last_page"],
-      //  });
+      dispatch({
+        type: "SET_GAME_PAGE_COUNT",
+        payload: JSON.parse(data.request.response)["parameter"]["last_page"],
+      });
 
-      //  dispatch({
-      //    type: "SET_ITEM_COUNT",
-      //    payload: JSON.parse(data.request.response)["parameter"]["total"],
-      //  });
+      dispatch({
+        type: "SET_GAME_COUNT",
+        payload: JSON.parse(data.request.response)["parameter"]["total"],
+      });
       console.log(data.data.data);
       dispatch({
         type: "SET_GAMES",
@@ -417,6 +417,8 @@ export const { Context, Provider } = createDataContext(
     users: [],
     games: [],
     user_count: 0,
+    game_count: 0,
+    game_page_count: 0,
     resolution_list: null,
   }
 );
