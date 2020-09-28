@@ -191,6 +191,15 @@ const fetchUser = (dispatch) => async (id) => {
     });
 };
 
+const fetchGameSubCategoryList = (dispatch) => async () => {
+  try {
+    const data = await Api("admin/game/sub-category-list");
+    return data.data.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const toggleItemStatus = (dispatch) => async (id, action) => {
   const x = {
     items: [id],
@@ -210,7 +219,6 @@ const toggleItemStatus = (dispatch) => async (id, action) => {
   await fetchItems();
 };
 
-
 const toggleGameStatus = (dispatch) => async (id, action) => {
   const x = {
     games: [id],
@@ -229,8 +237,6 @@ const toggleGameStatus = (dispatch) => async (id, action) => {
 
   await fetchGames();
 };
-
-
 
 const clearMessage = (dispatch) => async () => {
   dispatch({
@@ -428,6 +434,7 @@ export const { Context, Provider } = createDataContext(
     addGame,
     fetchGame,
     toggleGameStatus,
+    fetchGameSubCategoryList
   },
   {
     items: [],

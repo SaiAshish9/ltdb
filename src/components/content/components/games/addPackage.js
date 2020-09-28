@@ -21,11 +21,14 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
   const [value, setValue] = useState(null);
   const [itemValue, setItemValue] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [subCategories, setSubCategories] = useState(null);
+  const [subCategoryValue, setSubCategoryValue] = useState(null);
+  const [selectedSubCategories, setSelectedSubCategories] = useState([]);
 
   const {
     state: { games, items },
     fetchItems,
-    // fetchSubCategories,
+    fetchGameSubCategoryList,
   } = useContext(DataContext);
 
   useEffect(() => {
@@ -34,6 +37,8 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
 
   const getData = async () => {
     await fetchItems();
+    const data = await fetchGameSubCategoryList();
+    setSubCategories(data);
     // await fetchSubCategories();
   };
 
@@ -219,21 +224,29 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
               </p>
               <FormControl style={{ width: "100%" }}>
                 <Select
-                  //   value={value}
+                  value={subCategoryValue}
                   onChange={(e) => {
-                    // setValue(e.target.value);
+                    setSubCategoryValue(e.target.value);
+                    if (!selectedSubCategories.includes(e.target.value))
+                      setSelectedSubCategories([
+                        ...selectedSubCategories,
+                        e.target.value,
+                      ]);
                     console.log(e.target.value);
                   }}
                 >
-                  {/* {resolution_list ? (
-                resolution_list.map((i, k) => (
-                  <MenuItem value={i}>{i}</MenuItem>
-                ))
-              ) : (
-                <MenuItem value={0}></MenuItem>
-              )} */}
+                  {subCategories ? (
+                    subCategories.map((i, k) => (
+                      <MenuItem value={i.name_en}>{i.name_en}</MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem value={0}></MenuItem>
+                  )}
                 </Select>
               </FormControl>
+              {selectedSubCategories.map((i, k) => (
+                <p key={k}>{i}</p>
+              ))}
             </Box>
 
             <Box
@@ -256,7 +269,8 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
                   value={itemValue}
                   onChange={(e) => {
                     setItemValue(e.target.value);
-                    setSelectedItems([...selectedItems, e.target.value]);
+                    if (!selectedItems.includes(e.target.value))
+                      setSelectedItems([...selectedItems, e.target.value]);
                     console.log(e.target.value);
                   }}
                 >
