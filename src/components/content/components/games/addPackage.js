@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Box,
   Fab,
@@ -19,11 +19,23 @@ import { Context as DataContext } from "../../../../api/dataProvider";
 const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
   const [file, setFile] = useState(null);
   const [value, setValue] = useState(null);
+  const [itemValue, setItemValue] = useState(null);
+  const [selectedItems, setSelectedItems] = useState([]);
 
   const {
-    state: { games },
-    fetchGames,
+    state: { games, items },
+    fetchItems,
+    // fetchSubCategories,
   } = useContext(DataContext);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    await fetchItems();
+    // await fetchSubCategories();
+  };
 
   return (
     <Backdrop open={open} className={classes.backdrop}>
@@ -189,68 +201,80 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
           <Box
             display="flex"
             justifyContent="space-between"
-            style={{ margin: "1rem 0" }}
+            style={{ width: "100%" }}
           >
-            <p
-              style={{
-                fontSize: "1rem",
-                color: "#282b3c",
-                fontWeight: 600,
-              }}
+            <Box
+              // display="flex"
+              justifyContent="space-between"
+              style={{ margin: "1rem 0", width: "47%" }}
             >
-              SubCategory :
-            </p>
-            <FormControl style={{ width: "47%" }}>
-              <Select
-                //   value={value}
-                onChange={(e) => {
-                  // setValue(e.target.value);
-                  console.log(e.target.value);
+              <p
+                style={{
+                  fontSize: "1rem",
+                  color: "#282b3c",
+                  fontWeight: 600,
                 }}
               >
-                {/* {resolution_list ? (
+                SubCategory :
+              </p>
+              <FormControl style={{ width: "100%" }}>
+                <Select
+                  //   value={value}
+                  onChange={(e) => {
+                    // setValue(e.target.value);
+                    console.log(e.target.value);
+                  }}
+                >
+                  {/* {resolution_list ? (
                 resolution_list.map((i, k) => (
                   <MenuItem value={i}>{i}</MenuItem>
                 ))
               ) : (
                 <MenuItem value={0}></MenuItem>
               )} */}
-              </Select>
-            </FormControl>
-          </Box>
+                </Select>
+              </FormControl>
+            </Box>
 
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            style={{ margin: "1rem 0" }}
-          >
-            <p
-              style={{
-                fontSize: "1rem",
-                color: "#282b3c",
-                fontWeight: 600,
-              }}
+            <Box
+              // display="flex"
+              justifyContent="space-between"
+              style={{ margin: "1rem 0", width: "47%" }}
             >
-              Items :
-            </p>
-            <FormControl style={{ width: "47%" }}>
-              <Select
-                multiple
-                //   value={value}
-                onChange={(e) => {
-                  // setValue(e.target.value);
-                  console.log(e.target.value);
+              <p
+                style={{
+                  fontSize: "1rem",
+                  color: "#282b3c",
+                  fontWeight: 600,
                 }}
               >
-                {/* {resolution_list ? (
-                resolution_list.map((i, k) => (
-                  <MenuItem value={i}>{i}</MenuItem>
-                ))
-              ) : (
-                <MenuItem value={0}></MenuItem>
-              )} */}
-              </Select>
-            </FormControl>
+                Items :
+              </p>
+              <FormControl style={{ width: "100%" }}>
+                <Select
+                  // multiple
+                  value={itemValue}
+                  onChange={(e) => {
+                    setItemValue(e.target.value);
+                    setSelectedItems([...selectedItems, e.target.value]);
+                    console.log(e.target.value);
+                  }}
+                >
+                  {items ? (
+                    items.map((i, k) => (
+                      <MenuItem value={i.name_en}>{i.name_en}</MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem value={0}></MenuItem>
+                  )}
+                </Select>
+              </FormControl>
+              <Box>
+                {selectedItems.map((i, k) => (
+                  <p key={k}>{i}</p>
+                ))}
+              </Box>
+            </Box>
           </Box>
 
           <Box
