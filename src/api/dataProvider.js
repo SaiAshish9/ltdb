@@ -370,16 +370,39 @@ const uploadImage = async (bucket, file) => {
   return data1.key;
 };
 
+const addPackage = (dispatch) => async (data) => {
+  var image;
+  var cover_images = [];
+  image = await uploadImage("game/package", data.image);
 
-const addPackage=(dispatch) => async (data)=>{
-   
-  const image=await uploadImage("game/package", data.imgFile);
-  console.log(image)
-  console.log(data)   
+  cover_images = await Promise.all(
+    data.cover_images.map(async (x) => {
+      try {
+        var image1 = await uploadImage("game/package", x.file);
+        return image1;
+      } catch (err) {
+        console.log(err);
+      }
+    })
+  );
 
-}
-
-
+  try {
+    const x = await Api.post("admin/game/add-package", {
+      ...data,
+      cover_images,
+      image,
+    });
+    console.log(x);
+  } catch (e) {
+    console.log(e);
+  }
+console.log({
+  ...data,
+  cover_images,
+  image,
+});
+  // console.log(image, cover_images);
+};
 
 const addGame = (dispatch) => async (data) => {
   if (data.imgFile) {
@@ -446,7 +469,7 @@ export const { Context, Provider } = createDataContext(
     addGame,
     fetchGame,
     toggleGameStatus,
-    fetchGameSubCategoryList
+    fetchGameSubCategoryList,
   },
   {
     items: [],

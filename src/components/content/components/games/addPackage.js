@@ -17,19 +17,21 @@ import { Clear, CameraAlt } from "@material-ui/icons";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { useForm } from "react-hook-form";
 
-const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
+const AddPackage = ({ open, classes, setOpen }) => {
   const [file, setFile] = useState(null);
   const [value, setValue] = useState(null);
   const [itemValue, setItemValue] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const [subCategories, setSubCategories] = useState(null);
-  const [subCategoryValue, setSubCategoryValue] = useState(null);
+  const [subCategoryValue, setSubCategoryValue] = useState(0);
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
   const [name_en, setNameEn] = useState(null);
   const [name_ar, setNameAr] = useState(null);
   const [quality, setQuality] = useState(null);
   const [imgFile, setImgFile] = useState(null);
   const { register, handleSubmit } = useForm();
+  const [coverImages, setCoverImages] = useState([]);
+  const [disabled, setDisabled] = useState(false);
 
   const {
     state: { games, items },
@@ -46,19 +48,27 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
     await fetchItems();
     const data = await fetchGameSubCategoryList();
     setSubCategories(data);
+    // setSelectedItems(items);
+    console.log(items);
   };
 
   const onSubmit = async (y) => {
-    console.log(imgFile);
-    addPackage({
-      imgFile,
+    setDisabled(true);
+    await addPackage({
+      image: imgFile,
       status: 1,
       graphic_quality: quality,
       name_en,
       name_ar,
       game_id: value,
-      package_item: [],
+      cover_images: coverImages,
+      package_item: selectedSubCategories.map((i, k) => ({
+        sub_category_id: +selectedSubCategories[k].split(" ")[0],
+        item_id: +selectedItems[k].split(" ")[0],
+      })),
     });
+    setDisabled(false);
+    setOpen(false);
   };
 
   const handleImgChange = useCallback(
@@ -68,11 +78,25 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
       reader.onload = (e) => {
         setFile(reader.result);
         setImgFile(file1);
-        // console.log(file);
       };
       reader.readAsDataURL(file1);
     },
     [file]
+  );
+
+  const handleCoverImages = useCallback(
+    (e) => {
+      var file1 = e.target.files[0];
+      var reader = new FileReader();
+      reader.onload = (e) => {
+        setCoverImages([
+          ...coverImages,
+          { imgFile: reader.result, file: file1 },
+        ]);
+      };
+      reader.readAsDataURL(file1);
+    },
+    [coverImages]
   );
 
   return (
@@ -118,7 +142,6 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
                   value={value}
                   onChange={(e) => {
                     setValue(e.target.value);
-                    console.log(e.target.value);
                   }}
                 >
                   {games ? (
@@ -220,28 +243,55 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
                 >
                   Cover Images :
                 </p>
-                <Box display="flex" style={{ width: "47%" }}>
-                  <Avatar
-                    style={{
-                      height: 100,
-                      width: 100,
-                      marginRight: 10,
-                      cursor: "pointer",
-                    }}
-                    variant="rounded"
-                    src="https://image.freepik.com/free-psd/white-macbook-pro-mockup_106244-898.jpg"
-                  />
-                  <Avatar
-                    style={{
-                      height: 100,
-                      width: 100,
-                      marginRight: 10,
-                      cursor: "pointer",
-                    }}
-                    variant="rounded"
-                  >
-                    <CameraAlt />
-                  </Avatar>
+                <Box display="flex" flexWrap="wrap" style={{ width: "47%" }}>
+                  {coverImages.length > 0 ? (
+                    coverImages.map((i, k) => (
+                      <input
+                        id={`cover-image${k + 1 + coverImages.length}`}
+                        type="file"
+                        style={{ display: "none" }}
+                        accept=".png,.jpg,.jpeg"
+                        onChange={(e) => handleCoverImages(e)}
+                      />
+                    ))
+                  ) : (
+                    <input
+                      id={`cover-image${coverImages.length + 1}`}
+                      type="file"
+                      style={{ display: "none" }}
+                      accept=".png,.jpg,.jpeg"
+                      onChange={(e) => handleCoverImages(e)}
+                    />
+                  )}
+
+                  {coverImages.map((i, k) => (
+                    <Avatar
+                      key={k}
+                      style={{
+                        height: 100,
+                        width: 100,
+                        marginRight: 10,
+                        marginBottom: 10,
+                        cursor: "pointer",
+                      }}
+                      variant="rounded"
+                      src={i.imgFile}
+                    />
+                  ))}
+
+                  <label htmlFor={`cover-image${coverImages.length + 1}`}>
+                    <Avatar
+                      style={{
+                        height: 100,
+                        width: 100,
+                        marginRight: 10,
+                        cursor: "pointer",
+                      }}
+                      variant="rounded"
+                    >
+                      <CameraAlt />
+                    </Avatar>
+                  </label>
                 </Box>
               </Box>
             </Box>
@@ -265,11 +315,10 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
                   value={quality}
                   onChange={(e) => {
                     setQuality(e.target.value);
-                    console.log(e.target.value);
                   }}
                 >
                   {["Low", "Medium", "High"].map((i, k) => (
-                    <MenuItem value={k}>{i}</MenuItem>
+                    <MenuItem value={k+1}>{i}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -299,17 +348,21 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
                     value={subCategoryValue}
                     onChange={(e) => {
                       // setSubCategoryValue(e.target.value);
-                      if (!selectedSubCategories.includes(e.target.value))
+                      if (
+                        // !selectedSubCategories.includes(e.target.value)
+                        selectedItems.length === selectedSubCategories.length
+                      )
                         setSelectedSubCategories([
                           ...selectedSubCategories,
                           e.target.value,
                         ]);
-                      console.log(e.target.value);
                     }}
                   >
                     {subCategories ? (
                       subCategories.map((i, k) => (
-                        <MenuItem value={i.name_en}>{i.name_en}</MenuItem>
+                        <MenuItem value={`${i.sub_category_id} ${i.name_en}`}>
+                          {i.name_en}
+                        </MenuItem>
                       ))
                     ) : (
                       <MenuItem value={0}></MenuItem>
@@ -326,7 +379,7 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
                     style={{ cursor: "pointer" }}
                     key={k}
                   >
-                    {i}
+                    {i.split(" ")[1]}
                   </p>
                 ))}
               </Box>
@@ -351,14 +404,20 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
                     value={itemValue}
                     onChange={(e) => {
                       // setItemValue(e.target.value);
-                      if (!selectedItems.includes(e.target.value))
+                      if (
+                        // true
+                        // !selectedItems.includes(e.target.value)
+                        selectedItems.length < selectedSubCategories.length
+                      )
                         setSelectedItems([...selectedItems, e.target.value]);
-                      console.log(e.target.value);
+                      console.log([...selectedItems, e.target.value]);
                     }}
                   >
                     {items ? (
                       items.map((i, k) => (
-                        <MenuItem value={i.name_en}>{i.name_en}</MenuItem>
+                        <MenuItem value={`${i.item_id} ${i.name_en}`}>
+                          {i.name_en}
+                        </MenuItem>
                       ))
                     ) : (
                       <MenuItem value={0}></MenuItem>
@@ -374,7 +433,7 @@ const AddPackage = ({ open, classes, setDisabled, setOpen, disabled }) => {
                       }}
                       key={k}
                     >
-                      {i}
+                      {i.split(" ")[1]}
                     </p>
                   ))}
                 </Box>
