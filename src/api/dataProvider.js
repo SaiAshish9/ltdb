@@ -370,6 +370,17 @@ const uploadImage = async (bucket, file) => {
   return data1.key;
 };
 
+
+const addPackage=(dispatch) => async (data)=>{
+   
+  const image=await uploadImage("game/package", data.imgFile);
+  console.log(image)
+  console.log(data)   
+
+}
+
+
+
 const addGame = (dispatch) => async (data) => {
   if (data.imgFile) {
     if (data.game_id) {
@@ -431,6 +442,7 @@ export const { Context, Provider } = createDataContext(
     fetchResolutions,
     fetchGames,
     // uploadImage,
+    addPackage,
     addGame,
     fetchGame,
     toggleGameStatus,
