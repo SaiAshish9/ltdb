@@ -16,6 +16,7 @@ import {
 import { Clear, CameraAlt } from "@material-ui/icons";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { useForm } from "react-hook-form";
+import { GiCancel } from "react-icons/gi";
 
 const AddPackage = ({ open, classes, setOpen }) => {
   const [file, setFile] = useState(null);
@@ -265,18 +266,44 @@ const AddPackage = ({ open, classes, setOpen }) => {
                   )}
 
                   {coverImages.map((i, k) => (
-                    <Avatar
+                    <Box
                       key={k}
                       style={{
+                        position: "relative",
                         height: 100,
                         width: 100,
-                        marginRight: 10,
-                        marginBottom: 10,
-                        cursor: "pointer",
+                        marginRight: 15,
+                        marginBottom: 15,
                       }}
-                      variant="rounded"
-                      src={i.imgFile}
-                    />
+                    >
+                      <IconButton
+                        onClick={() => {
+                          const x = [
+                            ...coverImages.splice(0, k),
+                            ...coverImages.splice(k + 1, 0),
+                          ];
+                          setCoverImages(x);
+                        }}
+                        style={{
+                          background: "#fff",
+                          position: "absolute",
+                          right: -10,
+                          top: -10,
+                          zIndex: 10,
+                          padding: 0,
+                        }}
+                      >
+                        <GiCancel />
+                      </IconButton>
+                      <Avatar
+                        style={{
+                          height: 100,
+                          width: 100,
+                        }}
+                        variant="rounded"
+                        src={i.imgFile}
+                      />
+                    </Box>
                   ))}
 
                   <label htmlFor={`cover-image${coverImages.length + 1}`}>
@@ -318,7 +345,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                   }}
                 >
                   {["Low", "Medium", "High"].map((i, k) => (
-                    <MenuItem value={k+1}>{i}</MenuItem>
+                    <MenuItem value={k + 1}>{i}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -426,15 +453,38 @@ const AddPackage = ({ open, classes, setOpen }) => {
                 </FormControl>
                 <Box>
                   {selectedItems.map((i, k) => (
-                    <p
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        setSelectedItems(selectedItems.filter((x) => x !== i));
-                      }}
-                      key={k}
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
                     >
-                      {i.split(" ")[1]}
-                    </p>
+                      <p
+                        key={k}
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          setSelectedItems(
+                            selectedItems.filter((x) => x !== i)
+                          );
+                        }}
+                      >
+                        {i.split(" ")[1]}
+                      </p>
+                      <IconButton
+                        onClick={() => {
+                          setSelectedItems(
+                            selectedItems.filter((x) => x !== i)
+                          );
+                          setSelectedSubCategories(
+                            selectedSubCategories.filter(
+                              (x) => x !== selectedSubCategories[k]
+                            )
+                          );
+                        }}
+                        style={{ padding: 0, height: 20, width: 20 }}
+                      >
+                        <GiCancel />
+                      </IconButton>
+                    </Box>
                   ))}
                 </Box>
               </Box>
