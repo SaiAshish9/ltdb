@@ -14,6 +14,8 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import Popup from "./popup";
 import EditGame from "./editGame";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import Package from "./viewPackage";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -33,6 +35,7 @@ export default function SimpleTable({ data }) {
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openPackageDialog, setOpenPackageDialog] = useState(false);
 
   const {
     state: { games, message, game_count },
@@ -163,7 +166,7 @@ export default function SimpleTable({ data }) {
                   color: "#282b3c",
                 }}
               >
-                View
+                Package
               </TableCell>
             </TableRow>
           </TableHead>
@@ -202,7 +205,7 @@ export default function SimpleTable({ data }) {
                       fontWeight: 500,
                     }}
                   >
-                    {row.name_en.length>0 && k + 1 + rowsPerPage * page}
+                    {row.name_en.length > 0 && k + 1 + rowsPerPage * page}
                   </TableCell>
                   <TableCell
                     style={{
@@ -248,14 +251,28 @@ export default function SimpleTable({ data }) {
                       textAlign: "center",
                     }}
                   >
-                    <IconButton
-                      onClick={async () => {
-                        await fetchGame(row.game_id);
-                        setOpenEditDialog(true);
-                      }}
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
                     >
-                      <EditOutlinedIcon style={{ cursor: "pointer" }} />{" "}
-                    </IconButton>
+                      <IconButton
+                        onClick={async () => {
+                          await fetchGame(row.game_id);
+                          setOpenEditDialog(true);
+                        }}
+                      >
+                        <EditOutlinedIcon style={{ cursor: "pointer" }} />{" "}
+                      </IconButton>
+                      <IconButton
+                        onClick={async () => {
+                          await fetchGame(row.game_id);
+                          setOpen(true);
+                        }}
+                      >
+                        <VisibilityOutlinedIcon style={{ cursor: "pointer" }} />{" "}
+                      </IconButton>
+                    </Box>
                   </TableCell>
                   <TableCell
                     style={{
@@ -267,10 +284,10 @@ export default function SimpleTable({ data }) {
                     <IconButton
                       onClick={async () => {
                         await fetchGame(row.game_id);
-                        setOpen(true);
+                        setOpenPackageDialog(true);
                       }}
                     >
-                      <VisibilityOutlinedIcon style={{ cursor: "pointer" }} />{" "}
+                      <InfoOutlinedIcon />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -287,7 +304,17 @@ export default function SimpleTable({ data }) {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
-      <Popup classes={classes} open={open} setOpen={setOpen} />
+      <Popup
+        setOpenPackageDialog={setOpenPackageDialog}
+        classes={classes}
+        open={open}
+        setOpen={setOpen}
+      />
+      <Package
+        classes={classes}
+        open={openPackageDialog}
+        setOpen={setOpenPackageDialog}
+      />
       <EditGame
         classes={classes}
         open={openEditDialog}

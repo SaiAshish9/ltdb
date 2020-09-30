@@ -12,12 +12,12 @@ import {
   FormControl,
   CircularProgress,
 } from "@material-ui/core";
-import { Clear, CameraAlt } from "@material-ui/icons";
+import { Clear, CameraAlt, EditOutlined } from "@material-ui/icons";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { useForm } from "react-hook-form";
 import Thumbnail from "../../../../assets/thumbnail1.png";
 
-const Popup = ({ classes, open, setOpen }) => {
+const Popup = ({ classes, open, setOpen, setOpenPackageDialog }) => {
   const {
     state: { game_details },
   } = useContext(DataContext);
@@ -99,6 +99,14 @@ const Popup = ({ classes, open, setOpen }) => {
                     }}
                   >
                     <Clear />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      setDisabled(false);
+                      setOpenPackageDialog(true);
+                    }}
+                  >
+                    <EditOutlined />
                   </IconButton>
                 </Box>
                 <Box

@@ -447,7 +447,6 @@ const addGame = (dispatch) => async (data) => {
       }).then((data) => console.log(data));
     }
   }
-
   await fetchGames();
 };
 
