@@ -12,7 +12,14 @@ import {
   Avatar,
   FormControl,
   CircularProgress,
+  TableContainer,
+  TableBody,
+  Table,
+  TableRow,
+  TableCell,
+  TableHead,
 } from "@material-ui/core";
+import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import { Clear, CameraAlt } from "@material-ui/icons";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { useForm } from "react-hook-form";
@@ -57,7 +64,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
     setDisabled(true);
     await addPackage({
       image: imgFile,
-    //   status: 1,
+      //   status: 1,
       graphic_quality: quality,
       name_en,
       name_ar,
@@ -400,10 +407,10 @@ const AddPackage = ({ open, classes, setOpen }) => {
                     value={subCategoryValue}
                     onChange={(e) => {
                       // setSubCategoryValue(e.target.value);
-                      if (
-                        // !selectedSubCategories.includes(e.target.value)
-                        selectedItems.length === selectedSubCategories.length
-                      )
+                      // if (
+                      //   // !selectedSubCategories.includes(e.target.value)
+                      //   selectedItems.length === selectedSubCategories.length
+                      // )
                         setSelectedSubCategories([
                           ...selectedSubCategories,
                           e.target.value,
@@ -421,19 +428,6 @@ const AddPackage = ({ open, classes, setOpen }) => {
                     )}
                   </Select>
                 </FormControl>
-                {selectedSubCategories.map((i, k) => (
-                  <p
-                    onClick={() => {
-                      setSelectedSubCategories(
-                        selectedSubCategories.filter((x) => x !== i)
-                      );
-                    }}
-                    style={{ cursor: "pointer" }}
-                    key={k}
-                  >
-                    {i.split(" ")[1]}
-                  </p>
-                ))}
               </Box>
 
               <Box
@@ -460,7 +454,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                         // true
                         // !selectedItems.includes(e.target.value)
                         selectedItems.length < selectedSubCategories.length
-                      )
+                       )
                         setSelectedItems([...selectedItems, e.target.value]);
                       console.log([...selectedItems, e.target.value]);
                     }}
@@ -476,44 +470,109 @@ const AddPackage = ({ open, classes, setOpen }) => {
                     )}
                   </Select>
                 </FormControl>
-                <Box>
-                  {selectedItems.map((i, k) => (
-                    <Box
-                      display="flex"
-                      justifyContent="space-between"
-                      alignItems="center"
-                    >
-                      <p
-                        key={k}
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          setSelectedItems(
-                            selectedItems.filter((x) => x !== i)
-                          );
-                        }}
-                      >
-                        {i.split(" ")[1]}
-                      </p>
-                      <IconButton
-                        onClick={() => {
-                          setSelectedItems(
-                            selectedItems.filter((x) => x !== i)
-                          );
-                          setSelectedSubCategories(
-                            selectedSubCategories.filter(
-                              (x) => x !== selectedSubCategories[k]
-                            )
-                          );
-                        }}
-                        style={{ padding: 0, height: 20, width: 20 }}
-                      >
-                        <GiCancel />
-                      </IconButton>
-                    </Box>
-                  ))}
-                </Box>
               </Box>
             </Box>
+
+            {selectedSubCategories && selectedSubCategories.length > 0 && (
+              <TableContainer
+                style={{ width: "100%", marginTop: "2rem" }}
+                elevation={0}
+                components={Paper}
+              >
+                <Table
+                  style={{ width: "100%" }}
+                  // size="small"
+                >
+                  <TableHead>
+                    <TableRow
+                      style={{
+                        background: "#f4f4f4",
+                        height: "3.4rem",
+                      }}
+                    >
+                      <TableCell
+                        style={{
+                          fontWeight: "bolder",
+                          fontSize: "0.8rem",
+                          color: "#282b3c",
+                          textAlign: "center",
+                        }}
+                      >
+                        Sub Category
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          fontWeight: "bolder",
+                          fontSize: "0.8rem",
+                          color: "#282b3c",
+                          textAlign: "center",
+                        }}
+                      >
+                        Item
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          fontWeight: "bolder",
+                          fontSize: "0.8rem",
+                          color: "#282b3c",
+                          textAlign: "center",
+                        }}
+                      >
+                        Action
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+
+                  <TableBody>
+                    {selectedSubCategories.map((i, k) => (
+                      <TableRow key={k}>
+                        <TableCell
+                          style={{
+                            textAlign: "center",
+                            color: "#8095a1",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {i.split(" ")[1]}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            textAlign: "center",
+                            color: "#8095a1",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {selectedItems[k] && selectedItems[k].split(" ")[1]}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            textAlign: "center",
+                            color: "#8095a1",
+                            fontWeight: 500,
+                          }}
+                        >
+                          <IconButton
+                            onClick={() => {
+                              setSelectedItems(
+                                selectedItems.filter((x) => x !== i)
+                              );
+                              setSelectedSubCategories(
+                                selectedSubCategories.filter(
+                                  (x) => x !== selectedSubCategories[k]
+                                )
+                              );
+                            }}
+                            style={{ padding: 0 }}
+                          >
+                            <DeleteOutlineIcon style={{ color: "red" }} />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
 
             <Box
               display="flex"
