@@ -15,7 +15,7 @@ import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import Popup from "./popup";
 import EditGame from "./editGame";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
-import Package from "./viewPackage";
+import Packages from "./viewPackages";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -35,7 +35,7 @@ export default function SimpleTable({ data }) {
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [openPackageDialog, setOpenPackageDialog] = useState(false);
+  const [openPackagesDialog, setOpenPackagesDialog] = useState(false);
 
   const {
     state: { games, message, game_count },
@@ -43,6 +43,7 @@ export default function SimpleTable({ data }) {
     fetchGame,
     toggleGameStatus,
     clearMessage,
+    fetchGamePackages,
   } = useContext(DataContext);
 
   const [rows, setRows] = useState(null);
@@ -284,7 +285,8 @@ export default function SimpleTable({ data }) {
                     <IconButton
                       onClick={async () => {
                         await fetchGame(row.game_id);
-                        setOpenPackageDialog(true);
+                        await fetchGamePackages(row.game_id);
+                        setOpenPackagesDialog(true);
                       }}
                     >
                       <InfoOutlinedIcon />
@@ -305,15 +307,15 @@ export default function SimpleTable({ data }) {
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
       <Popup
-        setOpenPackageDialog={setOpenPackageDialog}
+        // setOpenPackageDialog={setOpenPackageDialog}
         classes={classes}
         open={open}
         setOpen={setOpen}
       />
-      <Package
+      <Packages
         classes={classes}
-        open={openPackageDialog}
-        setOpen={setOpenPackageDialog}
+        open={openPackagesDialog}
+        setOpen={setOpenPackagesDialog}
       />
       <EditGame
         classes={classes}

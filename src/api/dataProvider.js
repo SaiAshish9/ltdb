@@ -70,6 +70,16 @@ const reducer = (state, action) => {
         ...state,
         game_count: action.payload,
       };
+    case "SET_GAME_PACKAGES":
+      return {
+        ...state,
+        game_packages: action.payload,
+      };
+    case "SET_PACKAGE":
+      return {
+        ...state,
+        package_details: action.payload,
+      };
     default:
       return state;
   }
@@ -396,11 +406,11 @@ const addPackage = (dispatch) => async (data) => {
   } catch (e) {
     console.log(e);
   }
-console.log({
-  ...data,
-  cover_images,
-  image,
-});
+  console.log({
+    ...data,
+    cover_images,
+    image,
+  });
   // console.log(image, cover_images);
 };
 
@@ -450,6 +460,32 @@ const addGame = (dispatch) => async (data) => {
   await fetchGames();
 };
 
+const fetchGamePackages = (dispatch) => async (id) => {
+  try {
+    const {
+      data: { data },
+    } = await Api(`admin/game/game-package-list?game_id=${id}`);
+    dispatch({
+      type: "SET_GAME_PACKAGES",
+      payload: data,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const fetchPackage = (dispatch) => async (id) => {
+  try {
+    const {
+      data: { data },
+    } = await Api(`admin/game/get-package?package_id=${id}`);
+    dispatch({
+      type: "SET_PACKAGE",
+      payload: data,
+    });
+  } catch (e) {}
+};
+
 export const { Context, Provider } = createDataContext(
   reducer,
   {
@@ -463,11 +499,13 @@ export const { Context, Provider } = createDataContext(
     clearMessage,
     fetchResolutions,
     fetchGames,
+    fetchPackage,
     // uploadImage,
     addPackage,
     addGame,
     fetchGame,
     toggleGameStatus,
+    fetchGamePackages,
     fetchGameSubCategoryList,
   },
   {
@@ -480,6 +518,8 @@ export const { Context, Provider } = createDataContext(
     game_details: null,
     users: [],
     games: [],
+    package_details: null,
+    game_packages: [],
     user_count: 0,
     game_count: 0,
     game_page_count: 0,

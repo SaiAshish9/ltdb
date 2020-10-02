@@ -260,7 +260,7 @@ const EditPopup = ({ classes, open, setOpen }) => {
                   </FormControl>
                 </Box>
 
-                <Box
+                {/* <Box
                   display="flex"
                   justifyContent="space-between"
                   style={{ margin: "1rem 0" }}
@@ -286,7 +286,7 @@ const EditPopup = ({ classes, open, setOpen }) => {
                       <MenuItem value={1}>Active</MenuItem>
                     </Select>
                   </FormControl>
-                </Box>
+                </Box> */}
 
                 <Box
                   display="flex"

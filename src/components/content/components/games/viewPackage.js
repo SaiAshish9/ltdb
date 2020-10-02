@@ -37,12 +37,12 @@ const AddPackage = ({ open, classes, setOpen }) => {
   const [name_ar, setNameAr] = useState(null);
   const [quality, setQuality] = useState(null);
   const [imgFile, setImgFile] = useState(null);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const [coverImages, setCoverImages] = useState([]);
   const [disabled, setDisabled] = useState(false);
 
   const {
-    state: { game_details, items, games },
+    state: { game_details, items, games, package_details },
     fetchItems,
     fetchGameSubCategoryList,
     addPackage,
@@ -56,6 +56,9 @@ const AddPackage = ({ open, classes, setOpen }) => {
     await fetchItems();
     const data = await fetchGameSubCategoryList();
     setSubCategories(data);
+    if (package_details) {
+      setNameEn(package_details.name_en);
+    }
     // setSelectedItems(items);
     console.log(items);
   };
@@ -110,7 +113,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
 
   return (
     <Backdrop open={open} className={classes.backdrop}>
-      {games && (
+      {games && package_details && (
         <Paper
           style={{
             position: "absolute",
@@ -125,7 +128,17 @@ const AddPackage = ({ open, classes, setOpen }) => {
             <Box display="flex" flexDirection="row-reverse">
               <IconButton
                 onClick={() => {
+                  setNameAr(null);
+                  setNameEn(null);
+                  reset();
+                  setFile(null);
+                  setImgFile(null);
+                  setSelectedItems(null);
+                  setSelectedSubCategories(null);
+                  setQuality(null);
                   setDisabled(false);
+                  setValue(null);
+                  setCoverImages([]);
                   setOpen(false);
                 }}
               >
@@ -155,7 +168,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                   }}
                 >
                   <MenuItem value={0}>
-                    {game_details && game_details.name_en}
+                    {package_details && package_details.game_name_en}
                   </MenuItem>
                 </Select>
               </FormControl>
@@ -176,7 +189,8 @@ const AddPackage = ({ open, classes, setOpen }) => {
               </p>
               <FormControl style={{ width: "47%" }}>
                 <Select
-                  value={value}
+                  disabled
+                  value={package_details && package_details.status}
                   onChange={(e) => {
                     setValue(e.target.value);
                   }}
@@ -195,14 +209,20 @@ const AddPackage = ({ open, classes, setOpen }) => {
               <TextField
                 variant="outlined"
                 label="English Name"
-                value={name_en}
+                inputRef={register()}
+                disabled
+                name="name"
+                value={package_details && package_details.name_en}
                 onChange={(e) => setNameEn(e.target.value)}
                 style={{ width: "47%" }}
               />
               <TextField
                 variant="outlined"
                 label="Arabic Name"
-                name={name_ar}
+                disabled
+                name="name1"
+                inputRef={register()}
+                value={package_details && package_details.name_ar}
                 onChange={(e) => setNameAr(e.target.value)}
                 style={{ width: "47%" }}
               />
@@ -247,13 +267,13 @@ const AddPackage = ({ open, classes, setOpen }) => {
                         id="package-image1"
                         type="file"
                       />
-                      {file ? (
+                      {package_details.image ? (
                         <img
                           style={{
                             height: "20vh",
                           }}
                           alt="img"
-                          src={file}
+                          src={`${package_details.image}`}
                         />
                       ) : (
                         <CameraAlt />
@@ -297,18 +317,19 @@ const AddPackage = ({ open, classes, setOpen }) => {
                     />
                   )}
 
-                  {coverImages.map((i, k) => (
-                    <Box
-                      key={k}
-                      style={{
-                        position: "relative",
-                        height: 100,
-                        width: 100,
-                        marginRight: 15,
-                        marginBottom: 15,
-                      }}
-                    >
-                      <IconButton
+                  {package_details.cover_image.length > 0 &&
+                    package_details.cover_image.map((i, k) => (
+                      <Box
+                        key={k}
+                        style={{
+                          position: "relative",
+                          height: 100,
+                          width: 100,
+                          marginRight: 15,
+                          marginBottom: 15,
+                        }}
+                      >
+                        {/* <IconButton
                         onClick={() => {
                           const x = [
                             ...coverImages.splice(0, k),
@@ -326,17 +347,18 @@ const AddPackage = ({ open, classes, setOpen }) => {
                         }}
                       >
                         <GiCancel />
-                      </IconButton>
-                      <Avatar
-                        style={{
-                          height: 100,
-                          width: 100,
-                        }}
-                        variant="rounded"
-                        src={i.imgFile}
-                      />
-                    </Box>
-                  ))}
+                      </IconButton> */}
+                        <Avatar
+                          style={{
+                            height: 100,
+                            width: 100,
+                          }}
+                          variant="rounded"
+                          // src={i.imgFile}
+                          src={i.image_path}
+                        />
+                      </Box>
+                    ))}
 
                   <label htmlFor={`cover-image1${coverImages.length + 1}`}>
                     <Avatar
@@ -371,7 +393,9 @@ const AddPackage = ({ open, classes, setOpen }) => {
               </p>
               <FormControl style={{ width: "47%" }}>
                 <Select
-                  value={quality}
+                  value={package_details.graphic_quality}
+                  disabled
+                  // value={quality}
                   onChange={(e) => {
                     setQuality(e.target.value);
                   }}
@@ -411,10 +435,10 @@ const AddPackage = ({ open, classes, setOpen }) => {
                       //   // !selectedSubCategories.includes(e.target.value)
                       //   selectedItems.length === selectedSubCategories.length
                       // )
-                        setSelectedSubCategories([
-                          ...selectedSubCategories,
-                          e.target.value,
-                        ]);
+                      setSelectedSubCategories([
+                        ...selectedSubCategories,
+                        e.target.value,
+                      ]);
                     }}
                   >
                     {subCategories ? (
@@ -454,7 +478,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                         // true
                         // !selectedItems.includes(e.target.value)
                         selectedItems.length < selectedSubCategories.length
-                       )
+                      )
                         setSelectedItems([...selectedItems, e.target.value]);
                       console.log([...selectedItems, e.target.value]);
                     }}
