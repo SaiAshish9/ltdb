@@ -144,7 +144,7 @@ const fetchGames = (dispatch) => async (page, limit) => {
         type: "SET_GAME_COUNT",
         payload: JSON.parse(data.request.response)["parameter"]["total"],
       });
-      console.log(data.data.data);
+      // console.log(data.data.data);
       dispatch({
         type: "SET_GAMES",
         payload: data.data.data,
@@ -218,7 +218,7 @@ const toggleItemStatus = (dispatch) => async (id, action) => {
   clearMessage();
 
   await Api.post(`admin/item/block-unblock`, { ...x }).then(async (data) => {
-    console.log(data);
+    // console.log(data);
   });
 
   dispatch({
@@ -237,7 +237,7 @@ const toggleGameStatus = (dispatch) => async (id, action) => {
   clearMessage();
 
   await Api.post(`admin/game/block-unblock`, { ...x }).then(async (data) => {
-    console.log(data);
+    // console.log(data);
   });
 
   dispatch({
@@ -262,7 +262,7 @@ const toggleUserStatus = (dispatch) => async (id, action) => {
   };
   clearMessage();
   await Api.post(`admin/user/block-unblock`, { ...x }).then(async (data) => {
-    console.log(data);
+    // console.log(data);
   });
   dispatch({
     type: "SET_MESSAGE",
@@ -317,7 +317,7 @@ const addItem = (dispatch) => async (data) => {
   const ReactS3Client = new S3(config);
   await ReactS3Client.uploadFile(data.image)
     .then(async (data1) => {
-      console.log(data1, data1.location.split("com/")[2]);
+      // console.log(data1, data1.location.split("com/")[2]);
       await Api.post("admin/item/add", {
         category_id: data.category_id,
         sub_category_id: data.sub_category_id,
@@ -402,22 +402,22 @@ const addPackage = (dispatch) => async (data) => {
       cover_images,
       image,
     });
-    console.log(x);
+    // console.log(x);
   } catch (e) {
     console.log(e);
   }
-  console.log({
-    ...data,
-    cover_images,
-    image,
-  });
+  // console.log({
+  //   ...data,
+  //   cover_images,
+  //   image,
+  // });
   // console.log(image, cover_images);
 };
 
 const addGame = (dispatch) => async (data) => {
   if (data.imgFile) {
     if (data.game_id) {
-      console.log(data.imgFile);
+      // console.log(data.imgFile);
       const image = await uploadImage("games", data.imgFile);
       await Api.post("admin/game/add", {
         name_en: data.name_en,
@@ -426,7 +426,9 @@ const addGame = (dispatch) => async (data) => {
         image,
         game_id: data.game_id,
         status: data.status ? data.status : 1,
-      }).then((data) => console.log(data));
+      }).then((data) => {
+        // console.log(data)
+      });
     } else {
       const image = await uploadImage("games", data.imgFile);
       await Api.post("admin/game/add", {
@@ -435,7 +437,9 @@ const addGame = (dispatch) => async (data) => {
         resolution: data.value,
         image,
         status: data.status ? data.status : 1,
-      }).then((data) => console.log(data));
+      }).then((data) => {
+        // console.log(data)
+      });
     }
   } else {
     if (data.game_id) {
@@ -446,7 +450,8 @@ const addGame = (dispatch) => async (data) => {
         game_id: data.game_id,
         image: data.file,
         status: data.status ? data.status : 1,
-      }).then((data) => console.log(data));
+      });
+      // .then((data) => console.log(data));
     } else {
       await Api.post("admin/game/add", {
         name_en: data.name_en,
@@ -454,7 +459,8 @@ const addGame = (dispatch) => async (data) => {
         resolution: data.value,
         image: data.file,
         status: data.status ? data.status : 1,
-      }).then((data) => console.log(data));
+      });
+      // .then((data) => console.log(data));
     }
   }
   await fetchGames();
@@ -465,6 +471,7 @@ const fetchGamePackages = (dispatch) => async (id) => {
     const {
       data: { data },
     } = await Api(`admin/game/game-package-list?game_id=${id}`);
+
     dispatch({
       type: "SET_GAME_PACKAGES",
       payload: data,
@@ -479,9 +486,29 @@ const fetchPackage = (dispatch) => async (id) => {
     const {
       data: { data },
     } = await Api(`admin/game/get-package?package_id=${id}`);
+
+    const package_items = await Promise.all(
+      data.package_items.map(async (i, k) => {
+        try {
+          const subcategory = await Api.post(
+            `admin/subcategory/subcategory-by-id`,
+            { sub_category_id: i.sub_category_id }
+          );
+
+          const item = await Api(`admin/item/getitem?item_id=${i.item_id}`);
+
+          return {
+            sub_category: subcategory.data.data.name_en,
+            item: item.data.data.name_ar,
+          };
+        } catch (e) {}
+      })
+    );
+    console.log(package_items);
+
     dispatch({
       type: "SET_PACKAGE",
-      payload: data,
+      payload: { ...data, package_items },
     });
   } catch (e) {}
 };
@@ -520,6 +547,7 @@ export const { Context, Provider } = createDataContext(
     games: [],
     package_details: null,
     game_packages: [],
+    game_package_items: [],
     user_count: 0,
     game_count: 0,
     game_page_count: 0,

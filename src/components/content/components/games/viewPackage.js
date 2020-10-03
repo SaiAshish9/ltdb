@@ -407,7 +407,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
               </FormControl>
             </Box>
 
-            <Box
+            {/* <Box
               display="flex"
               justifyContent="space-between"
               style={{ width: "100%" }}
@@ -495,9 +495,9 @@ const AddPackage = ({ open, classes, setOpen }) => {
                   </Select>
                 </FormControl>
               </Box>
-            </Box>
+            </Box> */}
 
-            {selectedSubCategories && selectedSubCategories.length > 0 && (
+            {package_details && (
               <TableContainer
                 style={{ width: "100%", marginTop: "2rem" }}
                 elevation={0}
@@ -548,7 +548,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                   </TableHead>
 
                   <TableBody>
-                    {selectedSubCategories.map((i, k) => (
+                    {package_details && package_details.package_items.map((i, k) => (
                       <TableRow key={k}>
                         <TableCell
                           style={{
@@ -557,7 +557,8 @@ const AddPackage = ({ open, classes, setOpen }) => {
                             fontWeight: 500,
                           }}
                         >
-                          {i.split(" ")[1]}
+                          {i.sub_category}
+                          {/* {i.split(" ")[1]} */}
                         </TableCell>
                         <TableCell
                           style={{
@@ -566,7 +567,8 @@ const AddPackage = ({ open, classes, setOpen }) => {
                             fontWeight: 500,
                           }}
                         >
-                          {selectedItems[k] && selectedItems[k].split(" ")[1]}
+                          {i.item}
+                          {/* {selectedItems[k] && selectedItems[k].split(" ")[1]} */}
                         </TableCell>
                         <TableCell
                           style={{
@@ -575,7 +577,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                             fontWeight: 500,
                           }}
                         >
-                          <IconButton
+                          {/* <IconButton
                             onClick={() => {
                               setSelectedItems(
                                 selectedItems.filter((x) => x !== i)
@@ -589,7 +591,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                             style={{ padding: 0 }}
                           >
                             <DeleteOutlineIcon style={{ color: "red" }} />
-                          </IconButton>
+                          </IconButton> */}
                         </TableCell>
                       </TableRow>
                     ))}
@@ -597,7 +599,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                 </Table>
               </TableContainer>
             )}
-
+{/* 
             <Box
               display="flex"
               flexDirection="row-reverse"
@@ -613,7 +615,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                   Add
                 </Fab>
               )}
-            </Box>
+            </Box> */}
           </form>
         </Paper>
       )}
