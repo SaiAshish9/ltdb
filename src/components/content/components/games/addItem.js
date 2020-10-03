@@ -16,6 +16,7 @@ import { Clear, CameraAlt } from "@material-ui/icons";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { useForm } from "react-hook-form";
 import AddPackage from "./addPackage";
+import Search from "./search";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -88,7 +89,10 @@ const AddItem = () => {
           type="file"
         />
 
-        <Box display="flex">
+        <Box display="flex" style={{ zIndex: 3, position: "relative" }}>
+          <Box style={{ marginRight: "18rem" }}>
+            <Search />
+          </Box>
           <p
             onClick={() => {
               setOpen(true);
