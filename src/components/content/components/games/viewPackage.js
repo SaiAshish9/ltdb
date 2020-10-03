@@ -113,17 +113,18 @@ const AddPackage = ({ open, classes, setOpen }) => {
 
   return (
     <Backdrop open={open} className={classes.backdrop}>
-      {games && package_details && (
-        <Paper
-          style={{
-            position: "absolute",
-            top: "7vh",
-            maxHeight: "80vh",
-            overflowY: "scroll",
-            width: "70vw",
-            padding: "2rem",
-          }}
-        >
+      <Paper
+        style={{
+          position: "absolute",
+          top: "7vh",
+          maxHeight: "80vh",
+          overflowY: "scroll",
+          width: "70vw",
+          minHeight: "70vh",
+          padding: "2rem",
+        }}
+      >
+        {games && package_details && (
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box display="flex" flexDirection="row-reverse">
               <IconButton
@@ -360,7 +361,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                       </Box>
                     ))}
 
-                  <label htmlFor={`cover-image1${coverImages.length + 1}`}>
+                  {/* <label htmlFor={`cover-image1${coverImages.length + 1}`}>
                     <Avatar
                       style={{
                         height: 100,
@@ -372,7 +373,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                     >
                       <CameraAlt />
                     </Avatar>
-                  </label>
+                  </label> */}
                 </Box>
               </Box>
             </Box>
@@ -548,36 +549,37 @@ const AddPackage = ({ open, classes, setOpen }) => {
                   </TableHead>
 
                   <TableBody>
-                    {package_details && package_details.package_items.map((i, k) => (
-                      <TableRow key={k}>
-                        <TableCell
-                          style={{
-                            textAlign: "center",
-                            color: "#8095a1",
-                            fontWeight: 500,
-                          }}
-                        >
-                          {i.sub_category}
-                          {/* {i.split(" ")[1]} */}
-                        </TableCell>
-                        <TableCell
-                          style={{
-                            textAlign: "center",
-                            color: "#8095a1",
-                            fontWeight: 500,
-                          }}
-                        >
-                          {i.item}
-                          {/* {selectedItems[k] && selectedItems[k].split(" ")[1]} */}
-                        </TableCell>
-                        <TableCell
-                          style={{
-                            textAlign: "center",
-                            color: "#8095a1",
-                            fontWeight: 500,
-                          }}
-                        >
-                          {/* <IconButton
+                    {package_details &&
+                      package_details.package_items.map((i, k) => (
+                        <TableRow key={k}>
+                          <TableCell
+                            style={{
+                              textAlign: "center",
+                              color: "#8095a1",
+                              fontWeight: 500,
+                            }}
+                          >
+                            {i.sub_category}
+                            {/* {i.split(" ")[1]} */}
+                          </TableCell>
+                          <TableCell
+                            style={{
+                              textAlign: "center",
+                              color: "#8095a1",
+                              fontWeight: 500,
+                            }}
+                          >
+                            {i.item}
+                            {/* {selectedItems[k] && selectedItems[k].split(" ")[1]} */}
+                          </TableCell>
+                          <TableCell
+                            style={{
+                              textAlign: "center",
+                              color: "#8095a1",
+                              fontWeight: 500,
+                            }}
+                          >
+                            {/* <IconButton
                             onClick={() => {
                               setSelectedItems(
                                 selectedItems.filter((x) => x !== i)
@@ -592,14 +594,14 @@ const AddPackage = ({ open, classes, setOpen }) => {
                           >
                             <DeleteOutlineIcon style={{ color: "red" }} />
                           </IconButton> */}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                          </TableCell>
+                        </TableRow>
+                      ))}
                   </TableBody>
                 </Table>
               </TableContainer>
             )}
-{/* 
+            {/* 
             <Box
               display="flex"
               flexDirection="row-reverse"
@@ -617,8 +619,13 @@ const AddPackage = ({ open, classes, setOpen }) => {
               )}
             </Box> */}
           </form>
-        </Paper>
-      )}
+        )}
+        {!package_details && (
+          <Box display="flex" style={{margin:"30vh 0"}} alignItems="center" justifyContent="center">
+            <CircularProgress />
+          </Box>
+        )}
+      </Paper>
     </Backdrop>
   );
 };

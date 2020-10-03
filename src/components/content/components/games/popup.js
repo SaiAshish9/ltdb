@@ -100,14 +100,14 @@ const Popup = ({ classes, open, setOpen, setOpenPackageDialog }) => {
                   >
                     <Clear />
                   </IconButton>
-                  <IconButton
+                  {/* <IconButton
                     onClick={() => {
                       setDisabled(false);
                       setOpenPackageDialog(true);
                     }}
                   >
                     <EditOutlined />
-                  </IconButton>
+                  </IconButton> */}
                 </Box>
                 <Box
                   display="flex"

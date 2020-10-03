@@ -38,9 +38,10 @@ const Topbar = () => {
           src={Logo}
           alt="Lootbox"
           style={{
-            width:"3rem",
-            height:"1.8rem",
-            cursor:'pointer'
+            // width:"3.6rem",
+            height:"1.5rem",
+            cursor:'pointer',
+            marginLeft:"0.7rem"
           }}
           />
           {/* Lootbox */}

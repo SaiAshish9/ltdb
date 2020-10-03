@@ -1,4 +1,4 @@
-import React, { useContext ,useState} from "react";
+import React, { useContext, useState } from "react";
 import {
   Table,
   TableContainer,
@@ -14,13 +14,15 @@ import {
 import { Clear, EditOutlined, VisibilityOutlined } from "@material-ui/icons";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import Package from "./viewPackage";
+import EditPackage from "./editPackage";
 
 const ViewPackages = ({ classes, open, setOpen }) => {
   const {
     state: { game_packages },
-    fetchPackage
+    fetchPackage,
   } = useContext(DataContext);
   const [openPackageDialog, setOpenPackageDialog] = useState(false);
+  const [openEditPackageDialog, setOpenEditPackageDialog] = useState(false);
 
   return (
     <Backdrop open={open} className={classes.backdrop}>
@@ -156,16 +158,18 @@ const ViewPackages = ({ classes, open, setOpen }) => {
                       >
                         <IconButton
                           onClick={async () => {
-                              await fetchPackage(i.package_id);
-                              setOpenPackageDialog(true);
+                            // await 
+                            fetchPackage(i.package_id);
+                            setOpenEditPackageDialog(true);
                           }}
                         >
                           <EditOutlined style={{ cursor: "pointer" }} />{" "}
                         </IconButton>
                         <IconButton
                           onClick={async () => {
-                              await fetchPackage(i.package_id);
-                              setOpenPackageDialog(true);
+                            // await
+                             fetchPackage(i.package_id);
+                            setOpenPackageDialog(true);
                           }}
                         >
                           <VisibilityOutlined style={{ cursor: "pointer" }} />{" "}
@@ -183,6 +187,11 @@ const ViewPackages = ({ classes, open, setOpen }) => {
         classes={classes}
         open={openPackageDialog}
         setOpen={setOpenPackageDialog}
+      />
+      <EditPackage
+        classes={classes}
+        open={openEditPackageDialog}
+        setOpen={setOpenEditPackageDialog}
       />
     </Backdrop>
   );
