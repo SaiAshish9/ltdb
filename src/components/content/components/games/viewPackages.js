@@ -158,8 +158,7 @@ const ViewPackages = ({ classes, open, setOpen }) => {
                       >
                         <IconButton
                           onClick={async () => {
-                            // await 
-                            fetchPackage(i.package_id);
+                            await fetchPackage(i.package_id);
                             setOpenEditPackageDialog(true);
                           }}
                         >
@@ -167,8 +166,7 @@ const ViewPackages = ({ classes, open, setOpen }) => {
                         </IconButton>
                         <IconButton
                           onClick={async () => {
-                            // await
-                             fetchPackage(i.package_id);
+                            await fetchPackage(i.package_id);
                             setOpenPackageDialog(true);
                           }}
                         >

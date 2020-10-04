@@ -498,8 +498,11 @@ const fetchPackage = (dispatch) => async (id) => {
           const item = await Api(`admin/item/getitem?item_id=${i.item_id}`);
 
           return {
-            sub_category: subcategory.data.data.name_en,
-            item: item.data.data.name_ar,
+            sub_category:
+              subcategory.data.data.sub_category_id +
+              "###" +
+              subcategory.data.data.name_en,
+            item: item.data.data.item_id + "###" + item.data.data.name_ar,
           };
         } catch (e) {}
       })

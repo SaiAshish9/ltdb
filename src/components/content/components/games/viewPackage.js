@@ -559,8 +559,8 @@ const AddPackage = ({ open, classes, setOpen }) => {
                               fontWeight: 500,
                             }}
                           >
-                            {i.sub_category}
-                            {/* {i.split(" ")[1]} */}
+                            {i.sub_category.split("###")[1]}
+                            {/* {i} */}
                           </TableCell>
                           <TableCell
                             style={{
@@ -569,7 +569,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                               fontWeight: 500,
                             }}
                           >
-                            {i.item}
+                            {i.item.split("###")[1]}
                             {/* {selectedItems[k] && selectedItems[k].split(" ")[1]} */}
                           </TableCell>
                           <TableCell
@@ -621,7 +621,12 @@ const AddPackage = ({ open, classes, setOpen }) => {
           </form>
         )}
         {!package_details && (
-          <Box display="flex" style={{margin:"30vh 0"}} alignItems="center" justifyContent="center">
+          <Box
+            display="flex"
+            style={{ margin: "30vh 0" }}
+            alignItems="center"
+            justifyContent="center"
+          >
             <CircularProgress />
           </Box>
         )}
