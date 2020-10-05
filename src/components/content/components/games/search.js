@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
@@ -6,6 +6,7 @@ import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
+import { useForm } from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,11 +29,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CustomizedInputBase() {
+export default function CustomizedInputBase({ active, inActive }) {
   const classes = useStyles();
   const [value, setValue] = useState(null);
   const { fetchGames } = useContext(DataContext);
   const [searched, setSearched] = useState(false);
+  const search = useRef();
+  const { reset, handleSubmit, register } = useForm();
+
+  const onSubmit = (data) => {};
 
   return (
     <Paper component="form" className={classes.root}>
@@ -40,7 +45,12 @@ export default function CustomizedInputBase() {
         <IconButton
           onClick={async () => {
             if (value) {
-              await fetchGames(null, null, value);
+              if (active) await fetchGames(null, null, value, 1);
+              else if (inActive) {
+                await fetchGames(null, null, value, 0);
+              } else {
+                await fetchGames(null, null, value);
+              }
             }
             setSearched(true);
             // setValue(null);
@@ -52,12 +62,10 @@ export default function CustomizedInputBase() {
         </IconButton>
       ) : (
         <IconButton
-          onClick={async () => {
-            if (value) {
-              await fetchGames();
-              // setValue(null);
-              setSearched(false);
-            }
+          onClick={() => {
+            setValue("");
+            fetchGames();
+            setSearched(false);
           }}
           className={classes.iconButton}
           aria-label="menu"
@@ -66,15 +74,18 @@ export default function CustomizedInputBase() {
         </IconButton>
       )}
 
-      <InputBase
-        value={value}
-        onChange={(e) => {
-          setValue(e.target.value);
-        }}
-        className={classes.input}
-        placeholder="Search "
-        inputProps={{ "aria-label": "search google maps" }}
-      />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <InputBase
+          value={value}
+          name="search"
+          onChange={(e) => {
+            setValue(e.target.value);
+          }}
+          ref={register()}
+          className={classes.input}
+          placeholder="Search "
+        />
+      </form>
     </Paper>
   );
 }

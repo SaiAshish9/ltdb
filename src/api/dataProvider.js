@@ -118,7 +118,7 @@ const fetchItems = (dispatch) => async (page, limit) => {
     .catch((error) => console.log(error));
 };
 
-const fetchGames = (dispatch) => async (page, limit, search) => {
+const fetchGames = (dispatch) => async (page, limit, search, status) => {
   var url;
   if (page && limit) {
     url = `admin/game/get-game-list?limit=${limit}&&page=${page}`;
@@ -127,9 +127,24 @@ const fetchGames = (dispatch) => async (page, limit, search) => {
   }
 
   if (search) {
-    url = `admin/game/get-game-list?limit=10&&page=1&&status=1&&search=${search}`;
+    url = `admin/game/get-game-list?limit=10&&page=1&&search=${search}`;
   }
 
+  if (status === 1) {
+    url = `admin/game/get-game-list?limit=10&&page=1&&status=1`;
+  }
+
+  if (status === 0) {
+    url = `admin/game/get-game-list?limit=10&&page=1&&status=0`;
+  }
+
+  if (status === 0 && search) {
+    url = `admin/game/get-game-list?limit=10&&page=1&&search=${search}&&status=0`;
+  }
+
+  if (status === 1 && search) {
+    url = `admin/game/get-game-list?limit=10&&page=1&&search=${search}&&status=1`;
+  }
   if (page || limit) {
     dispatch({
       type: "SET_GAMES",

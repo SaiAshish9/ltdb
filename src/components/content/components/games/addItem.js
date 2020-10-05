@@ -10,7 +10,10 @@ import {
   Select,
   MenuItem,
   FormControl,
+  FormGroup,
   CircularProgress,
+  FormControlLabel,
+  Switch,
 } from "@material-ui/core";
 import { Clear, CameraAlt } from "@material-ui/icons";
 import { Context as DataContext } from "../../../../api/dataProvider";
@@ -36,6 +39,9 @@ const AddItem = () => {
   const [imgFile, setImgFile] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [openPackageForm, setOpenPackageForm] = useState(false);
+  const [active, isActive] = useState(false);
+  const [inActive, isInActive] = useState(false);
+
   const {
     state: { resolution_list },
     fetchResolutions,
@@ -74,7 +80,7 @@ const AddItem = () => {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      style={{ padding: "1rem 2rem" }}
+      style={{ padding: "0.9rem 2rem" }}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
@@ -89,42 +95,90 @@ const AddItem = () => {
           type="file"
         />
 
-        <Box display="flex" style={{ zIndex: 3, position: "relative" }}>
-          <Box style={{ marginRight: "18rem" }}>
-            <Search />
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          style={{ zIndex: 3, position: "relative", width: "80vw" }}
+        >
+          <Box display="flex" alignItems="center">
+            <Search active={active} inActive={inActive} />
+            <FormGroup row style={{ marginLeft: "2rem" }}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={active}
+                    onChange={() => {
+                      if (!active) {
+                        isInActive(false);
+                        fetchGames(null, null, null, 1);
+                      }
+                      if (active) {
+                        fetchGames();
+                      }
+                      isActive(!active);
+                    }}
+                    name="checkedA"
+                    color="primary"
+                  />
+                }
+                label={<p style={{ color: "#fff" }}>Active</p>}
+              />
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={inActive}
+                    onChange={() => {
+                      if (!inActive) {
+                        isActive(false);
+                        fetchGames(null, null, null, 0);
+                      }
+                      if (inActive) {
+                        fetchGames();
+                      }
+                      isInActive(!inActive);
+                    }}
+                    name="InActive"
+                  />
+                }
+                label={<p style={{ color: "#fff" }}>InActive</p>}
+              />
+            </FormGroup>
           </Box>
-          <p
-            onClick={() => {
-              setOpen(true);
-            }}
-            style={{
-              color: "#fff",
-              cursor: "pointer",
-              fontWeight: "bold",
-              position: "relative",
-              zIndex: 3,
-              top: -5,
-              marginRight: "1.5rem",
-            }}
-          >
-            Add Game
-          </p>
 
-          <p
-            onClick={() => {
-              setOpenPackageForm(true);
-            }}
-            style={{
-              color: "#fff",
-              cursor: "pointer",
-              fontWeight: "bold",
-              position: "relative",
-              zIndex: 3,
-              top: -5,
-            }}
-          >
-            Add Package
-          </p>
+          <Box display="flex">
+            <p
+              onClick={() => {
+                setOpen(true);
+              }}
+              style={{
+                color: "#fff",
+                cursor: "pointer",
+                fontWeight: "bold",
+                position: "relative",
+                zIndex: 3,
+                top: -5,
+                marginRight: "1.5rem",
+              }}
+            >
+              Add Game
+            </p>
+
+            <p
+              onClick={() => {
+                setOpenPackageForm(true);
+              }}
+              style={{
+                color: "#fff",
+                cursor: "pointer",
+                fontWeight: "bold",
+                position: "relative",
+                zIndex: 3,
+                top: -5,
+              }}
+            >
+              Add Package
+            </p>
+          </Box>
         </Box>
 
         <Backdrop open={open} className={classes.backdrop}>
