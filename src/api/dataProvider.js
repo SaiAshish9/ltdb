@@ -118,12 +118,16 @@ const fetchItems = (dispatch) => async (page, limit) => {
     .catch((error) => console.log(error));
 };
 
-const fetchGames = (dispatch) => async (page, limit) => {
+const fetchGames = (dispatch) => async (page, limit, search) => {
   var url;
   if (page && limit) {
     url = `admin/game/get-game-list?limit=${limit}&&page=${page}`;
   } else {
     url = "admin/game/get-game-list?limit=10&&page=1";
+  }
+
+  if (search) {
+    url = `admin/game/get-game-list?limit=10&&page=1&&status=1&&search=${search}`;
   }
 
   if (page || limit) {
