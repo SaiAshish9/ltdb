@@ -40,7 +40,7 @@ function SimpleTable({ data }) {
   const fetchSubCategories = useCallback(
     async (id) => {
       setCategoryId(id);
-      setSubCategories(null)
+      setSubCategories(null);
       await Api.post("admin/subcategory/category-wise-list", {
         category_id: id,
       }).then((data) => {
@@ -61,12 +61,9 @@ function SimpleTable({ data }) {
     return await Promise.all(
       rows.map(async (x) => {
         try {
-          const z = await Api.post(
-            "admin/subcategory/category-wise-list",
-            {
-              category_id: x,
-            }
-          ).then((data) => {
+          const z = await Api.post("admin/subcategory/category-wise-list", {
+            category_id: x,
+          }).then((data) => {
             var obj = {};
             obj[x] = data.data.data.length;
             return obj;
@@ -113,7 +110,11 @@ function SimpleTable({ data }) {
 
   return (
     <React.Fragment>
-      <TableContainer elevation={0} component={Paper}>
+      <TableContainer
+        style={{ height: "83vh" }}
+        elevation={0}
+        component={Paper}
+      >
         <Table size="small" className={classes.table} aria-label="simple table">
           <TableHead>
             <TableRow
@@ -122,15 +123,6 @@ function SimpleTable({ data }) {
                 height: "3.4rem",
               }}
             >
-              <TableCell
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "0.8rem",
-                  color: "#282b3c",
-                }}
-              >
-                <Check color="#282b3c" />
-              </TableCell>
               <TableCell
                 style={{
                   fontWeight: "bolder",
@@ -203,16 +195,6 @@ function SimpleTable({ data }) {
                 >
                   <TableCell
                     style={{
-                      color: "#8095a1",
-                      fontWeight: 500,
-                    }}
-                    component="th"
-                    scope="row"
-                  >
-                    <Check color="#282b3c" />
-                  </TableCell>
-                  <TableCell
-                    style={{
                       paddingLeft: "3rem",
                       color: "#8095a1",
                       fontWeight: 500,
@@ -264,24 +246,7 @@ function SimpleTable({ data }) {
                 </TableRow>
               ))}
 
-            {[...Array(7 - rows.length).keys()].map((i, k) => (
-              <TableRow
-                elevation={0}
-                style={{
-                  height: "3.5rem",
-                  border: "none",
-                }}
-                key={k}
-              >
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            ))}
+            
           </TableBody>
         </Table>
       </TableContainer>

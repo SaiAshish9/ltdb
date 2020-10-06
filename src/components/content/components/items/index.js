@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from "react";
-import {
-  // Fab,
-  Box,
-  CircularProgress,
-} from "@material-ui/core";
+import React, { useEffect, useState, useContext } from "react";
+import { Box, CircularProgress } from "@material-ui/core";
 import AddItem from "./addItem";
 import Table from "./table";
-import Api from "../../../../api";
+import { Context as DataContext } from "../../../../api/dataProvider";
 
 const Items = () => {
-  const [data, setData] = useState([]);
+  const {
+    state: { items },
+    fetchItems,
+  } = useContext(DataContext);
   const [loading, isLoading] = useState(false);
+
+  const getItems = async () => {
+    await fetchItems();
+    isLoading(true);
+  };
+
   useEffect(() => {
-    Api("admin/item/list")
-      .then((data) => {
-        setData(data.data.data);
-        isLoading(true);
-      })
-      .catch((error) => console.log(error));
+    getItems();
   }, []);
   return (
     <Box>
-      <Box
+      {/* <Box
         display="flex"
         justifyContent="space-between"
         alignItems="center"
@@ -37,8 +37,10 @@ const Items = () => {
           Items
         </p>
         <Box display="flex">
-          <AddItem />
         </Box>
+      </Box> */}
+      <Box style={{ position: "absolute", top: 1, right: "2vw" }}>
+        <AddItem />
       </Box>
       {!loading ? (
         <Box
@@ -51,6 +53,8 @@ const Items = () => {
             style={{
               margin: "auto",
               color: "#151628",
+              position: "relative",
+              top: "10vh",
             }}
           />
         </Box>
@@ -63,7 +67,7 @@ const Items = () => {
             width: "85%",
           }}
         >
-          <Table data={data} />
+          <Table data={items} />
         </Box>
       )}{" "}
     </Box>

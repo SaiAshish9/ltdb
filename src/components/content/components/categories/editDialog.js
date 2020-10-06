@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Backdrop from "@material-ui/core/Backdrop";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
@@ -29,11 +29,18 @@ const EditDialog = ({
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open1, setOpen1] = useState(false);
   const [msg, setMsg] = useState(current && current.status);
-  const data1 = data;
+  const [data1, setData1] = useState(null);
   const handleClose = () => {
     setAnchorEl(null);
     setOpen1(false);
   };
+
+  useEffect(() => {
+    if (data) {
+      setData1(data);
+    }
+  }, [data]);
+
   const id = open1 ? "simple-popover" : undefined;
 
   const onSubmit1 = (values) => {
@@ -249,7 +256,12 @@ const EditDialog = ({
                       {k === data1.length - 1 && (
                         <Tooltip title="Add New Custom Field" placement="left">
                           <Fab
-                            onClick={() => {}}
+                            onClick={() => {
+                              setData1([
+                                ...data1,
+                                { name_en: "", name_ar: "" },
+                              ]);
+                            }}
                             size="medium"
                             color="secondary"
                             aria-label="add"
@@ -264,7 +276,7 @@ const EditDialog = ({
                       <Tooltip title="Delete" placement="left">
                         <Fab
                           onClick={() => {
-
+                            setData1(data1.filter((x, i) => i !== k));
                           }}
                           style={{
                             color: "#fff",

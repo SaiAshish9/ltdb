@@ -65,7 +65,7 @@ const SubCategoryTable = ({
   const [customFieldCount, setCustomFieldCount] = useState(1);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open1, setOpen1] = useState(false);
-  const [msg, setMsg] = useState(0);
+  const [msg, setMsg] = useState(1);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -83,10 +83,10 @@ const SubCategoryTable = ({
     <Backdrop className={classes.backdrop} open={open}>
       <Paper
         style={{
-          maxHeight: "70vh",
-          width: "50vw",
+          maxHeight: "80vh",
+          width: "70vw",
           position: "absolute",
-          top: "10vh",
+          top: "8vh",
           overflowY: "scroll",
           paddingBottom: "2rem",
         }}

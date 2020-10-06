@@ -13,15 +13,15 @@ import axios from "axios";
 import Backdrop from "@material-ui/core/Backdrop";
 import IconButton from "@material-ui/core/IconButton";
 import Box from "@material-ui/core/Box";
-import {Clear} from '@material-ui/icons'
+import { Clear } from "@material-ui/icons";
 
-const useStyles = makeStyles(theme=>({
+const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 650,
   },
-  backdrop:{
-    zIndex:theme.zIndex.drawer + 1,
-  }
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+  },
 }));
 
 function createData(name, calories, fat, carbs, protein, status) {
@@ -49,17 +49,18 @@ export default function SimpleTable({ data }) {
   const rows1 = convertRows(data);
 
   const [rows, setRows] = useState(rows1);
-  const [rowsPerPage,setRowsPerPage] =useState(10)
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0)
+    setRowsPerPage(+event.target.value);
+    setPage(0);
   };
 
-  const handleChangePage = (event,newPage) => {
+  const handleChangePage = (event, newPage) => {
     axios({
-      url:
-        `https://test-api.loot-box.co/api/admin/user/list?page=${newPage+1}`,
+      url: `https://test-api.loot-box.co/api/admin/user/list?page=${
+        newPage + 1
+      }`,
       method: "get",
       headers: {
         "X-Localization": "en",
@@ -71,19 +72,30 @@ export default function SimpleTable({ data }) {
     })
       .then((data) => {
         console.log(data.data.data);
-                setRows(convertRows(data.data.data));
-                    setPage(newPage);
+        setRows(convertRows(data.data.data));
+        setPage(newPage);
       })
       .catch((error) => console.log(error));
   };
 
   return (
     <React.Fragment>
-      <TableContainer elevation={0} component={Paper}>
+      <TableContainer
+        dense={true}
+        style={{
+          height: "83vh",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+        elevation={0}
+        component={Paper}
+      >
         <Table
-          // size="small"
           className={classes.table}
           aria-label="simple table"
+          size="small"
         >
           <TableHead>
             <TableRow
@@ -156,72 +168,98 @@ export default function SimpleTable({ data }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, i) => (
-              <TableRow
-                elevation={0}
-                style={{
-                  height: "3.4rem",
-                  padding: "0px",
-                  border: "none",
-                }}
-                key={row.name}
-              >
-                <TableCell
+            {rows &&
+              rows.slice(0, 10).map((row, i) => (
+                <TableRow
+                  elevation={0}
                   style={{
-                    color: "#8095a1",
-                    fontWeight: 500,
+                    maxHeight: "3.4rem",
+                    padding: "0px",
+                    border: "none",
                   }}
-                  component="th"
-                  scope="row"
+                  key={row.name}
                 >
-                  {row.name}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.calories}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.fat}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.carbs}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.protein}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.status}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {/* {i === 0 && ( */}
-                  <IconButton
-                  onClick={()=>{
-                    setOpen(true)
-                  }} 
+                  <TableCell
+                    style={{
+                      color: "#8095a1",
+                      fontWeight: 500,
+                      maxHeight: "3.4rem",
+                    }}
+                    component="th"
+                    scope="row"
                   >
-                    <InfoOutlinedIcon style={{ cursor: "pointer" }} />                  </IconButton>
-                  {/* )} */}
-                </TableCell>
-              </TableRow>
-            ))}
-
-            {[...Array(10 - rows.length).keys()].map((i, k) => (
-              <TableRow
-                elevation={0}
-                style={{
-                  height: "3.5rem",
-                  border: "none",
-                }}
-                key={k}
-              >
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            ))}
+                    {row.name}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      color: "#8095a1",
+                      fontWeight: 500,
+                      maxHeight: "3.4rem",
+                    }}
+                  >
+                    {row.calories}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      color: "#8095a1",
+                      fontWeight: 500,
+                      maxHeight: "3.4rem",
+                    }}
+                  >
+                    {" "}
+                    {row.fat}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      color: "#8095a1",
+                      fontWeight: 500,
+                      maxHeight: "3.4rem",
+                    }}
+                  >
+                    {" "}
+                    {row.carbs}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      color: "#8095a1",
+                      fontWeight: 500,
+                      maxHeight: "3.4rem",
+                    }}
+                  >
+                    {" "}
+                    {row.protein}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      color: "#8095a1",
+                      fontWeight: 500,
+                      maxHeight: "3.4rem",
+                    }}
+                  >
+                    {" "}
+                    {row.status}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      color: "#8095a1",
+                      fontWeight: 500,
+                      maxHeight: "3.4rem",
+                    }}
+                  >
+                    {" "}
+                    {/* {i === 0 && ( */}
+                    <IconButton
+                      style={{ height: "2rem" }}
+                      onClick={() => {
+                        setOpen(true);
+                      }}
+                    >
+                      <InfoOutlinedIcon style={{ cursor: "pointer" }} />{" "}
+                    </IconButton>
+                    {/* )} */}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -234,31 +272,28 @@ export default function SimpleTable({ data }) {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
-        <Backdrop 
-        open={open}
-        className={classes.backdrop}>
-          <Paper
-            style={{
-              height: "80vh",
-              width: "80vw",
-              position: "absolute",
-              top: "10vh",
-              background:'#fff',
-              padding:'2rem'
-            }}
-          >
-            <Box display="flex" flexDirection="row-reverse">
+      <Backdrop open={open} className={classes.backdrop}>
+        <Paper
+          style={{
+            height: "80vh",
+            width: "80vw",
+            position: "absolute",
+            top: "10vh",
+            background: "#fff",
+            padding: "2rem",
+          }}
+        >
+          <Box display="flex" flexDirection="row-reverse">
             <IconButton
-            onClick={()=>{
-              setOpen(false)
-            }}
+              onClick={() => {
+                setOpen(false);
+              }}
             >
-              <Clear/>
+              <Clear />
             </IconButton>
-            </Box>
-            
-          </Paper>
-        </Backdrop>
+          </Box>
+        </Paper>
+      </Backdrop>
     </React.Fragment>
   );
 }

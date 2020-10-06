@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -8,7 +8,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import TablePagination from "@material-ui/core/TablePagination";
-import Api from "../../../../api";
+import { Context as DataContext } from "../../../../api/dataProvider";
+import { Box, CircularProgress, Snackbar } from "@material-ui/core";
 
 const useStyles = makeStyles({
   table: {
@@ -23,44 +24,74 @@ function createData(name, calories, fat, carbs, protein, status) {
 export default function SimpleTable({ data }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
+  const {
+    state: { items, items_count, page_count, message },
+    fetchItems,
+  } = useContext(DataContext);
 
-  const convertRows = (data) => {
-    return data.map((i, k) =>
-      createData(
-        i["item_id"],
-        i["name_en"],
-        i["name_ar"],
-        i["created_at"],
-        i["price"],
-        i["status"]
+  const convertRows = () => {
+    console.log(items);
+    return (
+      items &&
+      items.map((i, k) =>
+        createData(
+          i["item_id"],
+          i["name_en"],
+          i["name_ar"],
+          i["created_at"],
+          i["price"],
+          i["status"]
+        )
       )
     );
   };
 
-  const rows1 = convertRows(data);
+  const [rows, setRows] = useState(null);
+  const [openSnackbar, setOpenSnackbar] = useState(true);
 
-  const [rows, setRows] = useState(rows1);
-  const [rowsPerPage, setRowsPerPage] = useState(8);
+  useEffect(() => {
+    setRows(null);
+    setRows(convertRows());
+  }, [items, fetchItems]);
+
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
+    fetchItems(page + 1, +event.target.value);
     setPage(0);
   };
 
   const handleChangePage = (event, newPage) => {
-    Api(`https://test-api.loot-box.co/api/admin/user/list?page=${newPage + 1}`)
-      .then((data) => {
-        console.log(data.data.data);
-        setRows(convertRows(data.data.data));
-        setPage(newPage);
-      })
-      .catch((error) => console.log(error));
+    setPage(newPage);
+    console.log(newPage);
+    fetchItems(newPage + 1, rowsPerPage);
   };
 
   return (
     <React.Fragment>
-      <TableContainer elevation={0} component={Paper}>
+      <TableContainer
+        style={{
+          height: "83vh",
+          width: "100%",
+        }}
+        elevation={0}
+        component={Paper}
+      >
+        {message && (
+          <Snackbar
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            open={openSnackbar}
+            message={message}
+            onClose={() => {
+              setOpenSnackbar(false);
+            }}
+            autoHideDuration={1000}
+          />
+        )}
+
         <Table
+          style={{ width: "100%" }}
           className={classes.table}
           aria-label="simple table"
         >
@@ -69,6 +100,7 @@ export default function SimpleTable({ data }) {
               style={{
                 background: "#f4f4f4",
                 height: "3.4rem",
+                width: "85vw",
               }}
             >
               <TableCell
@@ -127,71 +159,70 @@ export default function SimpleTable({ data }) {
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {rows.map((row, i) => (
-              <TableRow
-                elevation={0}
-                style={{
-                  height: "3.4rem",
-                  padding: "0px",
-                  border: "none",
-                }}
-                key={row.name}
-              >
-                <TableCell
-                  style={{
-                    color: "#8095a1",
-                    fontWeight: 500,
-                  }}
-                  component="th"
-                  scope="row"
-                >
-                  {row.name}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.calories}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.fat}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.carbs}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.protein}
-                </TableCell>
-                <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                  {row.status}
-                </TableCell>
-              </TableRow>
-            ))}
 
-            {[...Array(8 - rows.length).keys()].map((i, k) => (
-              <TableRow
-                elevation={0}
+          {!items && (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              style={{ height: "70vh", width: "85vw" }}
+            >
+              <CircularProgress
                 style={{
-                  height: "3.5rem",
-                  border: "none",
+                  color: "#151628",
                 }}
-                key={k}
-              >
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            ))}
+              />
+            </Box>
+          )}
+
+          <TableBody>
+            {rows &&
+              rows.map((row, i) => (
+                <TableRow
+                  elevation={0}
+                  style={{
+                    height: "3.4rem",
+                    padding: "0px",
+                    border: "none",
+                  }}
+                  key={row.name}
+                >
+                  <TableCell
+                    style={{
+                      color: "#8095a1",
+                      fontWeight: 500,
+                    }}
+                    component="th"
+                    scope="row"
+                  >
+                    {row.name}
+                  </TableCell>
+                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                    {row.calories}
+                  </TableCell>
+                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                    {row.fat}
+                  </TableCell>
+                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                    {row.carbs}
+                  </TableCell>
+                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                    {row.protein}
+                  </TableCell>
+                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                    {row.status}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10]}
         component="div"
-        count={9}
         rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[5, 10, 20]}
         page={page}
+        count={items_count}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
