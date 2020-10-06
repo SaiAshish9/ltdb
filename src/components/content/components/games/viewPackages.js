@@ -148,10 +148,10 @@ const ViewPackages = ({ classes, open, setOpen }) => {
                         cursor: "pointer",
                         fontWeight: 500,
                         textAlign: "center",
-                        color: i.status !== 1 ? "red" : "green",
+                        color: +i.status != 1 ? "red" : "green",
                       }}
                     >
-                      {i.status === 1 ? "Active" : "InActive"}
+                      {+i.status == 1 ? "Active" : "InActive"}
                     </TableCell>
                     <TableCell
                       style={{

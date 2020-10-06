@@ -232,7 +232,7 @@ const togglePackage = (dispatch) => async (id, action) => {
   clearMessage();
   const x = {
     packages: [id],
-    action_type: action,
+    action_type: +action,
   };
   try {
     await Api.post(`admin/game/package-block-unblock`, { ...x }).then(
