@@ -81,7 +81,7 @@ export default function DenseTable({
                 <TableCell style={{ color: "#4c5172", fontWeight: 600 }}>
                   Custom Fields
                 </TableCell>
-                <TableCell></TableCell>
+                <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -99,21 +99,30 @@ export default function DenseTable({
                     <TableCell style={{ color: "#a197a3" }}>
                       {row.name_ar}
                     </TableCell>
-                    <TableCell style={{ color: "#a197a3" }}>
-                      <Chip
+                    <TableCell
+                      style={{
+                        // paddingLeft: "2rem",
+                        // color: "#8095a1",
+                        color: row.status === 1 ? "green" : "red",
+                        fontWeight: 500,
+                      }}
+                    >
+                      {/* <Chip
                         style={{
                           color: "#6cc07f",
                           background: "#fff",
                           fontWeight: 600,
                         }}
                         label={row.status}
-                      />
+                      /> */}
+                      {row.status === 1 ? "Active" : "InActive"}
                     </TableCell>
                     <TableCell
                       style={{
                         color: "#a197a3",
                         display: "flex",
                         alignItems: "center",
+                        paddingLeft: "20%",
                       }}
                     >
                       <IconButton
@@ -127,6 +136,8 @@ export default function DenseTable({
                       >
                         <VisibilityOutlinedIcon />
                       </IconButton>
+                    </TableCell>
+                    <TableCell>
                       <IconButton
                         onClick={() => {
                           setCurrent(false);
@@ -137,16 +148,6 @@ export default function DenseTable({
                         style={{ color: "orange" }}
                       >
                         <EditOutlinedIcon />
-                      </IconButton>
-                    </TableCell>
-                    <TableCell>
-                      <IconButton
-                        onClick={() => {
-                          console.log(row);
-                        }}
-                        style={{ color: "red" }}
-                      >
-                        <DeleteOutlineIcon />
                       </IconButton>
                     </TableCell>
                   </TableRow>

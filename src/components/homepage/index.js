@@ -18,6 +18,7 @@ const Home = () => {
       <img
         className="animate__animated animate__zoomIn"
         src={Lootbox}
+        // src={Logo}
         style={{
           height: "10rem",
           width: "10rem",

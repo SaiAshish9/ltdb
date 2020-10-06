@@ -5,6 +5,7 @@ import Users from './components/users'
 import Categories from './components/categories'
 // import Notifications from "./components/notifications";
 import Items from "./components/items"
+import Games from "./components/games";
 
 
 const Content = () => {
@@ -17,6 +18,7 @@ const Content = () => {
         <Route exact path="/categories" component={Categories} />
         {/* <Route exact path="/notifications" component={Notifications} /> */}
         <Route exact path="/items" component={Items} />
+        <Route exact path="/games" component={Games} />
       </Switch>
     );
 }

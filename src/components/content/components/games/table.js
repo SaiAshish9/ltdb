@@ -10,9 +10,12 @@ import Paper from "@material-ui/core/Paper";
 import TablePagination from "@material-ui/core/TablePagination";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { Box, CircularProgress, Snackbar, IconButton } from "@material-ui/core";
-import moment from "moment";
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
+import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import Popup from "./popup";
+import EditGame from "./editGame";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import Packages from "./viewPackages";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -31,52 +34,41 @@ export default function SimpleTable({ data }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openPackagesDialog, setOpenPackagesDialog] = useState(false);
 
   const {
-    state: { items, items_count, page_count, message },
-    fetchItems,
-    toggleItemStatus,
-    fetchItem,
+    state: { games, message, game_count },
+    fetchGames,
+    fetchGame,
+    toggleGameStatus,
     clearMessage,
+    fetchGamePackages,
   } = useContext(DataContext);
-
-  const convertRows = () => {
-    console.log(items);
-    return (
-      items &&
-      items.map((i, k) =>
-        createData(
-          i["item_id"],
-          i["name_en"],
-          i["name_ar"],
-          i["created_at"],
-          i["price"],
-          i["status"]
-        )
-      )
-    );
-  };
 
   const [rows, setRows] = useState(null);
   const [openSnackbar, setOpenSnackbar] = useState(true);
 
   useEffect(() => {
-    setRows(null);
-    setRows(convertRows());
-  }, [items, fetchItems]);
+    getGames();
+  }, []);
+
+  const getGames = async () => {
+    await fetchGames();
+  };
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    fetchItems(page + 1, +event.target.value);
+    fetchGames(page + 1, +event.target.value);
     setPage(0);
   };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
     console.log(newPage);
-    fetchItems(newPage + 1, rowsPerPage);
+    fetchGames(newPage + 1, rowsPerPage);
   };
 
   return (
@@ -84,6 +76,7 @@ export default function SimpleTable({ data }) {
       <TableContainer
         style={{
           height: "83vh",
+          maxHeight: "83vh",
           width: "100%",
         }}
         elevation={0}
@@ -117,19 +110,21 @@ export default function SimpleTable({ data }) {
             >
               <TableCell
                 style={{
-                  fontWeight: "bold",
+                  fontWeight: "bolder",
                   fontSize: "0.8rem",
                   color: "#282b3c",
+                  textAlign: "center",
                 }}
               >
-                S No
-                {/* Item Id */}
+                {games && "S No."}
+                {/* S No. */}
               </TableCell>
               <TableCell
                 style={{
                   fontWeight: "bolder",
                   fontSize: "0.8rem",
                   color: "#282b3c",
+                  textAlign: "center",
                 }}
               >
                 Name
@@ -138,6 +133,7 @@ export default function SimpleTable({ data }) {
                 style={{
                   fontWeight: "bold",
                   fontSize: "0.8rem",
+                  textAlign: "center",
                   color: "#282b3c",
                 }}
               >
@@ -148,24 +144,7 @@ export default function SimpleTable({ data }) {
                   fontWeight: "bold",
                   fontSize: "0.8rem",
                   color: "#282b3c",
-                }}
-              >
-                Created At
-              </TableCell>
-              <TableCell
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "0.8rem",
-                  color: "#282b3c",
-                }}
-              >
-                Price
-              </TableCell>
-              <TableCell
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "0.8rem",
-                  color: "#282b3c",
+                  textAlign: "center",
                 }}
               >
                 Status
@@ -174,13 +153,26 @@ export default function SimpleTable({ data }) {
                 style={{
                   fontWeight: "bold",
                   fontSize: "0.8rem",
+                  textAlign: "center",
                   color: "#282b3c",
                 }}
-              ></TableCell>
+              >
+                Action
+              </TableCell>
+              <TableCell
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "0.8rem",
+                  textAlign: "center",
+                  color: "#282b3c",
+                }}
+              >
+                Package
+              </TableCell>
             </TableRow>
           </TableHead>
 
-          {!items && (
+          {!games && (
             <Box
               display="flex"
               alignItems="center"
@@ -196,8 +188,8 @@ export default function SimpleTable({ data }) {
           )}
 
           <TableBody>
-            {items &&
-              items.map((row, i) => (
+            {games &&
+              games.map((row, k) => (
                 <TableRow
                   elevation={0}
                   style={{
@@ -205,43 +197,48 @@ export default function SimpleTable({ data }) {
                     padding: "0px",
                     border: "none",
                   }}
-                  key={row.item_id}
+                  key={row.game_id}
                 >
                   <TableCell
                     style={{
+                      textAlign: "center",
                       color: "#8095a1",
                       fontWeight: 500,
                     }}
-                    component="th"
-                    scope="row"
                   >
-                    {i + 1}
-                    {/* {row.item_id} */}
+                    {row.name_en.length > 0 && k + 1 + rowsPerPage * page}
                   </TableCell>
-                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                  <TableCell
+                    style={{
+                      textAlign: "center",
+                      color: "#8095a1",
+                      fontWeight: 500,
+                    }}
+                  >
                     {row.name_en}
                   </TableCell>
-                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
+                  <TableCell
+                    style={{
+                      textAlign: "center",
+                      color: "#8095a1",
+                      fontWeight: 500,
+                    }}
+                  >
                     {row.name_ar}
-                  </TableCell>
-                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                    {moment(row.created_at).format("DD MMM YYYY")}
-                  </TableCell>
-                  <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                    {row.price}
                   </TableCell>
                   <TableCell
                     onClick={async () => {
-                      console.log(row.item_id, +row.status === 1 ? 0 : 1);
-                      await toggleItemStatus(
-                        row.item_id,
+                      console.log(row.game_id, +row.status === 1 ? 0 : 1);
+                      await toggleGameStatus(
+                        row.game_id,
                         +row.status === 1 ? 0 : 1
                       );
-                      await fetchItems(page + 1);
+                      await fetchGames(page + 1);
                       await clearMessage();
                     }}
                     style={{
                       cursor: "pointer",
+                      textAlign: "center",
                       color: row.status !== 1 ? "red" : "green",
                       fontWeight: 500,
                     }}
@@ -252,15 +249,47 @@ export default function SimpleTable({ data }) {
                     style={{
                       color: "#8095a1",
                       fontWeight: 500,
+                      textAlign: "center",
+                    }}
+                  >
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <IconButton
+                        onClick={async () => {
+                          await fetchGame(row.game_id);
+                          setOpenEditDialog(true);
+                        }}
+                      >
+                        <EditOutlinedIcon style={{ cursor: "pointer" }} />{" "}
+                      </IconButton>
+                      <IconButton
+                        onClick={async () => {
+                          await fetchGame(row.game_id);
+                          setOpen(true);
+                        }}
+                      >
+                        <VisibilityOutlinedIcon style={{ cursor: "pointer" }} />{" "}
+                      </IconButton>
+                    </Box>
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      color: "#8095a1",
+                      fontWeight: 500,
+                      textAlign: "center",
                     }}
                   >
                     <IconButton
                       onClick={async () => {
-                        await fetchItem(row.item_id);
-                        setOpen(true);
+                        await fetchGame(row.game_id);
+                        await fetchGamePackages(row.game_id);
+                        setOpenPackagesDialog(true);
                       }}
                     >
-                      <InfoOutlinedIcon style={{ cursor: "pointer" }} />{" "}
+                      <InfoOutlinedIcon />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -271,13 +300,28 @@ export default function SimpleTable({ data }) {
       <TablePagination
         component="div"
         rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 20]}
+        rowsPerPageOptions={[5, 10]}
         page={page}
-        count={items_count}
+        count={game_count}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
-      <Popup classes={classes} open={open} setOpen={setOpen} />
+      <Popup
+        // setOpenPackageDialog={setOpenPackageDialog}
+        classes={classes}
+        open={open}
+        setOpen={setOpen}
+      />
+      <Packages
+        classes={classes}
+        open={openPackagesDialog}
+        setOpen={setOpenPackagesDialog}
+      />
+      <EditGame
+        classes={classes}
+        open={openEditDialog}
+        setOpen={setOpenEditDialog}
+      />
     </React.Fragment>
   );
 }

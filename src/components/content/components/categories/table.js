@@ -111,7 +111,7 @@ function SimpleTable({ data }) {
   return (
     <React.Fragment>
       <TableContainer
-        style={{ height: "83vh" }}
+        style={{ height: "90vh" }}
         elevation={0}
         component={Paper}
       >
@@ -128,9 +128,12 @@ function SimpleTable({ data }) {
                   fontWeight: "bolder",
                   fontSize: "0.8rem",
                   color: "#282b3c",
+                  // marginLeft: "2.5rem",
+                  textAlign: "center",
                 }}
               >
-                Category Id
+                S No.
+                {/* Category Id */}
               </TableCell>
               <TableCell
                 style={{
@@ -195,12 +198,14 @@ function SimpleTable({ data }) {
                 >
                   <TableCell
                     style={{
-                      paddingLeft: "3rem",
+                      paddingLeft: "4rem",
                       color: "#8095a1",
                       fontWeight: 500,
+                      // textAlign: "center",
                     }}
                   >
-                    {row.id}
+                    {i + 1}
+                    {/* {row.id} */}
                   </TableCell>
                   <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
                     {row.name}
@@ -233,24 +238,23 @@ function SimpleTable({ data }) {
                   </TableCell>
                   <TableCell
                     style={{
-                      paddingLeft: "2rem",
-                      color: "#8095a1",
+                      // paddingLeft: "2rem",
+                      // color: "#8095a1",
+                      color: row.status === 1 ? "green" : "red",
                       fontWeight: 500,
                     }}
                   >
-                    {row.status}
+                    {row.status === 1 ? "Active" : "InActive"}
                   </TableCell>
                   <TableCell
                     style={{ color: "#8095a1", fontWeight: 500 }}
                   ></TableCell>
                 </TableRow>
               ))}
-
-            
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
+      {/* <TablePagination
         style={{ background: "#fff" }}
         rowsPerPageOptions={[5, 10]}
         component="div"
@@ -259,7 +263,7 @@ function SimpleTable({ data }) {
         page={page}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
+      /> */}
       <Popup
         categoryId={categoryId}
         fetchSubCategories={fetchSubCategories}

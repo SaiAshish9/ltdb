@@ -1,41 +1,31 @@
 import React, { useEffect, useState, useContext } from "react";
-
 import { Box, CircularProgress } from "@material-ui/core";
-
+import AddItem from "./addItem";
 import Table from "./table";
 import { Context as DataContext } from "../../../../api/dataProvider";
 
-const Users = () => {
-  const [loading, isLoading] = useState(false);
+const Items = () => {
   const {
-    state: { users },
-    fetchUsers,
+    state: { items },
+    fetchItems,
+    fetchGames
   } = useContext(DataContext);
+  const [loading, isLoading] = useState(false);
 
-  const loadUsers = async () => {
-    await fetchUsers();
+  const getGames = async () => {
+    await fetchGames();
+    isLoading(true);
   };
 
   useEffect(() => {
-    loadUsers();
-    isLoading(true);
+    getGames();
   }, []);
-
   return (
     <Box>
-      <Box
-        style={{
-          width: "85%",
-          height: "90vh",
-          background: "#fff",
-          position: "absolute",
-          bottom: 0,
-          display: !loading ? "flex" : "",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {users && users.length === 0 ? (
+      <Box style={{ position: "absolute", top: 1, right: "2vw" }}>
+        <AddItem />
+      </Box>
+      {!loading ? (
         <Box
           display="flex"
           alignItems="center"
@@ -51,12 +41,21 @@ const Users = () => {
             }}
           />
         </Box>
-        ) : (
-          <Table />
-        )}
-      </Box>
+      ) : (
+        <Box
+          style={{
+            background: "#fff",
+            position: "absolute",
+            bottom: 0,
+            width: "85%",
+            height:"90vh"
+          }}
+        >
+          <Table data={items} />
+        </Box>
+      )}{" "}
     </Box>
   );
 };
 
-export default Users;
+export default Items;

@@ -11,11 +11,13 @@ import {
   MenuItem,
   Avatar,
   FormControl,
+  CircularProgress,
 } from "@material-ui/core";
 import { Add, Clear, CameraAlt } from "@material-ui/icons";
 import Api from "../../../../api";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { useForm } from "react-hook-form";
+import { uploadFile } from "react-s3";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -29,13 +31,15 @@ const AddItem = () => {
   const [data, setData] = useState(null);
   const [categories, setCategories] = useState(null);
   const [subCategories, setSubCategories] = useState(null);
-  const [subValue, setSubValue] = useState(0);
-  const [value, setValue] = useState(0);
+  const [subValue, setSubValue] = useState("a");
+  const [value, setValue] = useState(null);
   const [brandValue, setBrandValue] = useState(0);
   const [description, setDescription] = useState(null);
   const [price, setPrice] = useState(null);
   const [name_en, setNameEn] = useState("");
   const [name_ar, setNameAr] = useState("");
+  const [desc_en, setDescEn] = useState("");
+  const [desc_ar, setDescAr] = useState("");
   const { addItem, fetchItems } = useContext(DataContext);
   const [customFields, setCustomFields] = useState([]);
   // const [customFieldValue, setCustomFieldValue] = useState();
@@ -43,6 +47,8 @@ const AddItem = () => {
   const { register, handleSubmit } = useForm();
   // const [valueData, setValueData] = useState(null);
   const [file, setFile] = useState(null);
+  const [imgFile, setImgFile] = useState(null);
+  const [disabled, setDisabled] = useState(false);
 
   const handleImgChange = (e) => {
     var file1 = e.target.files[0];
@@ -100,37 +106,48 @@ const AddItem = () => {
       category_id: id,
     }).then((data) => {
       setSubCategories(data.data.data);
-      fetchCustomFields(data.data.data[0]["sub_category_id"]);
+      // if (data) fetchCustomFields(data.data.data[0]["sub_category_id"]);
     });
   };
 
   const fetchCustomFields = async (id) => {
-    await Api.post(`admin/subcategory/subcategory-by-id`, {
-      sub_category_id: ` ${
-        id ? id : subCategories[subValue]["sub_category_id"]
-      }`,
-    }).then((data) => {
-      console.log(data.data.data);
-      setFields(
-        data.data.data.custom_fields.map((i, k) => {
-          return `${i["name_en"]} ${i["name_ar"]} ${i["custom_field_id"]}`;
-        })
-      );
-      setCustomFields(data.data.data.custom_fields);
-    });
+      await Api.post(`admin/subcategory/subcategory-by-id`, {
+        sub_category_id: ` ${subCategories[id]["sub_category_id"]}`,
+      }).then((data) => {
+        console.log(data.data.data);
+        setFields(
+          data.data.data.custom_fields.map((i, k) => {
+            return `${i["name_en"]} ${i["name_ar"]} ${i["custom_field_id"]}`;
+          })
+        );
+        setCustomFields(data.data.data.custom_fields);
+      });
   };
 
   const handleSave = async (y) => {
-    console.log(y);
+    console.log({
+      category_id: subCategories[subValue]["category_id"],
+      sub_category_id: subCategories[subValue]["sub_category_id"],
+      brand_id: data[brandValue]["brand_id"],
+      name_en: name_en,
+      name_ar: name_ar,
+      description_en: desc_en,
+      description_ar: desc_ar,
+      image: file,
+      price: price ? +price : 0,
+      status: 1,
+      item_custom_values: y,
+    });
+    setDisabled(true);
     await addItem({
       category_id: subCategories[subValue]["category_id"],
       sub_category_id: subCategories[subValue]["sub_category_id"],
       brand_id: data[brandValue]["brand_id"],
       name_en: name_en,
       name_ar: name_ar,
-      description_en: description.desc,
-      description_ar: description.desc_ar,
-      image: file,
+      description_en: desc_en,
+      description_ar: desc_ar,
+      image: imgFile,
       price: price ? +price : 0,
       status: 1,
       item_custom_values: y,
@@ -139,12 +156,15 @@ const AddItem = () => {
     setCategories(null);
     setNameEn("");
     setNameAr("");
+    setDescEn("");
+    setDescAr("");
     setBrandValue(null);
     setDescription(null);
     setCustomFields(null);
     setPrice(0);
     setFile(null);
     await fetchItems();
+    setDisabled(false);
     setOpen(false);
   };
 
@@ -158,7 +178,18 @@ const AddItem = () => {
       <form onSubmit={handleSubmit(handleSubmit1)}>
         <input
           accept=".png,.jpeg,.jpg"
-          onChange={(e) => handleImgChange(e)}
+          onChange={(e) => {
+            handleImgChange(e);
+            console.log(e.target.files[0]);
+            // console.log(setImgFile(e.target.files[0]));
+            setImgFile(e.target.files[0]);
+
+            // uploadFile(e.target.files[0], config)
+            //   .then((data) => console.log(data))
+            //   .catch((err) => console.error(err));
+
+            setFile(e.target.files[0]);
+          }}
           style={{ display: "none" }}
           id="icon-button-file"
           type="file"
@@ -174,6 +205,7 @@ const AddItem = () => {
             fontWeight: "bold",
             position: "relative",
             top: -5,
+            zIndex:3
           }}
         >
           Add Item
@@ -202,6 +234,7 @@ const AddItem = () => {
             <Box display="flex" flexDirection="row-reverse">
               <IconButton
                 onClick={() => {
+                  setDisabled(false);
                   setOpen(false);
                 }}
               >
@@ -263,17 +296,17 @@ const AddItem = () => {
                     <Select
                       value={subValue}
                       onChange={(e) => {
-                        if (value !== 0) setSubValue(e.target.value);
-                        fetchCustomFields();
+                        setSubValue(e.target.value);
+                        setCustomFields(null);
+                        if (e.target.value !== "a")
+                          fetchCustomFields(e.target.value);
                       }}
                     >
-                      {subCategories ? (
+                      <MenuItem value={"a"}></MenuItem>
+                      {subCategories &&
                         subCategories.map((i, k) => (
                           <MenuItem value={k}>{i["name_en"]}</MenuItem>
-                        ))
-                      ) : (
-                        <MenuItem value={0}></MenuItem>
-                      )}
+                        ))}
                     </Select>
                   </FormControl>
                 </Box>
@@ -310,7 +343,7 @@ const AddItem = () => {
                   justifyContent="space-between"
                   style={{ margin: "1rem 0" }}
                 >
-                  { customFields && customFields.length > 0 && (
+                  {customFields && customFields.length > 0 && (
                     <p
                       style={{
                         fontSize: "1rem",
@@ -382,46 +415,49 @@ const AddItem = () => {
                   style={{ width: "47%" }}
                 />
               </Box>
-              {description && (
-                <Box display="flex" justifyContent="space-between">
-                  <div style={{ width: "47%" }}>
-                    <p
-                      style={{
-                        fontSize: "1rem",
-                        color: "#282b3c",
-                        fontWeight: 600,
-                      }}
-                    >
-                      Description_en :
-                    </p>
-                    <TextField
-                      multiline
-                      rows={4}
-                      variant="outlined"
-                      // defaultValue={description.desc}
-                      style={{ width: "100%", opacity: 0.8 }}
-                    />
-                  </div>
-                  <div style={{ width: "47%" }}>
-                    <p
-                      style={{
-                        fontSize: "1rem",
-                        color: "#282b3c",
-                        fontWeight: 600,
-                      }}
-                    >
-                      Description_ar :
-                    </p>
-                    <TextField
-                      multiline
-                      rows={4}
-                      // defaultValue={description.desc_ar}
-                      variant="outlined"
-                      style={{ width: "100%", opacity: 0.8 }}
-                    />
-                  </div>
-                </Box>
-              )}
+
+              <Box display="flex" justifyContent="space-between">
+                <div style={{ width: "47%" }}>
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      color: "#282b3c",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Description_en :
+                  </p>
+                  <TextField
+                    multiline
+                    rows={4}
+                    variant="outlined"
+                    value={desc_en}
+                    onChange={(e) => setDescEn(e.target.value)}
+                    // defaultValue={description.desc}
+                    style={{ width: "100%", opacity: 0.8 }}
+                  />
+                </div>
+                <div style={{ width: "47%" }}>
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      color: "#282b3c",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Description_ar :
+                  </p>
+                  <TextField
+                    multiline
+                    rows={4}
+                    value={desc_ar}
+                    onChange={(e) => setDescAr(e.target.value)}
+                    // defaultValue={description.desc_ar}
+                    variant="outlined"
+                    style={{ width: "100%", opacity: 0.8 }}
+                  />
+                </div>
+              </Box>
               <Box
                 display="flex"
                 flexDirection="column"
@@ -500,9 +536,13 @@ const AddItem = () => {
                 marginRight: "2rem",
               }}
             >
-              <Fab type="submit" variant="extended" color="primary">
-                Save
-              </Fab>
+              {disabled ? (
+                <CircularProgress />
+              ) : (
+                <Fab type="submit" variant="extended" color="primary">
+                  Save
+                </Fab>
+              )}
             </Box>
           </Paper>
         </Backdrop>
