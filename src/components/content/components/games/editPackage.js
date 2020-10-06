@@ -582,7 +582,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
                           >
                             {/* {i.sub_category} */}
 
-                            {i.split("###")[1]}
+                            {i && i.split("###")[1]}
                           </TableCell>
                           <TableCell
                             style={{

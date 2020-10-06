@@ -406,7 +406,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                     style={{ cursor: "pointer" }}
                     key={k}
                   >
-                    {i.split(" ")[1]}
+                    {i && i.split(" ")[1]}
                   </p>
                 ))}
               </Box>
@@ -467,7 +467,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                           );
                         }}
                       >
-                        {i.split(" ")[1]}
+                        {i && i.split(" ")[1]}
                       </p>
                       <IconButton
                         onClick={() => {
