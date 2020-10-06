@@ -18,6 +18,7 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import EditDialog from "./editDialog";
 import Api from "../../../../api";
+import Search from "./search";
 
 const useStyles = makeStyles({
   table: {
@@ -57,8 +58,23 @@ export default function DenseTable({
 
   return (
     <React.Fragment>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        style={{
+          margin: "0 2rem",
+        }}
+      >
+        <Search />
+      </Box>
+      <br />
       {!open && (
-        <TableContainer elevation={0} component={Paper}>
+        <TableContainer
+          style={{ marginTop: "2rem" }}
+          elevation={0}
+          component={Paper}
+        >
           <Table
             className={classes.table}
             size="small"
@@ -157,7 +173,6 @@ export default function DenseTable({
           </Table>
         </TableContainer>
       )}
-
       {open && (
         <Box>
           <Tooltip title="Go Back" placement="right">
@@ -219,7 +234,6 @@ export default function DenseTable({
           </TableContainer>
         </Box>
       )}
-
       <EditDialog
         classes1={classes1}
         openEditDialog={openEditDialog}

@@ -228,6 +228,30 @@ const fetchGameSubCategoryList = (dispatch) => async () => {
   }
 };
 
+const togglePackage = (dispatch) => async (id, action) => {
+  clearMessage();
+  const x = {
+    packages: [id],
+    action_type: action,
+  };
+  try {
+    await Api.post(`admin/game/package-block-unblock`, { ...x }).then(
+      async (data) => {
+        // console.log(data);
+      }
+    );
+
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: "Package Updated Successfully",
+    });
+
+    await fetchGamePackages();
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const toggleItemStatus = (dispatch) => async (id, action) => {
   const x = {
     items: [id],
@@ -552,6 +576,7 @@ export const { Context, Provider } = createDataContext(
     addPackage,
     addGame,
     fetchGame,
+    togglePackage,
     toggleGameStatus,
     fetchGamePackages,
     fetchGameSubCategoryList,
