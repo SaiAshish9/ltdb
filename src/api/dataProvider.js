@@ -125,7 +125,6 @@ const fetchGames = (dispatch) => async (page, limit, search, status) => {
   } else {
     url = "admin/game/get-game-list?limit=10&&page=1";
   }
-
   if (search) {
     url = `admin/game/get-game-list?limit=10&&page=1&&search=${search}`;
   }
