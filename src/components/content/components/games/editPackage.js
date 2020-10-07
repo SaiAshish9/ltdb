@@ -94,10 +94,10 @@ const EditPackage = ({ open, classes, setOpen }) => {
     await editPackage({
       image: file,
       newImgFile:newImgFile,
-      graphic_quality: quality ? quality : package_details.graphic_quality,
+      graphic_quality: +quality ? +quality : +package_details.graphic_quality,
       name_en,
       name_ar,
-      status: value ? +value : package_details.status,
+      status: value ? +value : +package_details.status,
       game_id: game_details.game_id,
       package_id: package_details.package_id,
       cover_images: coverImages,
@@ -118,7 +118,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
       var reader = new FileReader();
       reader.onload = (e) => {
         setNewFile(reader.result);
-        setNewImgFile(e)
+        setNewImgFile(file1)
         setImgFile(file1);
       };
       reader.readAsDataURL(file1);
@@ -280,7 +280,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
                   Package Image :
                 </p>
                 <Paper style={{ width: "47%" }}>
-                  <label htmlFor="package-image2">
+                  <label htmlFor={`package-image2${package_details.package_id}`}>
                     <Box
                       display="flex"
                       alignItems="center"
@@ -296,7 +296,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
                           handleImgChange(e);
                         }}
                         style={{ display: "none" }}
-                        id="package-image2"
+                        id={`package-image2${package_details.package_id}`}
                         type="file"
                       />
                       {newFile ? (
@@ -340,7 +340,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
                   {coverImages.length > 0 ? (
                     coverImages.map((i, k) => (
                       <input
-                        id={`cover-image2${k + 1 + coverImages.length}`}
+                        id={`cover-image2${k + 1 + coverImages.length}${package_details.package_id}`}
                         type="file"
                         style={{ display: "none" }}
                         accept=".png,.jpg,.jpeg"
@@ -349,7 +349,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
                     ))
                   ) : (
                     <input
-                      id={`cover-image2${coverImages.length + 1}`}
+                      id={`cover-image2${coverImages.length + 1}${package_details.package_id}`}
                       type="file"
                       style={{ display: "none" }}
                       accept=".png,.jpg,.jpeg"
@@ -443,7 +443,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
                       </Box>
                     ))}
 
-                  <label htmlFor={`cover-image2${coverImages.length + 1}`}>
+                  <label htmlFor={`cover-image2${coverImages.length + 1}${package_details.package_id}`}>
                     <Avatar
                       style={{
                         height: 100,

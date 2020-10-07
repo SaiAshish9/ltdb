@@ -464,13 +464,16 @@ const editPackage = (dispatch) => async (data) => {
 
   var image;
   var new_cover_images = [];
-  if(data.newImgFile)
-  image = await uploadImage("game/package", data.newImgFile);
-  else
-  image=data.image
+
+  console.log(data.newImgFile);
+  if (data.newImgFile) {
+    image = await uploadImage("game/package", data.newImgFile);
+  } else image = data.image.split("com/")[1];
+
   new_cover_images = await Promise.all(
     data.new_cover_images.map(async (x) => {
       try {
+        console.log(x.file);
         var image1 = await uploadImage("game/package", x.file);
         return image1;
       } catch (err) {
@@ -479,8 +482,9 @@ const editPackage = (dispatch) => async (data) => {
     })
   );
 
+  // console.log(image, [...data.cover_images, ...new_cover_images]);
   try {
-    await Api.post("admin/game/add-package", {
+    const x= await Api.post("admin/game/add-package", {
       image,
       game_id: data.game_id,
       package_id: data.package_id,
@@ -488,22 +492,13 @@ const editPackage = (dispatch) => async (data) => {
       name_ar: data.name_ar,
       graphic_quality: data.graphic_quality,
       status: data.status,
-      package_items: data.package_item,
+      package_item: data.package_item,
       cover_images: [...data.cover_images, ...new_cover_images],
     });
+    console.log(x.data)
   } catch (e) {
     console.log(e);
   }
-
-  // try {
-  //   const x = await Api.post("admin/game/add-package", {
-  //     ...data,
-  //     cover_images,
-  //     image,
-  //   });
-  // } catch (e) {
-  //   console.log(e);
-  // }
 };
 
 const addGame = (dispatch) => async (data) => {

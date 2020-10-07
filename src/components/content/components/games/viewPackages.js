@@ -125,7 +125,7 @@ const ViewPackages = ({ classes, open, setOpen }) => {
                         textAlign: "center",
                       }}
                     >
-                      {i.game_name_en}
+                      {i.name_en}
                     </TableCell>
                     <TableCell
                       style={{
@@ -134,7 +134,7 @@ const ViewPackages = ({ classes, open, setOpen }) => {
                         textAlign: "center",
                       }}
                     >
-                      {i.game_name_ar}
+                      {i.name_ar}
                     </TableCell>
                     <TableCell
                       onClick={async () => {
