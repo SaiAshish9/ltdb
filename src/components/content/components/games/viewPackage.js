@@ -174,7 +174,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                 </Select>
               </FormControl>
             </Box>
-            <Box
+            {/* <Box
               display="flex"
               justifyContent="space-between"
               style={{ margin: "1rem 0" }}
@@ -201,7 +201,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                   ))}
                 </Select>
               </FormControl>
-            </Box>
+            </Box> */}
             <Box
               display="flex"
               justifyContent="space-between"

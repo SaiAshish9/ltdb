@@ -12,8 +12,14 @@ import {
   Avatar,
   FormControl,
   CircularProgress,
+  TableContainer,
+  TableCell,
+  TableBody,
+  Table,
+  TableHead,
+  TableRow,
 } from "@material-ui/core";
-import { Clear, CameraAlt } from "@material-ui/icons";
+import { Clear, CameraAlt, DeleteOutlined } from "@material-ui/icons";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { useForm } from "react-hook-form";
 import { GiCancel } from "react-icons/gi";
@@ -396,7 +402,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                     )}
                   </Select>
                 </FormControl>
-                {selectedSubCategories.map((i, k) => (
+                {/* {selectedSubCategories.map((i, k) => (
                   <p
                     onClick={() => {
                       setSelectedSubCategories(
@@ -408,7 +414,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                   >
                     {i && i.split(" ")[1]}
                   </p>
-                ))}
+                ))} */}
               </Box>
 
               <Box
@@ -452,7 +458,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                   </Select>
                 </FormControl>
                 <Box>
-                  {selectedItems.map((i, k) => (
+                  {/* {selectedItems.map((i, k) => (
                     <Box
                       display="flex"
                       justifyContent="space-between"
@@ -485,10 +491,111 @@ const AddPackage = ({ open, classes, setOpen }) => {
                         <GiCancel />
                       </IconButton>
                     </Box>
-                  ))}
+                  ))} */}
                 </Box>
               </Box>
             </Box>
+
+            {selectedSubCategories && (
+              <TableContainer
+                style={{ width: "100%", marginTop: "2rem" }}
+                elevation={0}
+                components={Paper}
+              >
+                <Table style={{ width: "100%" }}>
+                  <TableHead>
+                    <TableRow
+                      style={{
+                        background: "#f4f4f4",
+                        height: "3.4rem",
+                      }}
+                    >
+                      <TableCell
+                        style={{
+                          fontWeight: "bolder",
+                          fontSize: "0.8rem",
+                          color: "#282b3c",
+                          textAlign: "center",
+                        }}
+                      >
+                        Sub Category
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          fontWeight: "bolder",
+                          fontSize: "0.8rem",
+                          color: "#282b3c",
+                          textAlign: "center",
+                        }}
+                      >
+                        Item
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          fontWeight: "bolder",
+                          fontSize: "0.8rem",
+                          color: "#282b3c",
+                          textAlign: "center",
+                        }}
+                      >
+                        Action
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+
+                  <TableBody>
+                    {selectedSubCategories &&
+                      selectedSubCategories.map((i, k) => (
+                        <TableRow key={k}>
+                          <TableCell
+                            style={{
+                              textAlign: "center",
+                              color: "#8095a1",
+                              fontWeight: 500,
+                            }}
+                          >
+                            {i && i.split(" ")[1]}
+                          </TableCell>
+                          <TableCell
+                            style={{
+                              textAlign: "center",
+                              color: "#8095a1",
+                              fontWeight: 500,
+                            }}
+                          >
+                            {/* {i.item} */}
+                            {selectedItems[k] &&
+                              selectedItems[k].split(" ")[1]}
+                          </TableCell>
+                          <TableCell
+                            style={{
+                              textAlign: "center",
+                              color: "#8095a1",
+                              fontWeight: 500,
+                            }}
+                          >
+                            <IconButton
+                              onClick={() => {
+                                setSelectedItems(
+                                  selectedItems.filter((x) => x !== i)
+                                );
+                                setSelectedSubCategories(
+                                  selectedSubCategories.filter(
+                                    (x) => x !== selectedSubCategories[k]
+                                  )
+                                );
+                              }}
+                              style={{ padding: 0 }}
+                            >
+                              <DeleteOutlined style={{ color: "red" }} />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
 
             <Box
               display="flex"
