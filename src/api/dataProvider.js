@@ -426,7 +426,6 @@ const addPackage = (dispatch) => async (data) => {
   var image;
   var cover_images = [];
   image = await uploadImage("game/package", data.image);
-
   cover_images = await Promise.all(
     data.cover_images.map(async (x) => {
       try {
@@ -437,23 +436,74 @@ const addPackage = (dispatch) => async (data) => {
       }
     })
   );
-
   try {
     const x = await Api.post("admin/game/add-package", {
       ...data,
       cover_images,
       image,
     });
-    // console.log(x);
   } catch (e) {
     console.log(e);
   }
-  // console.log({
-  //   ...data,
-  //   cover_images,
-  //   image,
-  // });
-  // console.log(image, cover_images);
+};
+
+const editPackage = (dispatch) => async (data) => {
+  console.log(data);
+
+  await Promise.all(
+    data.deleted_cover_images.map(async (x) => {
+      try {
+        await Api.post("admin/game/package-delete-image", {
+          image_id: x,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    })
+  );
+
+  var image;
+  var new_cover_images = [];
+  if(data.newImgFile)
+  image = await uploadImage("game/package", data.newImgFile);
+  else
+  image=data.image
+  new_cover_images = await Promise.all(
+    data.new_cover_images.map(async (x) => {
+      try {
+        var image1 = await uploadImage("game/package", x.file);
+        return image1;
+      } catch (err) {
+        console.log(err);
+      }
+    })
+  );
+
+  try {
+    await Api.post("admin/game/add-package", {
+      image,
+      game_id: data.game_id,
+      package_id: data.package_id,
+      name_en: data.name_en,
+      name_ar: data.name_ar,
+      graphic_quality: data.graphic_quality,
+      status: data.status,
+      package_items: data.package_item,
+      cover_images: [...data.cover_images, ...new_cover_images],
+    });
+  } catch (e) {
+    console.log(e);
+  }
+
+  // try {
+  //   const x = await Api.post("admin/game/add-package", {
+  //     ...data,
+  //     cover_images,
+  //     image,
+  //   });
+  // } catch (e) {
+  //   console.log(e);
+  // }
 };
 
 const addGame = (dispatch) => async (data) => {
@@ -572,8 +622,8 @@ export const { Context, Provider } = createDataContext(
     fetchResolutions,
     fetchGames,
     fetchPackage,
-    // uploadImage,
     addPackage,
+    editPackage,
     addGame,
     fetchGame,
     togglePackage,
