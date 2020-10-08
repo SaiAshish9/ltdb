@@ -85,12 +85,30 @@ const reducer = (state, action) => {
   }
 };
 
-const fetchItems = (dispatch) => async (page, limit) => {
+const fetchItems = (dispatch) => async (page, limit, search, status) => {
   var url;
   if (page && limit) {
     url = `admin/item/list?limit=${limit}&&page=${page}`;
   } else {
     url = "admin/item/list?limit=10";
+  }
+  if (search) {
+    url = `admin/item/list?limit=10&&page=1&&search=${search}`;
+  }
+  if (status === 1) {
+    url = `admin/item/list?limit=10&&page=1&&status=1`;
+  }
+
+  if (status === 0) {
+    url = `admin/item/list?limit=10&&page=1&&status=0`;
+  }
+
+  if (status === 0 && search) {
+    url = `admin/item/list?limit=10&&page=1&&search=${search}&&status=0`;
+  }
+
+  if (status === 1 && search) {
+    url = `admin/item/list?limit=10&&page=1&&search=${search}&&status=1`;
   }
 
   if (page || limit) {
@@ -172,13 +190,32 @@ const fetchGames = (dispatch) => async (page, limit, search, status) => {
     .catch((error) => console.log(error));
 };
 
-const fetchUsers = (dispatch) => async (page) => {
+const fetchUsers = (dispatch) => async (page, limit, search, status) => {
   var url;
   if (page) {
     url = `admin/user/list?page=${page}&&limit=10`;
   } else {
     url = `admin/user/list?limit=10`;
   }
+  if (search) {
+    url = `admin/user/list?limit=10&&page=1&&search=${search}`;
+  }
+  if (status === 1) {
+    url = `admin/user/list?limit=10&&page=1&&status=1`;
+  }
+
+  if (status === 0) {
+    url = `admin/user/list?limit=10&&page=1&&status=0`;
+  }
+
+  if (status === 0 && search) {
+    url = `admin/user/list?limit=10&&page=1&&search=${search}&&status=0`;
+  }
+
+  if (status === 1 && search) {
+    url = `admin/user/list?limit=10&&page=1&&search=${search}&&status=1`;
+  }
+
   if (page) {
     dispatch({
       type: "SET_USERS",

@@ -285,7 +285,7 @@ const SubCategoryTable = ({
                 </Box>
               ))}
             </Box>
-            <Divider />
+            {/* <Divider /> */}
           </Box>
           <Box style={{ padding: "1rem" }}>
             {!loading ? (

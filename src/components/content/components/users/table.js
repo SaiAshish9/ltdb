@@ -13,8 +13,12 @@ import IconButton from "@material-ui/core/IconButton";
 import moment from "moment";
 import Popup from "./popup";
 import { Box, CircularProgress } from "@material-ui/core";
-import { Snackbar } from "@material-ui/core";
+import { Snackbar, FormControl,
+  FormGroup,
+  FormControlLabel,
+  Switch, } from "@material-ui/core";
 import { Context as DataContext } from "../../../../api/dataProvider";
+import Search from './search'
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -39,8 +43,11 @@ export default function SimpleTable({ data }) {
     fetchUsers,
     toggleUserStatus,
     clearMessage,
+    
   } = useContext(DataContext);
   const [openSnackbar, setOpenSnackbar] = useState(true);
+  const [active, isActive] = useState(false);
+  const [inActive, isInActive] = useState(false);
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -57,6 +64,57 @@ export default function SimpleTable({ data }) {
 
   return (
     <React.Fragment>
+      <Box
+          display="flex"
+          justifyContent="space-between"
+          style={{ zIndex: 3, position: "relative", width: "80vw" }}
+        >
+          <Box display="flex" alignItems="center" style={{position:"absolute", top:"-8vh"}}>
+            <Search active={active} inActive={inActive} />
+            <FormGroup row style={{ marginLeft: "2rem" }}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={active}
+                    onChange={() => {
+                      if (!active) {
+                        isInActive(false);
+                        fetchUsers(null, null, null, 1);
+                      }
+                      if (active) {
+                         fetchUsers();
+                      }
+                      isActive(!active);
+                    }}
+                    name="checkedA"
+                    color="primary"
+                  />
+                }
+                label={<p style={{ color: "#fff" }}>Active</p>}
+                
+              />
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={inActive}
+                    onChange={() => {
+                      if (!inActive) {
+                        isActive(false);
+                        fetchUsers(null, null, null, 0);
+                      }
+                      if (inActive) {
+                         fetchUsers();
+                      }
+                      isInActive(!inActive);
+                    }}
+                    name="InActive"
+                  />
+                }
+                label={<p style={{ color: "#fff" }}>InActive</p>}
+              />
+              </FormGroup>
+              </Box>
+              </Box>
       <TableContainer
         dense={true}
         style={{

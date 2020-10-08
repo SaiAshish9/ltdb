@@ -11,6 +11,9 @@ import {
   MenuItem,
   Avatar,
   FormControl,
+  FormGroup,
+  FormControlLabel,
+  Switch,
   CircularProgress,
 } from "@material-ui/core";
 import { Add, Clear, CameraAlt } from "@material-ui/icons";
@@ -18,6 +21,7 @@ import Api from "../../../../api";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { useForm } from "react-hook-form";
 import { uploadFile } from "react-s3";
+import Search from './search'
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -49,6 +53,9 @@ const AddItem = () => {
   const [file, setFile] = useState(null);
   const [imgFile, setImgFile] = useState(null);
   const [disabled, setDisabled] = useState(false);
+  const [active, isActive] = useState(false);
+  const [inActive, isInActive] = useState(false);
+
 
   const handleImgChange = (e) => {
     var file1 = e.target.files[0];
@@ -173,7 +180,7 @@ const AddItem = () => {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      style={{ padding: "1rem 2rem" }}
+      style={{ padding: "0.2rem 2rem" }}
     >
       <form onSubmit={handleSubmit(handleSubmit1)}>
         <input
@@ -194,6 +201,61 @@ const AddItem = () => {
           id="icon-button-file"
           type="file"
         />
+        // Search Text field edit
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          style={{ zIndex: 3, position: "relative", width: "80vw" }}
+        >
+          <Box display="flex" alignItems="center">
+            <Search active={active} inActive={inActive} />
+            <FormGroup row style={{ marginLeft: "2rem" }}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={active}
+                    onChange={() => {
+                      if (!active) {
+                        isInActive(false);
+                        fetchItems(null, null, null, 1);
+                      }
+                      if (active) {
+                         fetchItems();
+                      }
+                      isActive(!active);
+                    }}
+                    name="checkedA"
+                    color="primary"
+                  />
+                }
+                label={<p style={{ color: "#fff" }}>Active</p>}
+                
+              />
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={inActive}
+                    onChange={() => {
+                      if (!inActive) {
+                        isActive(false);
+                        fetchItems(null, null, null, 0);
+                      }
+                      if (inActive) {
+                         fetchItems();
+                      }
+                      isInActive(!inActive);
+                    }}
+                    name="InActive"
+                  />
+                }
+                label={<p style={{ color: "#fff" }}>InActive</p>}
+              />
+              </FormGroup>
+              </Box>
+              
+
+
+        <Box display = 'flex'>
 
         <p
           onClick={() => {
@@ -205,11 +267,15 @@ const AddItem = () => {
             fontWeight: "bold",
             position: "relative",
             top: -5,
-            zIndex:3
+            zIndex:3,
+            marginRight: "1.5rem",
+
           }}
         >
           Add Item
         </p>
+        </Box>
+        </Box>
 
         {/* <Fab
           size="medium"
