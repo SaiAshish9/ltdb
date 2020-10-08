@@ -19,6 +19,7 @@ import { Snackbar, FormControl,
   Switch, } from "@material-ui/core";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import Search from './search'
+import Thumbnail from "../../../../assets/thumbnail1.png"
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -153,7 +154,8 @@ export default function SimpleTable({ data }) {
                   color: "#282b3c",
                 }}
               >
-                Serial Number
+                {users && users.length > 0 && "Serial Number"}
+                
               </TableCell>
               <TableCell
                 style={{
@@ -209,6 +211,26 @@ export default function SimpleTable({ data }) {
               ></TableCell>
             </TableRow>
           </TableHead>
+          {users && users.length === 0 && (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+              style={{ width: "85vw", height: "50vh" }}
+            >
+              <img src={Thumbnail} alt="No users" />
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                No Users Found!
+              </p>
+            </Box>
+          )}
           {!users && (
             <Box
               display="flex"

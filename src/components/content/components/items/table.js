@@ -13,6 +13,7 @@ import { Box, CircularProgress, Snackbar, IconButton } from "@material-ui/core";
 import moment from "moment";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import Popup from "./popup";
+import Thumbnail from '../../../../assets/thumbnail1.png'
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -179,6 +180,26 @@ export default function SimpleTable({ data }) {
               ></TableCell>
             </TableRow>
           </TableHead>
+          {items && items.length === 0 && (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+              style={{ width: "85vw", height: "50vh" }}
+            >
+              <img src={Thumbnail} alt="No items" />
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                No Items Found!
+              </p>
+            </Box>
+          )}
 
           {!items && (
             <Box

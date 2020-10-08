@@ -136,6 +136,8 @@ const fetchItems = (dispatch) => async (page, limit, search, status) => {
     .catch((error) => console.log(error));
 };
 
+
+
 const fetchGames = (dispatch) => async (page, limit, search, status) => {
   var url;
   if (page && limit) {
@@ -227,6 +229,7 @@ const fetchUsers = (dispatch) => async (page, limit, search, status) => {
       type: "SET_USERS_COUNT",
       payload: JSON.parse(data.request.response)["parameter"]["total"],
     });
+    console.log(data)
     dispatch({
       type: "SET_USERS",
       payload: data.data.data,

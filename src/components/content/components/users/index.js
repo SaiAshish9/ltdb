@@ -35,7 +35,7 @@ const Users = () => {
           justifyContent: "center",
         }}
       >
-        {users && users.length === 0 ? (
+        {!users? (
         <Box
           display="flex"
           alignItems="center"
