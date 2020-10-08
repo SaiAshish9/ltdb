@@ -21,7 +21,7 @@ import Api from "../../../../api";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { useForm } from "react-hook-form";
 import { uploadFile } from "react-s3";
-import Search from './search'
+import Search from "./search";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -44,7 +44,11 @@ const AddItem = () => {
   const [name_ar, setNameAr] = useState("");
   const [desc_en, setDescEn] = useState("");
   const [desc_ar, setDescAr] = useState("");
-  const { addItem, fetchItems } = useContext(DataContext);
+  const {
+    addItem,
+    fetchItems,
+    state: { items },
+  } = useContext(DataContext);
   const [customFields, setCustomFields] = useState([]);
   // const [customFieldValue, setCustomFieldValue] = useState();
   const [fields, setFields] = useState([]);
@@ -55,7 +59,8 @@ const AddItem = () => {
   const [disabled, setDisabled] = useState(false);
   const [active, isActive] = useState(false);
   const [inActive, isInActive] = useState(false);
-
+  const [item_available, is_item_available] = useState(false);
+  const [item_value, setItemValue] = useState(null);
 
   const handleImgChange = (e) => {
     var file1 = e.target.files[0];
@@ -112,23 +117,27 @@ const AddItem = () => {
     Api.post("admin/subcategory/category-wise-list", {
       category_id: id,
     }).then((data) => {
+      console.log(data);
       setSubCategories(data.data.data);
       // if (data) fetchCustomFields(data.data.data[0]["sub_category_id"]);
     });
   };
 
   const fetchCustomFields = async (id) => {
-      await Api.post(`admin/subcategory/subcategory-by-id`, {
-        sub_category_id: ` ${subCategories[id]["sub_category_id"]}`,
-      }).then((data) => {
-        console.log(data.data.data);
-        setFields(
-          data.data.data.custom_fields.map((i, k) => {
-            return `${i["name_en"]} ${i["name_ar"]} ${i["custom_field_id"]}`;
-          })
-        );
-        setCustomFields(data.data.data.custom_fields);
-      });
+    await Api.post(`admin/subcategory/subcategory-by-id`, {
+      sub_category_id: ` ${subCategories[id]["sub_category_id"]}`,
+    }).then((data) => {
+      if (subCategories[id]["link_item_available"]) {
+        is_item_available(true);
+      }
+      console.log(data.data.data);
+      setFields(
+        data.data.data.custom_fields.map((i, k) => {
+          return `${i["name_en"]} ${i["name_ar"]} ${i["custom_field_id"]}`;
+        })
+      );
+      setCustomFields(data.data.data.custom_fields);
+    });
   };
 
   const handleSave = async (y) => {
@@ -146,19 +155,37 @@ const AddItem = () => {
       item_custom_values: y,
     });
     setDisabled(true);
-    await addItem({
-      category_id: subCategories[subValue]["category_id"],
-      sub_category_id: subCategories[subValue]["sub_category_id"],
-      brand_id: data[brandValue]["brand_id"],
-      name_en: name_en,
-      name_ar: name_ar,
-      description_en: desc_en,
-      description_ar: desc_ar,
-      image: imgFile,
-      price: price ? +price : 0,
-      status: 1,
-      item_custom_values: y,
-    });
+    if (item_value) {
+      await addItem({
+        category_id: subCategories[subValue]["category_id"],
+        sub_category_id: subCategories[subValue]["sub_category_id"],
+        brand_id: data[brandValue]["brand_id"],
+        name_en: name_en,
+        link_item_id:item_value,
+        name_ar: name_ar,
+        description_en: desc_en,
+        description_ar: desc_ar,
+        image: imgFile,
+        price: price ? +price : 0,
+        status: 1,
+        item_custom_values: y,
+      });
+    } else {
+      await addItem({
+        category_id: subCategories[subValue]["category_id"],
+        sub_category_id: subCategories[subValue]["sub_category_id"],
+        brand_id: data[brandValue]["brand_id"],
+        name_en: name_en,
+        name_ar: name_ar,
+        description_en: desc_en,
+        description_ar: desc_ar,
+        image: imgFile,
+        price: price ? +price : 0,
+        status: 1,
+        item_custom_values: y,
+      });
+    }
+
     setSubCategories(null);
     setCategories(null);
     setNameEn("");
@@ -201,7 +228,6 @@ const AddItem = () => {
           id="icon-button-file"
           type="file"
         />
-        // Search Text field edit
         <Box
           display="flex"
           justifyContent="space-between"
@@ -220,7 +246,7 @@ const AddItem = () => {
                         fetchItems(null, null, null, 1);
                       }
                       if (active) {
-                         fetchItems();
+                        fetchItems();
                       }
                       isActive(!active);
                     }}
@@ -229,7 +255,6 @@ const AddItem = () => {
                   />
                 }
                 label={<p style={{ color: "#fff" }}>Active</p>}
-                
               />
               <FormControlLabel
                 control={
@@ -241,7 +266,7 @@ const AddItem = () => {
                         fetchItems(null, null, null, 0);
                       }
                       if (inActive) {
-                         fetchItems();
+                        fetchItems();
                       }
                       isInActive(!inActive);
                     }}
@@ -250,31 +275,27 @@ const AddItem = () => {
                 }
                 label={<p style={{ color: "#fff" }}>InActive</p>}
               />
-              </FormGroup>
-              </Box>
-              
+            </FormGroup>
+          </Box>
 
-
-        <Box display = 'flex'>
-
-        <p
-          onClick={() => {
-            setOpen(true);
-          }}
-          style={{
-            color: "#fff",
-            cursor: "pointer",
-            fontWeight: "bold",
-            position: "relative",
-            top: -5,
-            zIndex:3,
-            marginRight: "1.5rem",
-
-          }}
-        >
-          Add Item
-        </p>
-        </Box>
+          <Box display="flex">
+            <p
+              onClick={() => {
+                setOpen(true);
+              }}
+              style={{
+                color: "#fff",
+                cursor: "pointer",
+                fontWeight: "bold",
+                position: "relative",
+                top: -5,
+                zIndex: 3,
+                marginRight: "1.5rem",
+              }}
+            >
+              Add Item
+            </p>
+          </Box>
         </Box>
 
         {/* <Fab
@@ -405,6 +426,40 @@ const AddItem = () => {
                       ))}
                   </Select>
                 </Box>
+
+                {item_available === true && (
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    style={{ margin: "1rem 0" }}
+                  >
+                    <p
+                      style={{
+                        fontSize: "1rem",
+                        color: "#282b3c",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Select Item :
+                    </p>
+                    <FormControl style={{ width: "47%" }}>
+                      <Select
+                        value={item_value}
+                        onChange={(e) => {
+                          setItemValue(e.target.value);
+                        }}
+                      >
+                        {items &&
+                          items.map((i, k) => (
+                            <MenuItem value={i["item_id"]}>
+                              {i["name_en"]}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
+                )}
+
                 <Box
                   justifyContent="space-between"
                   style={{ margin: "1rem 0" }}
