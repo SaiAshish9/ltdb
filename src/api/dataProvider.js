@@ -143,7 +143,6 @@ const fetchGames = (dispatch) => async (page, limit, search, status) => {
   } else {
     url = "admin/game/get-game-list?limit=10&&page=1";
   }
-
   if (search) {
     url = `admin/game/get-game-list?limit=10&&page=1&&search=${search}`;
   }
@@ -155,7 +154,7 @@ const fetchGames = (dispatch) => async (page, limit, search, status) => {
   if (status === 0) {
     url = `admin/game/get-game-list?limit=10&&page=1&&status=0`;
   }
-
+  // jkjkj
   if (status === 0 && search) {
     url = `admin/game/get-game-list?limit=10&&page=1&&search=${search}&&status=0`;
   }
@@ -261,6 +260,30 @@ const fetchGameSubCategoryList = (dispatch) => async () => {
   try {
     const data = await Api("admin/game/sub-category-list");
     return data.data.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const togglePackage = (dispatch) => async (id, action) => {
+  clearMessage();
+  const x = {
+    packages: [id],
+    action_type: +action,
+  };
+  try {
+    await Api.post(`admin/game/package-block-unblock`, { ...x }).then(
+      async (data) => {
+        // console.log(data);
+      }
+    );
+
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: "Package Updated Successfully",
+    });
+
+    await fetchGamePackages();
   } catch (e) {
     console.log(e);
   }
@@ -440,7 +463,6 @@ const addPackage = (dispatch) => async (data) => {
   var image;
   var cover_images = [];
   image = await uploadImage("game/package", data.image);
-
   cover_images = await Promise.all(
     data.cover_images.map(async (x) => {
       try {
@@ -451,23 +473,69 @@ const addPackage = (dispatch) => async (data) => {
       }
     })
   );
-
   try {
     const x = await Api.post("admin/game/add-package", {
       ...data,
       cover_images,
       image,
     });
-    // console.log(x);
   } catch (e) {
     console.log(e);
   }
-  // console.log({
-  //   ...data,
-  //   cover_images,
-  //   image,
-  // });
-  // console.log(image, cover_images);
+};
+
+const editPackage = (dispatch) => async (data) => {
+  console.log(data);
+
+  await Promise.all(
+    data.deleted_cover_images.map(async (x) => {
+      try {
+        await Api.post("admin/game/package-delete-image", {
+          image_id: x,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    })
+  );
+
+  var image;
+  var new_cover_images = [];
+
+  console.log(data.newImgFile);
+  if (data.newImgFile) {
+    image = await uploadImage("game/package", data.newImgFile);
+  } else image = data.image.split("com/")[1];
+
+  new_cover_images = await Promise.all(
+    data.new_cover_images.map(async (x) => {
+      try {
+        console.log(x.file);
+        var image1 = await uploadImage("game/package", x.file);
+        return image1;
+      } catch (err) {
+        console.log(err);
+      }
+    })
+  );
+
+  // console.log(image, [...data.cover_images, ...new_cover_images]);
+  try {
+    const x= await Api.post("admin/game/add-package", {
+      image,
+      game_id: data.game_id,
+      package_id: data.package_id,
+      name_en: data.name_en,
+      name_ar: data.name_ar,
+      graphic_quality: data.graphic_quality,
+      status: data.status,
+      package_item: data.package_item,
+      cover_images: [...data.cover_images, ...new_cover_images],
+    });
+    console.log(x.data)
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const addGame = (dispatch) => async (data) => {
@@ -586,10 +654,11 @@ export const { Context, Provider } = createDataContext(
     fetchResolutions,
     fetchGames,
     fetchPackage,
-    // uploadImage,
     addPackage,
+    editPackage,
     addGame,
     fetchGame,
+    togglePackage,
     toggleGameStatus,
     fetchGamePackages,
     fetchGameSubCategoryList,

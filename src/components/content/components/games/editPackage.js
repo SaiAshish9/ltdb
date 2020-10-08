@@ -30,12 +30,13 @@ const EditPackage = ({ open, classes, setOpen }) => {
     state: { game_details, items, games, package_details },
     fetchItems,
     fetchGameSubCategoryList,
-    addPackage,
+    editPackage,
     fetchPackage,
   } = useContext(DataContext);
 
   const [file, setFile] = useState(null);
-  const [value, setValue] = useState(package_details && package_details.status);
+  const [newFile, setNewFile] = useState(null);
+  const [value, setValue] = useState(null);
   const [itemValue, setItemValue] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const [subCategories, setSubCategories] = useState(null);
@@ -48,6 +49,9 @@ const EditPackage = ({ open, classes, setOpen }) => {
   const { register, handleSubmit, reset } = useForm();
   const [coverImages, setCoverImages] = useState([]);
   const [disabled, setDisabled] = useState(false);
+  const [newCoverImages, setNewCoverImages] = useState([]);
+  const [deletedCoverImages, setDeletedCoverImages] = useState([]);
+  const [newImgFile,setNewImgFile] = useState(null)
 
   const handleChangedData = useCallback(async () => {
     setDisabled(true);
@@ -57,7 +61,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
       setNameAr(package_details.name_ar);
       setCoverImages([
         ...package_details.cover_image.map((x) => {
-          return { imgFile: x.image_path };
+          return { imgFile: x.image_path, id: x.id };
         }),
       ]);
       setSelectedSubCategories(
@@ -82,21 +86,23 @@ const EditPackage = ({ open, classes, setOpen }) => {
     if (package_details) {
       setNameEn(package_details.name_en);
     }
-    // setSelectedItems(items);
     console.log(items);
   };
 
   const onSubmit = async (y) => {
     setDisabled(true);
-    await addPackage({
-      image: imgFile,
-      //   status: 1,
-      graphic_quality: quality,
+    await editPackage({
+      image: file,
+      newImgFile:newImgFile,
+      graphic_quality: +quality ? +quality : +package_details.graphic_quality,
       name_en,
       name_ar,
-      status: value,
+      status: value ? +value : +package_details.status,
       game_id: game_details.game_id,
+      package_id: package_details.package_id,
       cover_images: coverImages,
+      new_cover_images: newCoverImages,
+      deleted_cover_images: deletedCoverImages,
       package_item: selectedSubCategories.map((i, k) => ({
         sub_category_id: +selectedSubCategories[k].split("###")[0],
         item_id: +selectedItems[k].split("###")[0],
@@ -111,7 +117,8 @@ const EditPackage = ({ open, classes, setOpen }) => {
       var file1 = e.target.files[0];
       var reader = new FileReader();
       reader.onload = (e) => {
-        setFile(reader.result);
+        setNewFile(reader.result);
+        setNewImgFile(file1)
         setImgFile(file1);
       };
       reader.readAsDataURL(file1);
@@ -124,14 +131,14 @@ const EditPackage = ({ open, classes, setOpen }) => {
       var file1 = e.target.files[0];
       var reader = new FileReader();
       reader.onload = (e) => {
-        setCoverImages([
-          ...coverImages,
+        setNewCoverImages([
+          ...newCoverImages,
           { imgFile: reader.result, file: file1 },
         ]);
       };
       reader.readAsDataURL(file1);
     },
-    [coverImages]
+    [newCoverImages]
   );
 
   return (
@@ -156,13 +163,17 @@ const EditPackage = ({ open, classes, setOpen }) => {
                   setNameEn(null);
                   reset();
                   setFile(null);
+                  setNewFile(null);
                   setImgFile(null);
+                  setNewImgFile(null);
                   setSelectedItems(null);
                   setSelectedSubCategories(null);
                   setQuality(null);
                   setDisabled(false);
                   setValue(null);
                   setCoverImages([]);
+                  setNewCoverImages([]);
+                  setDeletedCoverImages([]);
                   setOpen(false);
                 }}
               >
@@ -218,7 +229,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
                     setValue(e.target.value);
                   }}
                 >
-                  {["Active", "InActive"].map((i, k) => (
+                  {["InActive", "Active"].map((i, k) => (
                     <MenuItem value={k}>{i}</MenuItem>
                   ))}
                 </Select>
@@ -235,7 +246,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
                 inputRef={register()}
                 name="name"
                 defaultValue={package_details.name_en}
-                // onChange={(e) => setNameEn(e.target.value)}
+                onChange={(e) => setNameEn(e.target.value)}
                 style={{ width: "47%" }}
               />
               <TextField
@@ -244,7 +255,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
                 name="name1"
                 inputRef={register()}
                 defaultValue={package_details.name_ar}
-                // onChange={(e) => setNameAr(e.target.value)}
+                onChange={(e) => setNameAr(e.target.value)}
                 style={{ width: "47%" }}
               />
             </Box>
@@ -269,7 +280,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
                   Package Image :
                 </p>
                 <Paper style={{ width: "47%" }}>
-                  <label htmlFor="package-image2">
+                  <label htmlFor={`package-image2${package_details.package_id}`}>
                     <Box
                       display="flex"
                       alignItems="center"
@@ -285,10 +296,18 @@ const EditPackage = ({ open, classes, setOpen }) => {
                           handleImgChange(e);
                         }}
                         style={{ display: "none" }}
-                        id="package-image2"
+                        id={`package-image2${package_details.package_id}`}
                         type="file"
                       />
-                      {file ? (
+                      {newFile ? (
+                        <img
+                          style={{
+                            height: "20vh",
+                          }}
+                          alt="img"
+                          src={newFile}
+                        />
+                      ) : file ? (
                         <img
                           style={{
                             height: "20vh",
@@ -321,7 +340,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
                   {coverImages.length > 0 ? (
                     coverImages.map((i, k) => (
                       <input
-                        id={`cover-image2${k + 1 + coverImages.length}`}
+                        id={`cover-image2${k + 1 + coverImages.length}${package_details.package_id}`}
                         type="file"
                         style={{ display: "none" }}
                         accept=".png,.jpg,.jpeg"
@@ -330,7 +349,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
                     ))
                   ) : (
                     <input
-                      id={`cover-image2${coverImages.length + 1}`}
+                      id={`cover-image2${coverImages.length + 1}${package_details.package_id}`}
                       type="file"
                       style={{ display: "none" }}
                       accept=".png,.jpg,.jpeg"
@@ -352,10 +371,12 @@ const EditPackage = ({ open, classes, setOpen }) => {
                       >
                         <IconButton
                           onClick={() => {
-                            const x = [
-                              ...coverImages.splice(0, k),
-                              ...coverImages.splice(k + 1, 0),
-                            ];
+                            const x = [...coverImages];
+                            setDeletedCoverImages([
+                              ...deletedCoverImages,
+                              coverImages[k]["id"],
+                            ]);
+                            x.splice(k, 1);
                             setCoverImages(x);
                           }}
                           style={{
@@ -381,7 +402,48 @@ const EditPackage = ({ open, classes, setOpen }) => {
                       </Box>
                     ))}
 
-                  <label htmlFor={`cover-image2${coverImages.length + 1}`}>
+                  {newCoverImages.length > 0 &&
+                    newCoverImages.map((i, k) => (
+                      <Box
+                        key={k}
+                        style={{
+                          position: "relative",
+                          height: 100,
+                          width: 100,
+                          marginRight: 15,
+                          marginBottom: 15,
+                        }}
+                      >
+                        <IconButton
+                          onClick={() => {
+                            const x = [...newCoverImages];
+                            x.splice(k, 1);
+                            setNewCoverImages(x);
+                          }}
+                          style={{
+                            background: "#fff",
+                            position: "absolute",
+                            right: -10,
+                            top: -10,
+                            zIndex: 10,
+                            padding: 0,
+                          }}
+                        >
+                          <GiCancel />
+                        </IconButton>
+                        <Avatar
+                          style={{
+                            height: 100,
+                            width: 100,
+                          }}
+                          variant="rounded"
+                          src={i.imgFile}
+                          // src={i.image_path}
+                        />
+                      </Box>
+                    ))}
+
+                  <label htmlFor={`cover-image2${coverImages.length + 1}${package_details.package_id}`}>
                     <Avatar
                       style={{
                         height: 100,
@@ -414,7 +476,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
               </p>
               <FormControl style={{ width: "47%" }}>
                 <Select
-                  value={package_details.graphic_quality}
+                  defaultValue={package_details.graphic_quality}
                   //   disabled
                   // value={quality}
                   onChange={(e) => {
@@ -524,10 +586,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
                 elevation={0}
                 components={Paper}
               >
-                <Table
-                  style={{ width: "100%" }}
-                  // size="small"
-                >
+                <Table style={{ width: "100%" }}>
                   <TableHead>
                     <TableRow
                       style={{
@@ -580,9 +639,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
                               fontWeight: 500,
                             }}
                           >
-                            {/* {i.sub_category} */}
-
-                            {i.split("###")[1]}
+                            {i && i.split("###")[1]}
                           </TableCell>
                           <TableCell
                             style={{
@@ -592,7 +649,8 @@ const EditPackage = ({ open, classes, setOpen }) => {
                             }}
                           >
                             {/* {i.item} */}
-                            {selectedItems[k] && selectedItems[k].split('###')[1]}
+                            {selectedItems[k] &&
+                              selectedItems[k].split("###")[1]}
                           </TableCell>
                           <TableCell
                             style={{

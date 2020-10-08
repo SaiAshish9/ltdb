@@ -16,6 +16,7 @@ import Popup from "./popup";
 import EditGame from "./editGame";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import Packages from "./viewPackages";
+import Thumbnail from "../../../../assets/thumbnail1.png";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -100,7 +101,7 @@ export default function SimpleTable({ data }) {
           aria-label="simple table"
           size="small"
         >
-          <TableHead>
+          <TableHead style={{ width: "100%" }}>
             <TableRow
               style={{
                 background: "#f4f4f4",
@@ -116,7 +117,7 @@ export default function SimpleTable({ data }) {
                   textAlign: "center",
                 }}
               >
-                {games && "S No."}
+                {games && games.length > 0 && "S No."}
                 {/* S No. */}
               </TableCell>
               <TableCell
@@ -172,6 +173,27 @@ export default function SimpleTable({ data }) {
             </TableRow>
           </TableHead>
 
+          {games && games.length === 0 && (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              flexDirection="column"
+              style={{ width: "85vw", height: "50vh" }}
+            >
+              <img src={Thumbnail} alt="No games" />
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                No Games Found!
+              </p>
+            </Box>
+          )}
+
           {!games && (
             <Box
               display="flex"
@@ -189,6 +211,7 @@ export default function SimpleTable({ data }) {
 
           <TableBody>
             {games &&
+              games.length > 0 &&
               games.map((row, k) => (
                 <TableRow
                   elevation={0}

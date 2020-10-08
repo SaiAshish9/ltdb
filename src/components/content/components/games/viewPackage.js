@@ -174,7 +174,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                 </Select>
               </FormControl>
             </Box>
-            <Box
+            {/* <Box
               display="flex"
               justifyContent="space-between"
               style={{ margin: "1rem 0" }}
@@ -201,7 +201,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                   ))}
                 </Select>
               </FormControl>
-            </Box>
+            </Box> */}
             <Box
               display="flex"
               justifyContent="space-between"
@@ -559,7 +559,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                               fontWeight: 500,
                             }}
                           >
-                            {i.sub_category.split("###")[1]}
+                            {i && i.sub_category.split("###")[1]}
                             {/* {i} */}
                           </TableCell>
                           <TableCell
@@ -569,7 +569,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                               fontWeight: 500,
                             }}
                           >
-                            {i.item.split("###")[1]}
+                            {i && i.item.split("###")[1]}
                             {/* {selectedItems[k] && selectedItems[k].split(" ")[1]} */}
                           </TableCell>
                           <TableCell

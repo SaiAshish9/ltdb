@@ -81,7 +81,7 @@ export default function CustomizedInputBase({ active, inActive }) {
           onChange={(e) => {
             setValue(e.target.value);
           }}
-          ref={register()}
+          // ref={register()}
           className={classes.input}
           placeholder="Search "
         />

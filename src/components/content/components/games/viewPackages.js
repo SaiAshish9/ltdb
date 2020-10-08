@@ -18,8 +18,10 @@ import EditPackage from "./editPackage";
 
 const ViewPackages = ({ classes, open, setOpen }) => {
   const {
-    state: { game_packages },
+    state: { game_packages, game_details },
     fetchPackage,
+    fetchGamePackages,
+    togglePackage,
   } = useContext(DataContext);
   const [openPackageDialog, setOpenPackageDialog] = useState(false);
   const [openEditPackageDialog, setOpenEditPackageDialog] = useState(false);
@@ -123,7 +125,7 @@ const ViewPackages = ({ classes, open, setOpen }) => {
                         textAlign: "center",
                       }}
                     >
-                      {i.game_name_en}
+                      {i.name_en}
                     </TableCell>
                     <TableCell
                       style={{
@@ -132,17 +134,24 @@ const ViewPackages = ({ classes, open, setOpen }) => {
                         textAlign: "center",
                       }}
                     >
-                      {i.game_name_ar}
+                      {i.name_ar}
                     </TableCell>
                     <TableCell
+                      onClick={async () => {
+                        await togglePackage(
+                          i.package_id,
+                          +i.status == 1 ? 0 : 1
+                        );
+                        await fetchGamePackages(game_details.game_id);
+                      }}
                       style={{
                         cursor: "pointer",
                         fontWeight: 500,
                         textAlign: "center",
-                        color: i.status !== 1 ? "red" : "green",
+                        color: +i.status != 1 ? "red" : "green",
                       }}
                     >
-                      {i.status === 1 ? "Active" : "InActive"}
+                      {+i.status == 1 ? "Active" : "InActive"}
                     </TableCell>
                     <TableCell
                       style={{
