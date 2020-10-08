@@ -49,7 +49,7 @@ export default function CustomizedInputBase({ active, inActive }) {
               else if (inActive) {
                 await fetchUsers(null, null, value, 0);
               } else {
-                await fetchUsers(null, null, value);
+                await fetchUsers(null, null, value,null);
               }
             }
             setSearched(true);

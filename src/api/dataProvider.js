@@ -117,26 +117,23 @@ const fetchItems = (dispatch) => async (page, limit, search, status) => {
       payload: null,
     });
   }
-  await Api(url)
-    .then((data) => {
-      dispatch({
-        type: "SET_PAGE_COUNT",
-        payload: JSON.parse(data.request.response)["parameter"]["last_page"],
-      });
+  const data = await Api(url);
+  if (data) {
+    dispatch({
+      type: "SET_PAGE_COUNT",
+      payload: JSON.parse(data.request.response)["parameter"]["last_page"],
+    });
 
-      dispatch({
-        type: "SET_ITEM_COUNT",
-        payload: JSON.parse(data.request.response)["parameter"]["total"],
-      });
-      dispatch({
-        type: "SET_ITEMS",
-        payload: data.data.data,
-      });
-    })
-    .catch((error) => console.log(error));
+    dispatch({
+      type: "SET_ITEM_COUNT",
+      payload: JSON.parse(data.request.response)["parameter"]["total"],
+    });
+    dispatch({
+      type: "SET_ITEMS",
+      payload: data.data.data,
+    });
+  }
 };
-
-
 
 const fetchGames = (dispatch) => async (page, limit, search, status) => {
   var url;
@@ -171,24 +168,22 @@ const fetchGames = (dispatch) => async (page, limit, search, status) => {
     });
   }
 
-  await Api(url)
-    .then((data) => {
-      dispatch({
-        type: "SET_GAME_PAGE_COUNT",
-        payload: JSON.parse(data.request.response)["parameter"]["last_page"],
-      });
+  const data = await Api(url);
+  if (data) {
+    dispatch({
+      type: "SET_GAME_PAGE_COUNT",
+      payload: JSON.parse(data.request.response)["parameter"]["last_page"],
+    });
 
-      dispatch({
-        type: "SET_GAME_COUNT",
-        payload: JSON.parse(data.request.response)["parameter"]["total"],
-      });
-      // console.log(data.data.data);
-      dispatch({
-        type: "SET_GAMES",
-        payload: data.data.data,
-      });
-    })
-    .catch((error) => console.log(error));
+    dispatch({
+      type: "SET_GAME_COUNT",
+      payload: JSON.parse(data.request.response)["parameter"]["total"],
+    });
+    dispatch({
+      type: "SET_GAMES",
+      payload: data.data.data,
+    });
+  }
 };
 
 const fetchUsers = (dispatch) => async (page, limit, search, status) => {
@@ -217,24 +212,24 @@ const fetchUsers = (dispatch) => async (page, limit, search, status) => {
     url = `admin/user/list?limit=10&&page=1&&search=${search}&&status=1`;
   }
 
-  if (page) {
-    dispatch({
-      type: "SET_USERS",
-      payload: null,
-    });
-  }
+  // if (page) {
+  //   dispatch({
+  //     type: "SET_USERS",
+  //     payload: null,
+  //   });
+  // }
 
-  await Api(url).then((data) => {
+  const data = await Api(url);
+  if (data) {
     dispatch({
       type: "SET_USERS_COUNT",
       payload: JSON.parse(data.request.response)["parameter"]["total"],
     });
-    console.log(data)
     dispatch({
       type: "SET_USERS",
       payload: data.data.data,
     });
-  });
+  }
 };
 
 const fetchUser = (dispatch) => async (id) => {
@@ -399,7 +394,6 @@ const addItem = (dispatch) => async (data) => {
   const ReactS3Client = new S3(config);
   await ReactS3Client.uploadFile(data.image)
     .then(async (data1) => {
-      // console.log(data1, data1.location.split("com/")[2]);
       await Api.post("admin/item/add", {
         category_id: data.category_id,
         sub_category_id: data.sub_category_id,
@@ -409,7 +403,7 @@ const addItem = (dispatch) => async (data) => {
         description_en: data.description_en,
         description_ar: data.description_ar,
         item_custom_values: data.item_custom_values,
-        image: data1.location.split("com/")[1],
+        image: data1 && data1.location.split("com/")[1],
         price: data.price,
         status: data.status,
       })
@@ -508,7 +502,7 @@ const editPackage = (dispatch) => async (data) => {
   console.log(data.newImgFile);
   if (data.newImgFile) {
     image = await uploadImage("game/package", data.newImgFile);
-  } else image = data.image.split("com/")[1];
+  } else image = data && data.image.split("com/")[1];
 
   new_cover_images = await Promise.all(
     data.new_cover_images.map(async (x) => {
@@ -524,7 +518,7 @@ const editPackage = (dispatch) => async (data) => {
 
   // console.log(image, [...data.cover_images, ...new_cover_images]);
   try {
-    const x= await Api.post("admin/game/add-package", {
+    const x = await Api.post("admin/game/add-package", {
       image,
       game_id: data.game_id,
       package_id: data.package_id,
@@ -535,7 +529,7 @@ const editPackage = (dispatch) => async (data) => {
       package_item: data.package_item,
       cover_images: [...data.cover_images, ...new_cover_images],
     });
-    console.log(x.data)
+    console.log(x.data);
   } catch (e) {
     console.log(e);
   }
