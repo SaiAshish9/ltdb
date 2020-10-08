@@ -47,7 +47,8 @@ const AddItem = () => {
   const {
     addItem,
     fetchItems,
-    state: { items },
+    fetchLinkableItems,
+    state:{ linkableItems}
   } = useContext(DataContext);
   const [customFields, setCustomFields] = useState([]);
   // const [customFieldValue, setCustomFieldValue] = useState();
@@ -61,6 +62,7 @@ const AddItem = () => {
   const [inActive, isInActive] = useState(false);
   const [item_available, is_item_available] = useState(false);
   const [item_value, setItemValue] = useState(null);
+
 
   const handleImgChange = (e) => {
     var file1 = e.target.files[0];
@@ -116,8 +118,9 @@ const AddItem = () => {
   const fetchSubCategories = (id) => {
     Api.post("admin/subcategory/category-wise-list", {
       category_id: id,
-    }).then((data) => {
+    }).then(async (data) => {
       console.log(data);
+      await fetchLinkableItems()
       setSubCategories(data.data.data);
       // if (data) fetchCustomFields(data.data.data[0]["sub_category_id"]);
     });
@@ -449,10 +452,10 @@ const AddItem = () => {
                           setItemValue(e.target.value);
                         }}
                       >
-                        {items &&
-                          items.map((i, k) => (
-                            <MenuItem value={i["item_id"]}>
-                              {i["name_en"]}
+                        {linkableItems &&
+                          linkableItems.map((i, k) => (
+                            <MenuItem key={k} value={i["item_id"]}>
+                              {i["name"]}
                             </MenuItem>
                           ))}
                       </Select>

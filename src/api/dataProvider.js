@@ -80,6 +80,11 @@ const reducer = (state, action) => {
         ...state,
         package_details: action.payload,
       };
+    case "SET_LINKABLE_ITEMS":
+      return {
+        ...state,
+        linkableItems: action.payload,
+      }
     default:
       return state;
   }
@@ -183,6 +188,19 @@ const fetchGames = (dispatch) => async (page, limit, search, status) => {
       type: "SET_GAMES",
       payload: data.data.data,
     });
+  }
+};
+
+const fetchLinkableItems = (dispatch) => async () => {
+  try {
+    const data = await Api("admin/item/get-linkable-items");
+    console.log(data)
+    dispatch({
+      type: "SET_LINKABLE_ITEMS",
+      payload: data.data.data,
+    });
+  } catch (e) {
+    console.log(e);
   }
 };
 
@@ -659,6 +677,7 @@ export const { Context, Provider } = createDataContext(
     toggleGameStatus,
     fetchGamePackages,
     fetchGameSubCategoryList,
+    fetchLinkableItems,
   },
   {
     items: [],
@@ -677,5 +696,6 @@ export const { Context, Provider } = createDataContext(
     game_count: 0,
     game_page_count: 0,
     resolution_list: null,
+    linkableItems: [],
   }
 );
