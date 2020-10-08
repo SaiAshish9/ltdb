@@ -13,7 +13,7 @@ import { Box, CircularProgress, Snackbar, IconButton } from "@material-ui/core";
 import moment from "moment";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import Popup from "./popup";
-import Thumbnail from '../../../../assets/thumbnail1.png'
+import Thumbnail from "../../../../assets/thumbnail1.png";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -218,6 +218,7 @@ export default function SimpleTable({ data }) {
 
           <TableBody>
             {items &&
+              items.length > 0 &&
               items.map((row, i) => (
                 <TableRow
                   elevation={0}
