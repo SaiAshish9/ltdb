@@ -97,15 +97,15 @@ const AddItem = () => {
       })
       .catch((error) => console.log(error));
 
-    Api(`admin/item/getitem?item_id=20`)
-      .then((data) => {
-        var x = data.data.data;
-        setDescription({
-          desc: x.description_en,
-          desc_ar: x.description_ar,
-        });
-      })
-      .catch((error) => console.log(error));
+    // Api(`admin/item/getitem?item_id=20`)
+    //   .then((data) => {
+    //     var x = data.data.data;
+    //     setDescription({
+    //       desc: x.description_en,
+    //       desc_ar: x.description_ar,
+    //     });
+    //   })
+    //   .catch((error) => console.log(error));
   }, []);
 
   const fetchSubCategories = (id) => {
