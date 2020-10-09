@@ -21,24 +21,6 @@ const Items = () => {
   }, []);
   return (
     <Box>
-      {/* <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        style={{ padding: "1rem 2rem" }}
-      >
-        <p
-          style={{
-            color: "#282b3c",
-            fontWeight: 600,
-            fontSize: "1.5rem",
-          }}
-        >
-          Items
-        </p>
-        <Box display="flex">
-        </Box>
-      </Box> */}
       <Box style={{ position: "absolute", top: 1, right: "2vw" }}>
         <AddItem />
       </Box>

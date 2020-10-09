@@ -66,7 +66,9 @@ const AddItem = () => {
     setNameEn("");
     setNameAr("");
     setImgFile(null);
+    setFile(null)
     setValue(0);
+    setDisabled(false);
     setDisabled(false);
     setOpen(false);
   };
@@ -93,7 +95,6 @@ const AddItem = () => {
           onChange={(e) => {
             handleImgChange(e);
             setImgFile(e.target.files[0]);
-            // setFile(e.target.files[0]);
           }}
           style={{ display: "none" }}
           id="icon-button-file"
@@ -203,6 +204,7 @@ const AddItem = () => {
                   setNameEn("");
                   setNameAr("");
                   setImgFile(null);
+                  setFile(null)
                   setValue(0);
                   setDisabled(false);
                   setDisabled(false);
@@ -227,7 +229,7 @@ const AddItem = () => {
               <TextField
                 variant="outlined"
                 label="name_ar"
-                name={name_ar}
+                value={name_ar}
                 onChange={(e) => setNameAr(e.target.value)}
                 style={{ width: "47%" }}
               />

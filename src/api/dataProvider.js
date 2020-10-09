@@ -84,7 +84,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         linkableItems: action.payload,
-      }
+      };
     default:
       return state;
   }
@@ -194,7 +194,7 @@ const fetchGames = (dispatch) => async (page, limit, search, status) => {
 const fetchLinkableItems = (dispatch) => async () => {
   try {
     const data = await Api("admin/item/get-linkable-items");
-    console.log(data)
+    console.log(data);
     dispatch({
       type: "SET_LINKABLE_ITEMS",
       payload: data.data.data,
@@ -229,14 +229,6 @@ const fetchUsers = (dispatch) => async (page, limit, search, status) => {
   if (status === 1 && search) {
     url = `admin/user/list?limit=10&&page=1&&search=${search}&&status=1`;
   }
-
-  // if (page) {
-  //   dispatch({
-  //     type: "SET_USERS",
-  //     payload: null,
-  //   });
-  // }
-
   const data = await Api(url);
   if (data) {
     dispatch({
@@ -290,7 +282,6 @@ const togglePackage = (dispatch) => async (id, action) => {
   try {
     await Api.post(`admin/game/package-block-unblock`, { ...x }).then(
       async (data) => {
-        // console.log(data);
       }
     );
 
@@ -313,7 +304,6 @@ const toggleItemStatus = (dispatch) => async (id, action) => {
   clearMessage();
 
   await Api.post(`admin/item/block-unblock`, { ...x }).then(async (data) => {
-    // console.log(data);
   });
 
   dispatch({
@@ -332,7 +322,6 @@ const toggleGameStatus = (dispatch) => async (id, action) => {
   clearMessage();
 
   await Api.post(`admin/game/block-unblock`, { ...x }).then(async (data) => {
-    // console.log(data);
   });
 
   dispatch({
@@ -357,7 +346,6 @@ const toggleUserStatus = (dispatch) => async (id, action) => {
   };
   clearMessage();
   await Api.post(`admin/user/block-unblock`, { ...x }).then(async (data) => {
-    // console.log(data);
   });
   dispatch({
     type: "SET_MESSAGE",
@@ -409,36 +397,129 @@ const addItem = (dispatch) => async (data) => {
     accessKeyId: "AKIA3JWMPNMIYUFSR54M",
     secretAccessKey: "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",
   };
+  console.log(data);
   const ReactS3Client = new S3(config);
   await ReactS3Client.uploadFile(data.image)
     .then(async (data1) => {
-      await Api.post("admin/item/add", {
-        category_id: data.category_id,
-        sub_category_id: data.sub_category_id,
-        brand_id: data.brand_id,
-        name_en: data.name_en,
-        name_ar: data.name_ar,
-        description_en: data.description_en,
-        description_ar: data.description_ar,
-        item_custom_values: data.item_custom_values,
-        image: data1 && data1.location.split("com/")[1],
-        price: data.price,
-        status: data.status,
-      })
-        .then(async (data) => {
-          dispatch({
-            type: "SET_MESSAGE",
-            payload: "Item Added Successfully",
-          });
-          await fetchItems();
-        })
-        .catch((error) => {
-          dispatch({
-            type: "SET_MESSAGE",
-            payload: "Some error occurred while adding new item",
-          });
-          console.log(error);
-        });
+      if (data.link_item_id && data.link_item_id.length > 0) {
+        if (data.item_custom_values && data.item_custom_values.length > 0) {
+          await Api.post("admin/item/add", {
+            category_id: data.category_id,
+            sub_category_id: data.sub_category_id,
+            brand_id: data.brand_id,
+            name_en: data.name_en,
+            name_ar: data.name_ar,
+            description_en: data.description_en,
+            description_ar: data.description_ar,
+            item_custom_values: data.item_custom_values,
+            link_item_id: data.link_item_id,
+            image: data1 && data1.location.split("com/")[1],
+            price: data.price,
+            status: data.status,
+          })
+            .then(async (data) => {
+              console.log(data);
+              dispatch({
+                type: "SET_MESSAGE",
+                payload: "Item Added Successfully",
+              });
+              await fetchItems();
+            })
+            .catch((error) => {
+              dispatch({
+                type: "SET_MESSAGE",
+                payload: "Some error occurred while adding new item",
+              });
+              console.log(error);
+            });
+        } else {
+          await Api.post("admin/item/add", {
+            category_id: data.category_id,
+            sub_category_id: data.sub_category_id,
+            brand_id: data.brand_id,
+            name_en: data.name_en,
+            name_ar: data.name_ar,
+            description_en: data.description_en,
+            description_ar: data.description_ar,
+            link_item_id: data.link_item_id,
+            image: data1 && data1.location.split("com/")[1],
+            price: data.price,
+            status: data.status,
+          })
+            .then(async (data) => {
+              console.log(data);
+              dispatch({
+                type: "SET_MESSAGE",
+                payload: "Item Added Successfully",
+              });
+              await fetchItems();
+            })
+            .catch((error) => {
+              dispatch({
+                type: "SET_MESSAGE",
+                payload: "Some error occurred while adding new item",
+              });
+              console.log(error);
+            });
+        }
+      } else {
+        if (data.item_custom_values && data.item_custom_values.length > 0) {
+          await Api.post("admin/item/add", {
+            category_id: data.category_id,
+            sub_category_id: data.sub_category_id,
+            brand_id: data.brand_id,
+            name_en: data.name_en,
+            name_ar: data.name_ar,
+            description_en: data.description_en,
+            description_ar: data.description_ar,
+            item_custom_values: data.item_custom_values,
+            image: data1 && data1.location.split("com/")[1],
+            price: data.price,
+            status: data.status,
+          })
+            .then(async (data) => {
+              dispatch({
+                type: "SET_MESSAGE",
+                payload: "Item Added Successfully",
+              });
+              await fetchItems();
+            })
+            .catch((error) => {
+              dispatch({
+                type: "SET_MESSAGE",
+                payload: "Some error occurred while adding new item",
+              });
+              console.log(error);
+            });
+        } else {
+          await Api.post("admin/item/add", {
+            category_id: data.category_id,
+            sub_category_id: data.sub_category_id,
+            brand_id: data.brand_id,
+            name_en: data.name_en,
+            name_ar: data.name_ar,
+            description_en: data.description_en,
+            description_ar: data.description_ar,
+            image: data1 && data1.location.split("com/")[1],
+            price: data.price,
+            status: data.status,
+          })
+            .then(async (data) => {
+              dispatch({
+                type: "SET_MESSAGE",
+                payload: "Item Added Successfully",
+              });
+              await fetchItems();
+            })
+            .catch((error) => {
+              dispatch({
+                type: "SET_MESSAGE",
+                payload: "Some error occurred while adding new item",
+              });
+              console.log(error);
+            });
+        }
+      }
     })
     .catch((err) => console.error(err));
 };

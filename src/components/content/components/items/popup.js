@@ -44,7 +44,6 @@ const Popup = ({ classes, open, setOpen }) => {
           <Box
             style={{
               padding: "2rem",
-              // width: "80%",
             }}
           >
             <Box display="flex" justifyContent="space-between">
@@ -65,17 +64,20 @@ const Popup = ({ classes, open, setOpen }) => {
                 <TextField
                   defaultValue={item_details && item_details.name_en}
                   variant="outlined"
+                  disabled
                   label="Name_en"
                 />
                 <TextField
                   defaultValue={item_details && item_details.name_ar}
                   variant="outlined"
+                  disabled
                   label="Name_ar"
                 />
               </Box>
               <TextField
                 rows={7}
                 multiline
+                disabled
                 label="Description_en"
                 variant="outlined"
                 value={item_details && item_details.description_en}
@@ -83,6 +85,7 @@ const Popup = ({ classes, open, setOpen }) => {
               <TextField
                 rows={7}
                 multiline
+                disabled
                 label="Description_ar"
                 variant="outlined"
                 defaultValue={item_details && item_details.description_ar}
@@ -98,6 +101,7 @@ const Popup = ({ classes, open, setOpen }) => {
                   item_details && item_details.price ? item_details.price : null
                 }
                 variant="outlined"
+                disabled
                 label="Price"
                 type="number"
               />
@@ -108,11 +112,13 @@ const Popup = ({ classes, open, setOpen }) => {
                     : "InActive"
                 }
                 variant="outlined"
+                disabled
                 label="Status"
               />
               <TextField
                 variant="outlined"
                 id="date"
+                disabled
                 label="created_at"
                 // type="date"
                 value={
@@ -120,7 +126,6 @@ const Popup = ({ classes, open, setOpen }) => {
                   moment(new Date(item_details.created_at)).format(
                     "DD MMM YYYY"
                   )
-                  // moment(item_details.created_at).format("DD MM YYYY")
                 }
                 InputLabelProps={{
                   shrink: true,
@@ -137,16 +142,19 @@ const Popup = ({ classes, open, setOpen }) => {
                 defaultValue={item_details && item_details.link_item_id}
                 label="link_item_id"
                 type="number"
+                disabled
               />
               <TextField
                 variant="outlined"
                 defaultValue={item_details && item_details.category_id}
                 label="category"
+                disabled
               />
               <TextField
                 variant="outlined"
                 defaultValue={item_details && item_details.sub_category_id}
                 label="sub-category"
+                disabled
               />
             </Box>
             <Box display="flex" alignItems="center" justifyContent="center">
@@ -168,11 +176,13 @@ const Popup = ({ classes, open, setOpen }) => {
                     variant="outlined"
                     label="value_en"
                     defaultValue={i.value_en}
+                    disabled
                   />
                   <TextField
                     variant="outlined"
                     label="value_ar"
                     defaultValue={i.value_ar}
+                    disabled
                   />
                 </Box>
               ))}

@@ -14,6 +14,9 @@ import moment from "moment";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import Popup from "./popup";
 import Thumbnail from "../../../../assets/thumbnail1.png";
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
+import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
+import EditItem from "./editItem";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -32,6 +35,7 @@ export default function SimpleTable({ data }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
+  const [openEditDialog, setOpenEditDialog]=useState(false);
 
   const {
     state: { items, items_count, page_count, message },
@@ -175,9 +179,12 @@ export default function SimpleTable({ data }) {
                 style={{
                   fontWeight: "bold",
                   fontSize: "0.8rem",
+                  paddingLeft: "2rem",
                   color: "#282b3c",
                 }}
-              ></TableCell>
+              >
+                Action
+              </TableCell>
             </TableRow>
           </TableHead>
           {items && items.length === 0 && (
@@ -238,7 +245,6 @@ export default function SimpleTable({ data }) {
                     scope="row"
                   >
                     {i + 1}
-                    {/* {row.item_id} */}
                   </TableCell>
                   <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
                     {row.name_en}
@@ -276,14 +282,24 @@ export default function SimpleTable({ data }) {
                       fontWeight: 500,
                     }}
                   >
-                    <IconButton
-                      onClick={async () => {
-                        await fetchItem(row.item_id);
-                        setOpen(true);
-                      }}
-                    >
-                      <InfoOutlinedIcon style={{ cursor: "pointer" }} />{" "}
-                    </IconButton>
+                    <Box display="flex" alignItems="center">
+                      <IconButton
+                        onClick={async () => {
+                          await fetchItem(row.item_id);
+                          setOpen(true);
+                        }}
+                      >
+                        <VisibilityOutlinedIcon style={{ cursor: "pointer" }} />{" "}
+                      </IconButton>
+                      <IconButton
+                        onClick={async () => {
+                          await fetchItem(row.item_id);
+                          setOpenEditDialog(true);
+                        }}
+                      >
+                        <EditOutlinedIcon />
+                      </IconButton>
+                    </Box>
                   </TableCell>
                 </TableRow>
               ))}
@@ -300,6 +316,11 @@ export default function SimpleTable({ data }) {
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
       <Popup classes={classes} open={open} setOpen={setOpen} />
+      <EditItem
+        classes={classes}
+        open={openEditDialog}
+        setOpen={setOpenEditDialog}
+      />
     </React.Fragment>
   );
 }

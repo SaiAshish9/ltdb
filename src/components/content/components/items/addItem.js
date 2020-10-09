@@ -13,6 +13,7 @@ import {
   FormControl,
   FormGroup,
   FormControlLabel,
+  Checkbox,
   Switch,
   CircularProgress,
 } from "@material-ui/core";
@@ -61,6 +62,7 @@ const AddItem = () => {
   const [item_available, is_item_available] = useState(false);
   const [item_value, setItemValue] = useState(null);
   const [items, setItems] = useState([]);
+  const [checked, setChecked] = useState(false);
 
   const handleChangeMultiple = (e) => {
     setItems(e.target.value);
@@ -117,7 +119,6 @@ const AddItem = () => {
       console.log(data);
       await fetchLinkableItems();
       setSubCategories(data.data.data);
-      // if (data) fetchCustomFields(data.data.data[0]["sub_category_id"]);
     });
   };
 
@@ -153,7 +154,7 @@ const AddItem = () => {
       item_custom_values: y,
     });
     setDisabled(true);
-    if (item_value) {
+    if (items && items.length > 0) {
       await addItem({
         category_id: subCategories[subValue]["category_id"],
         sub_category_id: subCategories[subValue]["sub_category_id"],
@@ -196,6 +197,7 @@ const AddItem = () => {
     setItemValue(null);
     setCustomFields(null);
     setPrice(0);
+    setChecked(false);
     setFile(null);
     await fetchItems();
     await fetchCategories();
@@ -215,14 +217,7 @@ const AddItem = () => {
           accept=".png,.jpeg,.jpg"
           onChange={(e) => {
             handleImgChange(e);
-            console.log(e.target.files[0]);
-            // console.log(setImgFile(e.target.files[0]));
             setImgFile(e.target.files[0]);
-
-            // uploadFile(e.target.files[0], config)
-            //   .then((data) => console.log(data))
-            //   .catch((err) => console.error(err));
-
             setFile(e.target.files[0]);
           }}
           style={{ display: "none" }}
@@ -325,6 +320,7 @@ const AddItem = () => {
                   setDescription(null);
                   setCustomFields(null);
                   setPrice(0);
+                  setChecked(false);
                   setFile(null);
                   setDisabled(false);
                   setOpen(false);
@@ -466,61 +462,80 @@ const AddItem = () => {
                   </Box>
                 )}
 
-                <Box
-                  justifyContent="space-between"
-                  style={{ margin: "1rem 0" }}
-                >
-                  {customFields && customFields.length > 0 && (
-                    <p
-                      style={{
-                        fontSize: "1rem",
-                        color: "#282b3c",
-                        fontWeight: 600,
-                        textAlign: "center",
-                      }}
-                    >
-                      Custom Fields :
-                    </p>
-                  )}
+                {customFields && customFields.length > 0 && (
+                  <FormControlLabel
+                    style={{ marginVertical: "2rem" }}
+                    control={
+                      <Checkbox
+                        checked={checked}
+                        onChange={() => {
+                          setChecked(!checked);
+                        }}
+                        name="checkedB"
+                        color="primary"
+                      />
+                    }
+                    label="Add custom fields"
+                  />
+                )}
 
-                  {customFields &&
-                    customFields.map((i, k) => (
-                      <Box key={k}>
-                        <p
-                          style={{
-                            fontSize: "1rem",
-                            color: "#282b3c",
-                            fontWeight: 600,
-                          }}
-                        >
-                          {i.name_en}
-                        </p>
+                {checked && (
+                  <Box
+                    justifyContent="space-between"
+                    style={{ margin: "1rem 0" }}
+                  >
+                    {customFields && customFields.length > 0 && (
+                      <p
+                        style={{
+                          fontSize: "1rem",
+                          color: "#282b3c",
+                          fontWeight: 600,
+                          textAlign: "center",
+                        }}
+                      >
+                        Custom Fields :
+                      </p>
+                    )}
 
-                        <Box
-                          display="flex"
-                          justifyContent="space-between"
-                          style={{ margin: "1rem 0" }}
-                        >
-                          <TextField
-                            variant="outlined"
-                            label="value_en"
-                            required
-                            inputRef={register}
-                            name={`value_en${k + 1}`}
-                            style={{ width: "47%" }}
-                          />
-                          <TextField
-                            variant="outlined"
-                            label="value_ar"
-                            required
-                            inputRef={register}
-                            name={`value_ar${k + 1}`}
-                            style={{ width: "47%" }}
-                          />
+                    {customFields &&
+                      customFields.map((i, k) => (
+                        <Box key={k}>
+                          <p
+                            style={{
+                              fontSize: "1rem",
+                              color: "#282b3c",
+                              fontWeight: 600,
+                            }}
+                          >
+                            {i.name_en}
+                          </p>
+
+                          <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            style={{ margin: "1rem 0" }}
+                          >
+                            <TextField
+                              variant="outlined"
+                              label="value_en"
+                              required
+                              inputRef={register}
+                              name={`value_en${k + 1}`}
+                              style={{ width: "47%" }}
+                            />
+                            <TextField
+                              variant="outlined"
+                              label="value_ar"
+                              required
+                              inputRef={register}
+                              name={`value_ar${k + 1}`}
+                              style={{ width: "47%" }}
+                            />
+                          </Box>
                         </Box>
-                      </Box>
-                    ))}
-                </Box>
+                      ))}
+                  </Box>
+                )}
               </Box>
               <Box
                 display="flex"
