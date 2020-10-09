@@ -55,7 +55,6 @@ const AddPackage = ({ open, classes, setOpen }) => {
     await fetchItems();
     const data = await fetchGameSubCategoryList();
     setSubCategories(data);
-    // setSelectedItems(items);
     console.log(items);
   };
 
@@ -284,10 +283,8 @@ const AddPackage = ({ open, classes, setOpen }) => {
                     >
                       <IconButton
                         onClick={() => {
-                          const x = [
-                            ...coverImages.splice(0, k),
-                            ...coverImages.splice(k + 1, 0),
-                          ];
+                          const x = [...coverImages];
+                          x.splice(k, 1);
                           setCoverImages(x);
                         }}
                         style={{
@@ -438,8 +435,6 @@ const AddPackage = ({ open, classes, setOpen }) => {
                     onChange={(e) => {
                       // setItemValue(e.target.value);
                       if (
-                        // true
-                        // !selectedItems.includes(e.target.value)
                         selectedItems.length < selectedSubCategories.length
                       )
                         setSelectedItems([...selectedItems, e.target.value]);
@@ -563,9 +558,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                               fontWeight: 500,
                             }}
                           >
-                            {/* {i.item} */}
-                            {selectedItems[k] &&
-                              selectedItems[k].split(" ")[1]}
+                            {selectedItems[k] && selectedItems[k].split(" ")[1]}
                           </TableCell>
                           <TableCell
                             style={{
@@ -576,14 +569,17 @@ const AddPackage = ({ open, classes, setOpen }) => {
                           >
                             <IconButton
                               onClick={() => {
-                                setSelectedItems(
-                                  selectedItems.filter((x) => x !== i)
-                                );
-                                setSelectedSubCategories(
-                                  selectedSubCategories.filter(
-                                    (x) => x !== selectedSubCategories[k]
-                                  )
-                                );
+                                if (selectedItems.length !== 1) {
+                                  const x=[...selectedItems]
+                                  const y=[...selectedSubCategories]
+                                  x.splice(k,1)
+                                  y.splice(k,1)
+                                  setSelectedItems(x)       
+                                  setSelectedSubCategories(y);
+                                } else {
+                                  setSelectedItems([]);
+                                  setSelectedSubCategories([]);
+                                }
                               }}
                               style={{ padding: 0 }}
                             >

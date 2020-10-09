@@ -51,7 +51,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
   const [disabled, setDisabled] = useState(false);
   const [newCoverImages, setNewCoverImages] = useState([]);
   const [deletedCoverImages, setDeletedCoverImages] = useState([]);
-  const [newImgFile,setNewImgFile] = useState(null)
+  const [newImgFile, setNewImgFile] = useState(null);
 
   const handleChangedData = useCallback(async () => {
     setDisabled(true);
@@ -93,7 +93,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
     setDisabled(true);
     await editPackage({
       image: file,
-      newImgFile:newImgFile,
+      newImgFile: newImgFile,
       graphic_quality: +quality ? +quality : +package_details.graphic_quality,
       name_en,
       name_ar,
@@ -118,7 +118,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
       var reader = new FileReader();
       reader.onload = (e) => {
         setNewFile(reader.result);
-        setNewImgFile(file1)
+        setNewImgFile(file1);
         setImgFile(file1);
       };
       reader.readAsDataURL(file1);
@@ -280,7 +280,9 @@ const EditPackage = ({ open, classes, setOpen }) => {
                   Package Image :
                 </p>
                 <Paper style={{ width: "47%" }}>
-                  <label htmlFor={`package-image2${package_details.package_id}`}>
+                  <label
+                    htmlFor={`package-image2${package_details.package_id}`}
+                  >
                     <Box
                       display="flex"
                       alignItems="center"
@@ -340,7 +342,9 @@ const EditPackage = ({ open, classes, setOpen }) => {
                   {coverImages.length > 0 ? (
                     coverImages.map((i, k) => (
                       <input
-                        id={`cover-image2${k + 1 + coverImages.length}${package_details.package_id}`}
+                        id={`cover-image2${k + 1 + coverImages.length}${
+                          package_details.package_id
+                        }`}
                         type="file"
                         style={{ display: "none" }}
                         accept=".png,.jpg,.jpeg"
@@ -349,7 +353,9 @@ const EditPackage = ({ open, classes, setOpen }) => {
                     ))
                   ) : (
                     <input
-                      id={`cover-image2${coverImages.length + 1}${package_details.package_id}`}
+                      id={`cover-image2${coverImages.length + 1}${
+                        package_details.package_id
+                      }`}
                       type="file"
                       style={{ display: "none" }}
                       accept=".png,.jpg,.jpeg"
@@ -443,7 +449,11 @@ const EditPackage = ({ open, classes, setOpen }) => {
                       </Box>
                     ))}
 
-                  <label htmlFor={`cover-image2${coverImages.length + 1}${package_details.package_id}`}>
+                  <label
+                    htmlFor={`cover-image2${coverImages.length + 1}${
+                      package_details.package_id
+                    }`}
+                  >
                     <Avatar
                       style={{
                         height: 100,
@@ -661,14 +671,17 @@ const EditPackage = ({ open, classes, setOpen }) => {
                           >
                             <IconButton
                               onClick={() => {
-                                setSelectedItems(
-                                  selectedItems.filter((x) => x !== i)
-                                );
-                                setSelectedSubCategories(
-                                  selectedSubCategories.filter(
-                                    (x) => x !== selectedSubCategories[k]
-                                  )
-                                );
+                                if (selectedItems.length !== 1) {
+                                  const x = [...selectedItems];
+                                  const y = [...selectedSubCategories];
+                                  x.splice(k, 1);
+                                  y.splice(k, 1);
+                                  setSelectedItems(x);
+                                  setSelectedSubCategories(y);
+                                } else {
+                                  setSelectedItems([]);
+                                  setSelectedSubCategories([]);
+                                }
                               }}
                               style={{ padding: 0 }}
                             >
