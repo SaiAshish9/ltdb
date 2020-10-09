@@ -9,7 +9,7 @@ import {
   TextField,
   Select,
   MenuItem,
-  Avatar,
+  Input,
   FormControl,
   FormGroup,
   FormControlLabel,
@@ -37,7 +37,7 @@ const AddItem = () => {
   const [subCategories, setSubCategories] = useState(null);
   const [subValue, setSubValue] = useState("a");
   const [value, setValue] = useState(null);
-  const [brandValue, setBrandValue] = useState(0);
+  const [brandValue, setBrandValue] = useState(null);
   const [description, setDescription] = useState(null);
   const [price, setPrice] = useState(null);
   const [name_en, setNameEn] = useState("");
@@ -48,13 +48,11 @@ const AddItem = () => {
     addItem,
     fetchItems,
     fetchLinkableItems,
-    state:{ linkableItems}
+    state: { linkableItems },
   } = useContext(DataContext);
   const [customFields, setCustomFields] = useState([]);
-  // const [customFieldValue, setCustomFieldValue] = useState();
   const [fields, setFields] = useState([]);
   const { register, handleSubmit } = useForm();
-  // const [valueData, setValueData] = useState(null);
   const [file, setFile] = useState(null);
   const [imgFile, setImgFile] = useState(null);
   const [disabled, setDisabled] = useState(false);
@@ -62,7 +60,11 @@ const AddItem = () => {
   const [inActive, isInActive] = useState(false);
   const [item_available, is_item_available] = useState(false);
   const [item_value, setItemValue] = useState(null);
+  const [items, setItems] = useState([]);
 
+  const handleChangeMultiple = (e) => {
+    setItems(e.target.value);
+  };
 
   const handleImgChange = (e) => {
     var file1 = e.target.files[0];
@@ -97,30 +99,23 @@ const AddItem = () => {
         setData(data.data.data);
       })
       .catch((error) => console.log(error));
+    fetchCategories();
+  }, []);
 
-    Api(`admin/category/list`)
+  const fetchCategories = async () => {
+    await Api(`admin/category/list`)
       .then((data) => {
         setCategories(data.data.data);
       })
       .catch((error) => console.log(error));
-
-    // Api(`admin/item/getitem?item_id=20`)
-    //   .then((data) => {
-    //     var x = data.data.data;
-    //     setDescription({
-    //       desc: x.description_en,
-    //       desc_ar: x.description_ar,
-    //     });
-    //   })
-    //   .catch((error) => console.log(error));
-  }, []);
+  };
 
   const fetchSubCategories = (id) => {
     Api.post("admin/subcategory/category-wise-list", {
       category_id: id,
     }).then(async (data) => {
       console.log(data);
-      await fetchLinkableItems()
+      await fetchLinkableItems();
       setSubCategories(data.data.data);
       // if (data) fetchCustomFields(data.data.data[0]["sub_category_id"]);
     });
@@ -164,7 +159,7 @@ const AddItem = () => {
         sub_category_id: subCategories[subValue]["sub_category_id"],
         brand_id: data[brandValue]["brand_id"],
         name_en: name_en,
-        link_item_id:item_value,
+        link_item_id: items,
         name_ar: name_ar,
         description_en: desc_en,
         description_ar: desc_ar,
@@ -195,12 +190,15 @@ const AddItem = () => {
     setNameAr("");
     setDescEn("");
     setDescAr("");
+    setValue(null);
     setBrandValue(null);
     setDescription(null);
+    setItemValue(null);
     setCustomFields(null);
     setPrice(0);
     setFile(null);
     await fetchItems();
+    await fetchCategories();
     setDisabled(false);
     setOpen(false);
   };
@@ -300,16 +298,6 @@ const AddItem = () => {
             </p>
           </Box>
         </Box>
-
-        {/* <Fab
-          size="medium"
-          onClick={() => {
-            setOpen(true);
-          }}
-          color="secondary"
-        >
-          <Add />
-        </Fab> */}
         <Backdrop open={open} className={classes.backdrop}>
           <Paper
             style={{
@@ -324,6 +312,20 @@ const AddItem = () => {
             <Box display="flex" flexDirection="row-reverse">
               <IconButton
                 onClick={() => {
+                  setSubCategories(null);
+                  setCategories(null);
+                  setNameEn("");
+                  fetchCategories();
+                  setNameAr("");
+                  setDescEn("");
+                  setDescAr("");
+                  setItemValue(null);
+                  setValue(null);
+                  setBrandValue(null);
+                  setDescription(null);
+                  setCustomFields(null);
+                  setPrice(0);
+                  setFile(null);
                   setDisabled(false);
                   setOpen(false);
                 }}
@@ -447,10 +449,11 @@ const AddItem = () => {
                     </p>
                     <FormControl style={{ width: "47%" }}>
                       <Select
-                        value={item_value}
-                        onChange={(e) => {
-                          setItemValue(e.target.value);
-                        }}
+                        value={items}
+                        multiple
+                        input={<Input />}
+                        displayEmpty
+                        onChange={handleChangeMultiple}
                       >
                         {linkableItems &&
                           linkableItems.map((i, k) => (
@@ -534,7 +537,7 @@ const AddItem = () => {
                 <TextField
                   variant="outlined"
                   label="name_ar"
-                  name={name_ar}
+                  value={name_ar}
                   onChange={(e) => setNameAr(e.target.value)}
                   style={{ width: "47%" }}
                 />

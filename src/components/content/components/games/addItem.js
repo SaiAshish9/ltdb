@@ -61,7 +61,12 @@ const AddItem = () => {
       value,
       imgFile,
     });
+
     await fetchGames();
+    setNameEn("");
+    setNameAr("");
+    setImgFile(null);
+    setValue(0);
     setDisabled(false);
     setOpen(false);
   };
@@ -195,6 +200,11 @@ const AddItem = () => {
             <Box display="flex" flexDirection="row-reverse">
               <IconButton
                 onClick={() => {
+                  setNameEn("");
+                  setNameAr("");
+                  setImgFile(null);
+                  setValue(0);
+                  setDisabled(false);
                   setDisabled(false);
                   setOpen(false);
                 }}

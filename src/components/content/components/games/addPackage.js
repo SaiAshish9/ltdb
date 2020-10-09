@@ -4,7 +4,6 @@ import {
   Fab,
   Backdrop,
   Paper,
-  makeStyles,
   IconButton,
   TextField,
   Select,
@@ -32,8 +31,8 @@ const AddPackage = ({ open, classes, setOpen }) => {
   const [subCategories, setSubCategories] = useState(null);
   const [subCategoryValue, setSubCategoryValue] = useState(0);
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
-  const [name_en, setNameEn] = useState(null);
-  const [name_ar, setNameAr] = useState(null);
+  const [name_en, setNameEn] = useState("");
+  const [name_ar, setNameAr] = useState("");
   const [quality, setQuality] = useState(null);
   const [imgFile, setImgFile] = useState(null);
   const { register, handleSubmit } = useForm();
@@ -73,6 +72,15 @@ const AddPackage = ({ open, classes, setOpen }) => {
         item_id: +selectedItems[k].split(" ")[0],
       })),
     });
+    setNameEn("");
+    setNameAr("");
+    setQuality(null);
+    setImgFile(null);
+    setCoverImages([]);
+    setSelectedItems([]);
+    setSelectedSubCategories([]);
+    setValue(null);
+    setFile(null);
     setDisabled(false);
     setOpen(false);
   };
@@ -122,6 +130,15 @@ const AddPackage = ({ open, classes, setOpen }) => {
             <Box display="flex" flexDirection="row-reverse">
               <IconButton
                 onClick={() => {
+                  setNameEn("");
+                  setNameAr("");
+                  setQuality(null);
+                  setImgFile(null);
+                  setCoverImages([]);
+                  setSelectedItems([]);
+                  setSelectedSubCategories([]);
+                  setValue(null);
+                  setFile(null);
                   setDisabled(false);
                   setOpen(false);
                 }}
@@ -175,7 +192,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
               <TextField
                 variant="outlined"
                 label="Arabic Name"
-                name={name_ar}
+                value={name_ar}
                 onChange={(e) => setNameAr(e.target.value)}
                 style={{ width: "47%" }}
               />
@@ -399,19 +416,6 @@ const AddPackage = ({ open, classes, setOpen }) => {
                     )}
                   </Select>
                 </FormControl>
-                {/* {selectedSubCategories.map((i, k) => (
-                  <p
-                    onClick={() => {
-                      setSelectedSubCategories(
-                        selectedSubCategories.filter((x) => x !== i)
-                      );
-                    }}
-                    style={{ cursor: "pointer" }}
-                    key={k}
-                  >
-                    {i && i.split(" ")[1]}
-                  </p>
-                ))} */}
               </Box>
 
               <Box
@@ -434,9 +438,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                     value={itemValue}
                     onChange={(e) => {
                       // setItemValue(e.target.value);
-                      if (
-                        selectedItems.length < selectedSubCategories.length
-                      )
+                      if (selectedItems.length < selectedSubCategories.length)
                         setSelectedItems([...selectedItems, e.target.value]);
                       console.log([...selectedItems, e.target.value]);
                     }}
@@ -452,42 +454,6 @@ const AddPackage = ({ open, classes, setOpen }) => {
                     )}
                   </Select>
                 </FormControl>
-                <Box>
-                  {/* {selectedItems.map((i, k) => (
-                    <Box
-                      display="flex"
-                      justifyContent="space-between"
-                      alignItems="center"
-                    >
-                      <p
-                        key={k}
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          setSelectedItems(
-                            selectedItems.filter((x) => x !== i)
-                          );
-                        }}
-                      >
-                        {i && i.split(" ")[1]}
-                      </p>
-                      <IconButton
-                        onClick={() => {
-                          setSelectedItems(
-                            selectedItems.filter((x) => x !== i)
-                          );
-                          setSelectedSubCategories(
-                            selectedSubCategories.filter(
-                              (x) => x !== selectedSubCategories[k]
-                            )
-                          );
-                        }}
-                        style={{ padding: 0, height: 20, width: 20 }}
-                      >
-                        <GiCancel />
-                      </IconButton>
-                    </Box>
-                  ))} */}
-                </Box>
               </Box>
             </Box>
 
@@ -570,11 +536,11 @@ const AddPackage = ({ open, classes, setOpen }) => {
                             <IconButton
                               onClick={() => {
                                 if (selectedItems.length !== 1) {
-                                  const x=[...selectedItems]
-                                  const y=[...selectedSubCategories]
-                                  x.splice(k,1)
-                                  y.splice(k,1)
-                                  setSelectedItems(x)       
+                                  const x = [...selectedItems];
+                                  const y = [...selectedSubCategories];
+                                  x.splice(k, 1);
+                                  y.splice(k, 1);
+                                  setSelectedItems(x);
                                   setSelectedSubCategories(y);
                                 } else {
                                   setSelectedItems([]);
