@@ -63,9 +63,8 @@ const EditDialog = ({
 
     Api.post("admin/subcategory/add", res)
       .then((data) => {
-        fetchSubCategories(current.categoryId);
+        fetchSubCategories(current.categoryId,null);
         setOpenEditDialog(false);
-        // setOpen(false);
       })
       .catch((error) => console.log(error));
   };

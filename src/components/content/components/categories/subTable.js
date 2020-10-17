@@ -66,7 +66,7 @@ export default function DenseTable({
           margin: "0 2rem",
         }}
       >
-        <Search />
+        <Search  selected={selected} fetchSubCategories={fetchSubCategories} />
       </Box>
       <br />
       {!open && (

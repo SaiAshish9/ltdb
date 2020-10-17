@@ -28,26 +28,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CustomizedInputBase({ active, inActive }) {
+export default function CustomizedInputBase({ selected, fetchSubCategories }) {
   const classes = useStyles();
-  const [value, setValue] = useState('');
-  const { fetchUsers } = useContext(DataContext);
+  const [value, setValue] = useState("");
   const [searched, setSearched] = useState(false);
 
-  const onSubmit = (data) => {};
-
   return (
-    <Paper  className={classes.root}>
+    <Paper className={classes.root}>
       {!searched ? (
         <IconButton
           onClick={async () => {
             if (value) {
-              if (active) await fetchUsers(null, null, value, 1);
-              else if (inActive) {
-                await fetchUsers(null, null, value, 0);
-              } else {
-                await fetchUsers(null, null, value);
-              }
+              await fetchSubCategories(selected.categoryId, value);
             }
             setSearched(true);
           }}
@@ -60,7 +52,7 @@ export default function CustomizedInputBase({ active, inActive }) {
         <IconButton
           onClick={() => {
             setValue("");
-            fetchUsers();
+            fetchSubCategories(selected.categoryId);
             setSearched(false);
           }}
           className={classes.iconButton}
@@ -70,15 +62,15 @@ export default function CustomizedInputBase({ active, inActive }) {
         </IconButton>
       )}
 
-          <InputBase
-            value={value}
-            name="search"
-            onChange={(e) => {
-              setValue(e.target.value);
-            }}
-            className={classes.input}
-            placeholder="Search "
-          />
+      <InputBase
+        value={value}
+        name="search"
+        onChange={(e) => {
+          setValue(e.target.value);
+        }}
+        className={classes.input}
+        placeholder="Search "
+      />
     </Paper>
   );
 }

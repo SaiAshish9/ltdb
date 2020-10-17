@@ -570,7 +570,12 @@ const AddPackage = ({ open, classes, setOpen }) => {
               {disabled ? (
                 <CircularProgress />
               ) : (
-                <Fab type="submit" variant="extended" color="primary">
+                <Fab
+                  disabled={selectedItems < 1}
+                  type="submit"
+                  variant="extended"
+                  color="primary"
+                >
                   Add
                 </Fab>
               )}

@@ -249,7 +249,6 @@ const EditPopup = ({ classes, open, setOpen }) => {
                       value={resolution}
                       onChange={(e) => {
                         setResolution(e.target.value);
-                        // console.log(e.target.value);
                       }}
                     >
                       {resolution_list &&
@@ -260,33 +259,7 @@ const EditPopup = ({ classes, open, setOpen }) => {
                   </FormControl>
                 </Box>
 
-                {/* <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  style={{ margin: "1rem 0" }}
-                >
-                  <p
-                    style={{
-                      fontSize: "1rem",
-                      color: "#282b3c",
-                      fontWeight: 600,
-                    }}
-                  >
-                    Status :
-                  </p>
-                  <FormControl style={{ width: "47%" }}>
-                    <Select
-                      value={value}
-                      onChange={(e) => {
-                        setValue(e.target.value);
-                        // console.log(e.target.value);
-                      }}
-                    >
-                      <MenuItem value={0}>InActive</MenuItem>
-                      <MenuItem value={1}>Active</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box> */}
+          
 
                 <Box
                   display="flex"

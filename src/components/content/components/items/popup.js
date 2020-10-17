@@ -139,7 +139,7 @@ const Popup = ({ classes, open, setOpen }) => {
             >
               <TextField
                 variant="outlined"
-                defaultValue={item_details && item_details.link_item_id}
+                defaultValue={item_details && `${item_details.link_items}`}
                 label="link_item_id"
                 type="number"
                 disabled

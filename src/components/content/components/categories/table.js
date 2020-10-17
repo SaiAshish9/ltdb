@@ -38,10 +38,16 @@ function SimpleTable({ data }) {
   const [openEditDialog, setOpenEditDialog] = useState(false);
 
   const fetchSubCategories = useCallback(
-    async (id) => {
+    async (id, value) => {
       setCategoryId(id);
       setSubCategories(null);
-      await Api.post("admin/subcategory/category-wise-list", {
+      var url;
+      if (value) {
+        url = `admin/subcategory/category-wise-list?search=${value}`;
+      } else {
+        url = "admin/subcategory/category-wise-list";
+      }
+      await Api.post(url, {
         category_id: id,
       }).then((data) => {
         var x = data.data.data.map((x) => ({
@@ -217,7 +223,7 @@ function SimpleTable({ data }) {
                     <Button
                       onClick={() => {
                         setOpen(true);
-                        fetchSubCategories(row.id);
+                        fetchSubCategories(row.id, null);
                       }}
                       style={{
                         textTransform: "none",
@@ -254,16 +260,6 @@ function SimpleTable({ data }) {
           </TableBody>
         </Table>
       </TableContainer>
-      {/* <TablePagination
-        style={{ background: "#fff" }}
-        rowsPerPageOptions={[5, 10]}
-        component="div"
-        count={10}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      /> */}
       <Popup
         categoryId={categoryId}
         fetchSubCategories={fetchSubCategories}
