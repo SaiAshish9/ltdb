@@ -306,7 +306,7 @@ const AddItem = () => {
                 >
                   {resolution_list ? (
                     resolution_list.map((i, k) => (
-                      <MenuItem value={i}>{i}</MenuItem>
+                      <MenuItem key={k} value={i}>{i}</MenuItem>
                     ))
                   ) : (
                     <MenuItem value={0}></MenuItem>

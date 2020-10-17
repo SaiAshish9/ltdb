@@ -16,7 +16,7 @@ const App = ({ token }) => {
         ) : (
           <Route exact path="/" component={Login} />
         )}
-        {!token && <Redirect to="/" />}
+        {!token && <Route exact path="/" component={Login} />}
       </Switch>
     </DataProvider>
   );

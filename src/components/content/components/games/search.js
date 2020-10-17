@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CustomizedInputBase({ active, inActive }) {
   const classes = useStyles();
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState('');
   const { fetchGames } = useContext(DataContext);
   const [searched, setSearched] = useState(false);
   const search = useRef();
@@ -40,7 +40,7 @@ export default function CustomizedInputBase({ active, inActive }) {
   const onSubmit = (data) => {};
 
   return (
-    <Paper component="form" className={classes.root}>
+    <Paper className={classes.root}>
       {!searched ? (
         <IconButton
           onClick={async () => {
@@ -75,16 +75,18 @@ export default function CustomizedInputBase({ active, inActive }) {
       )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <InputBase
-          value={value}
-          name="search"
-          onChange={(e) => {
-            setValue(e.target.value);
-          }}
-          // ref={register()}
-          className={classes.input}
-          placeholder="Search "
-        />
+        {value && (
+          <InputBase
+            value={value}
+            name="search"
+            onChange={(e) => {
+              setValue(e.target.value);
+            }}
+            // ref={register()}
+            className={classes.input}
+            placeholder="Search "
+          />
+        )}
       </form>
     </Paper>
   );
