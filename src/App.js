@@ -18,6 +18,7 @@ const App = ({ token }) => {
         )}
         {!token && <Route exact path="/" component={Login} />}
       </Switch>
+      {!token && <Redirect to="/"/>}
     </DataProvider>
   );
 };
