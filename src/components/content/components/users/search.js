@@ -6,7 +6,6 @@ import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
-import { useForm } from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,16 +30,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CustomizedInputBase({ active, inActive }) {
   const classes = useStyles();
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   const { fetchUsers } = useContext(DataContext);
   const [searched, setSearched] = useState(false);
-  const search = useRef();
-  const { reset, handleSubmit, register } = useForm();
 
   const onSubmit = (data) => {};
 
   return (
-    <Paper  className={classes.root}>
+    <Paper className={classes.root}>
       {!searched ? (
         <IconButton
           onClick={async () => {
@@ -74,18 +71,15 @@ export default function CustomizedInputBase({ active, inActive }) {
         </IconButton>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-          <InputBase
-            value={value}
-            name="search"
-            onChange={(e) => {
-              setValue(e.target.value);
-            }}
-            ref={register()}
-            className={classes.input}
-            placeholder="Search "
-          />
-      </form>
+      <InputBase
+        value={value}
+        name="search"
+        onChange={(e) => {
+          setValue(e.target.value);
+        }}
+        className={classes.input}
+        placeholder="Search "
+      />
     </Paper>
   );
 }

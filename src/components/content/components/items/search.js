@@ -6,7 +6,6 @@ import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
-import { useForm } from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,8 +33,6 @@ export default function CustomizedInputBase({ active, inActive }) {
   const [value, setValue] = useState("");
   const { fetchItems } = useContext(DataContext);
   const [searched, setSearched] = useState(false);
-  const search = useRef();
-  const { reset, handleSubmit, register } = useForm();
 
   const onSubmit = (data) => {};
 
@@ -74,18 +71,15 @@ export default function CustomizedInputBase({ active, inActive }) {
         </IconButton>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)}>
         <InputBase
           value={value}
           name="search"
           onChange={(e) => {
             setValue(e.target.value);
           }}
-          ref={register()}
           className={classes.input}
           placeholder="Search "
         />
-      </form>
     </Paper>
   );
 }
