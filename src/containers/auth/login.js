@@ -30,12 +30,10 @@ const Login = ({ dispatch }) => {
       email: forgotEmail,
     })
       .then((data) => {
-        console.log(data);
         setEmailSent(true);
         setForgotEmail(forgotEmail);
       })
-      .catch((e) => console.log(e));
-  };
+      };
 
   const onSubmit = ({ email, password }) => {
     Api.post("https://test-api.loot-box.co/api/admin/login", {

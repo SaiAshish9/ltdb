@@ -10,7 +10,6 @@ const INITIAL_STATE = {
 
 const updateProduct = (products,payload) => {
   const product = products.find((x) => x.id === 1);
-  console.log(payload)
   product[payload.key] = payload.value;
   products[0] = product;
   return products;

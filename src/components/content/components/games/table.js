@@ -68,7 +68,6 @@ export default function SimpleTable({ data }) {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-    console.log(newPage);
     fetchGames(newPage + 1, rowsPerPage);
   };
 
@@ -251,7 +250,6 @@ export default function SimpleTable({ data }) {
                   </TableCell>
                   <TableCell
                     onClick={async () => {
-                      console.log(row.game_id, +row.status === 1 ? 0 : 1);
                       await toggleGameStatus(
                         row.game_id,
                         +row.status === 1 ? 0 : 1

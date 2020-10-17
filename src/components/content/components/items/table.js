@@ -35,7 +35,8 @@ export default function SimpleTable({ data }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
-  const [openEditDialog, setOpenEditDialog]=useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [id, setId] = useState(null);
 
   const {
     state: { items, items_count, page_count, message },
@@ -46,7 +47,6 @@ export default function SimpleTable({ data }) {
   } = useContext(DataContext);
 
   const convertRows = () => {
-    console.log(items);
     return (
       items &&
       items.map((i, k) =>
@@ -80,7 +80,6 @@ export default function SimpleTable({ data }) {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-    console.log(newPage);
     fetchItems(newPage + 1, rowsPerPage);
   };
 
@@ -260,7 +259,6 @@ export default function SimpleTable({ data }) {
                   </TableCell>
                   <TableCell
                     onClick={async () => {
-                      console.log(row.item_id, +row.status === 1 ? 0 : 1);
                       await toggleItemStatus(
                         row.item_id,
                         +row.status === 1 ? 0 : 1
@@ -294,6 +292,7 @@ export default function SimpleTable({ data }) {
                       <IconButton
                         onClick={async () => {
                           await fetchItem(row.item_id);
+                          setId(row.item_id);
                           setOpenEditDialog(true);
                         }}
                       >
@@ -317,6 +316,7 @@ export default function SimpleTable({ data }) {
       />
       <Popup classes={classes} open={open} setOpen={setOpen} />
       <EditItem
+        id={id}
         classes={classes}
         open={openEditDialog}
         setOpen={setOpenEditDialog}

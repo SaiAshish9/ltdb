@@ -60,7 +60,6 @@ const AddPackage = ({ open, classes, setOpen }) => {
       setNameEn(package_details.name_en);
     }
     // setSelectedItems(items);
-    console.log(items);
   };
 
   const onSubmit = async (y) => {
@@ -407,96 +406,6 @@ const AddPackage = ({ open, classes, setOpen }) => {
                 </Select>
               </FormControl>
             </Box>
-
-            {/* <Box
-              display="flex"
-              justifyContent="space-between"
-              style={{ width: "100%" }}
-            >
-              <Box
-                // display="flex"
-                justifyContent="space-between"
-                style={{ margin: "1rem 0", width: "47%" }}
-              >
-                <p
-                  style={{
-                    fontSize: "1rem",
-                    color: "#282b3c",
-                    fontWeight: 600,
-                  }}
-                >
-                  SubCategory :
-                </p>
-                <FormControl style={{ width: "100%" }}>
-                  <Select
-                    value={subCategoryValue}
-                    onChange={(e) => {
-                      // setSubCategoryValue(e.target.value);
-                      // if (
-                      //   // !selectedSubCategories.includes(e.target.value)
-                      //   selectedItems.length === selectedSubCategories.length
-                      // )
-                      setSelectedSubCategories([
-                        ...selectedSubCategories,
-                        e.target.value,
-                      ]);
-                    }}
-                  >
-                    {subCategories ? (
-                      subCategories.map((i, k) => (
-                        <MenuItem value={`${i.sub_category_id} ${i.name_en}`}>
-                          {i.name_en}
-                        </MenuItem>
-                      ))
-                    ) : (
-                      <MenuItem value={0}></MenuItem>
-                    )}
-                  </Select>
-                </FormControl>
-              </Box>
-
-              <Box
-                // display="flex"
-                justifyContent="space-between"
-                style={{ margin: "1rem 0", width: "47%" }}
-              >
-                <p
-                  style={{
-                    fontSize: "1rem",
-                    color: "#282b3c",
-                    fontWeight: 600,
-                  }}
-                >
-                  Items :
-                </p>
-                <FormControl style={{ width: "100%" }}>
-                  <Select
-                    // multiple
-                    value={itemValue}
-                    onChange={(e) => {
-                      // setItemValue(e.target.value);
-                      if (
-                        // true
-                        // !selectedItems.includes(e.target.value)
-                        selectedItems.length < selectedSubCategories.length
-                      )
-                        setSelectedItems([...selectedItems, e.target.value]);
-                      console.log([...selectedItems, e.target.value]);
-                    }}
-                  >
-                    {items ? (
-                      items.map((i, k) => (
-                        <MenuItem value={`${i.item_id} ${i.name_en}`}>
-                          {i.name_en}
-                        </MenuItem>
-                      ))
-                    ) : (
-                      <MenuItem value={0}></MenuItem>
-                    )}
-                  </Select>
-                </FormControl>
-              </Box>
-            </Box> */}
 
             {package_details && (
               <TableContainer

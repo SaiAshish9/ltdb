@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Backdrop,
   Paper,
@@ -7,17 +7,33 @@ import {
   Avatar,
   TextField,
   Fab,
+  Select,
+  MenuItem,
+  Input,
+  FormControl,
 } from "@material-ui/core";
 import Img from "../../../../assets/thumbnail1.png";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import moment from "moment";
 import Clear from "@material-ui/icons/Clear";
 
-const EditItem = ({ classes, open, setOpen }) => {
+const EditItem = ({ classes, open, setOpen, id }) => {
   const {
-    state: { item_details },
+    state: { item_details, linkableItems },
+    fetchItem,
   } = useContext(DataContext);
+  const [items, setItems] = useState([]);
 
+  useEffect(() => {
+    const fetchLinks = async () => {
+      await fetchItem(id);
+    };
+    fetchLinks();
+  }, []);
+
+  const handleChangeMultiple = (e) => {
+    setItems(e.target.value);
+  };
   return (
     <Backdrop open={open} className={classes.backdrop}>
       {item_details && (
@@ -35,6 +51,7 @@ const EditItem = ({ classes, open, setOpen }) => {
           <Box display="flex" flexDirection="row-reverse">
             <IconButton
               onClick={() => {
+                setItems([]);
                 setOpen(false);
               }}
             >
@@ -78,14 +95,12 @@ const EditItem = ({ classes, open, setOpen }) => {
                 justifyContent="space-between"
               >
                 <TextField
-                //   rows={7}
                   multiline
                   label="Description_ar"
                   variant="outlined"
                   defaultValue={item_details && item_details.description_ar}
                 />
                 <TextField
-                //   rows={7}
                   multiline
                   label="Description_en"
                   variant="outlined"
@@ -106,15 +121,6 @@ const EditItem = ({ classes, open, setOpen }) => {
                 label="Price"
                 type="number"
               />
-              {/* <TextField
-                defaultValue={
-                  item_details && item_details.status === 1
-                    ? "Active"
-                    : "InActive"
-                }
-                variant="outlined"
-                label="Status"
-              /> */}
               <TextField
                 variant="outlined"
                 id="date"
@@ -135,15 +141,33 @@ const EditItem = ({ classes, open, setOpen }) => {
               justifyContent="space-between"
               style={{ margin: "2rem 0" }}
             >
+              <FormControl style={{ width: "30%", marginTop: "1rem" }}>
+                <Select
+                  multiple
+                  defaultValue={item_details.link_items}
+                  input={<Input />}
+                  displayEmpty
+                  onChange={handleChangeMultiple}
+                >
+                  {linkableItems &&
+                    linkableItems.map((i, k) => (
+                      <MenuItem key={k} value={i["item_id"]}>
+                        {i["name"]}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
               <TextField
                 variant="outlined"
-                defaultValue={item_details && item_details.link_item_id}
-                label="link_item_id"
-                type="number"
-              />
-              <TextField
-                variant="outlined"
-                defaultValue={item_details && item_details.category_id}
+                defaultValue={
+                  item_details && item_details.category_id === 1
+                    ? "Pc Parts"
+                    : item_details.category_id === 2
+                    ? "Gaming Access"
+                    : item_details.category_id === 3
+                    ? "Gears"
+                    : ""
+                }
                 label="category"
               />
               <TextField
@@ -163,18 +187,20 @@ const EditItem = ({ classes, open, setOpen }) => {
                   display="flex"
                   alignItems="center"
                   justifyContent="space-between"
-                  style={{ margin: "2rem 0" }}
+                  style={{ margin: "2rem 0", width: "100%" }}
                 >
-                  <p>{i.name_en}</p>
+                  <p style={{ width: "30%" }}>{i.name_en}</p>
 
                   <TextField
                     variant="outlined"
                     label="value_en"
+                    style={{ width: "30%" }}
                     defaultValue={i.value_en}
                   />
                   <TextField
                     variant="outlined"
                     label="value_ar"
+                    style={{ width: "30%" }}
                     defaultValue={i.value_ar}
                   />
                 </Box>
@@ -182,9 +208,7 @@ const EditItem = ({ classes, open, setOpen }) => {
 
             <Box display="flex" flexDirection="row-reverse">
               <Fab
-                onClick={() => {
-                  console.log(item_details);
-                }}
+                onClick={() => {}}
                 type="submit"
                 variant="extended"
                 color="primary"

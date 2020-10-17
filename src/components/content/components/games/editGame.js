@@ -50,7 +50,6 @@ const EditPopup = ({ classes, open, setOpen }) => {
         game_id: game_details.game_id,
       });
     } else {
-      console.log(file);
       await addGame({
         game_id: game_details.game_id,
         name_en,
@@ -75,7 +74,6 @@ const EditPopup = ({ classes, open, setOpen }) => {
       reader.onload = (e) => {
         setFile(reader.result);
         setImgFile(file1);
-        // console.log(file);
       };
       reader.readAsDataURL(file1);
     },

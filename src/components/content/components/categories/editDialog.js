@@ -66,7 +66,6 @@ const EditDialog = ({
         fetchSubCategories(current.categoryId,null);
         setOpenEditDialog(false);
       })
-      .catch((error) => console.log(error));
   };
 
   const handleClick = (event) => {
@@ -127,7 +126,6 @@ const EditDialog = ({
                 name="name_en"
                 variant="outlined"
                 label="Name"
-                // disabled
               />
               <TextField
                 inputRef={register()}
@@ -135,7 +133,6 @@ const EditDialog = ({
                 defaultValue={current.name_ar}
                 variant="outlined"
                 label="اسم"
-                // disabled
               />
 
               <Tooltip
@@ -143,7 +140,6 @@ const EditDialog = ({
                 placement="left"
               >
                 <Fab
-                  // disabled
                   aria-describedby={id}
                   onClick={handleClick}
                   style={{

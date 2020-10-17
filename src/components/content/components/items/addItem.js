@@ -73,7 +73,6 @@ const AddItem = () => {
     var reader = new FileReader();
     reader.onload = (e) => {
       setFile(reader.result);
-      console.log(file);
     };
     reader.readAsDataURL(file1);
   };
@@ -100,7 +99,6 @@ const AddItem = () => {
       .then((data) => {
         setData(data.data.data);
       })
-      .catch((error) => console.log(error));
     fetchCategories();
   }, []);
 
@@ -109,14 +107,12 @@ const AddItem = () => {
       .then((data) => {
         setCategories(data.data.data);
       })
-      .catch((error) => console.log(error));
   };
 
   const fetchSubCategories = (id) => {
     Api.post("admin/subcategory/category-wise-list", {
       category_id: id,
     }).then(async (data) => {
-      console.log(data);
       await fetchLinkableItems();
       setSubCategories(data.data.data);
     });
@@ -129,7 +125,6 @@ const AddItem = () => {
       if (subCategories[id]["link_item_available"]) {
         is_item_available(true);
       }
-      console.log(data.data.data);
       setFields(
         data.data.data.custom_fields.map((i, k) => {
           return `${i["name_en"]} ${i["name_ar"]} ${i["custom_field_id"]}`;
@@ -140,19 +135,7 @@ const AddItem = () => {
   };
 
   const handleSave = async (y) => {
-    console.log({
-      category_id: subCategories[subValue]["category_id"],
-      sub_category_id: subCategories[subValue]["sub_category_id"],
-      brand_id: data[brandValue]["brand_id"],
-      name_en: name_en,
-      name_ar: name_ar,
-      description_en: desc_en,
-      description_ar: desc_ar,
-      image: file,
-      price: price ? +price : 0,
-      status: 1,
-      item_custom_values: y,
-    });
+
     setDisabled(true);
     if (items && items.length > 0) {
       await addItem({
@@ -191,6 +174,7 @@ const AddItem = () => {
     setNameAr("");
     setDescEn("");
     setDescAr("");
+    setItems([])
     setValue(null);
     setBrandValue(null);
     setDescription(null);
@@ -317,6 +301,7 @@ const AddItem = () => {
                   setItemValue(null);
                   setValue(null);
                   setBrandValue(null);
+                  setItems([])
                   setDescription(null);
                   setCustomFields(null);
                   setPrice(0);

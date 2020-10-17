@@ -15,10 +15,8 @@ const Category = () => {
     Api("admin/category/list")
       .then((data) => {
         setData(data);
-        console.log(data);
         setLoading(false);
       })
-      .catch((error) => console.log(error));
   }, []);
 
   return (

@@ -47,7 +47,6 @@ const Notifications = () => {
       .then((data) => {
         setData(data.data.data);
       })
-      .catch((error) => console.log(error));
     axios({
       url: `https://test-api.loot-box.co/api/admin/category/list`,
       method: "get",
@@ -62,7 +61,6 @@ const Notifications = () => {
       .then((data) => {
         setCategories(data.data.data);
       })
-      .catch((error) => console.log(error));
 
     axios({
       url: `https://test-api.loot-box.co/api/admin/item/getitem?item_id=20`,
@@ -86,7 +84,6 @@ const Notifications = () => {
           })
 
         })
-      .catch((error) => console.log(error));
 
 
 

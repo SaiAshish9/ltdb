@@ -107,11 +107,9 @@ function SimpleTable({ data }) {
   const handleChangePage = (event, newPage) => {
     Api(`admin/user/list?page=${newPage + 1}`)
       .then((data) => {
-        console.log(data.data.data);
         setRows(convertRows(data.data.data));
         setPage(newPage);
       })
-      .catch((error) => console.log(error));
   };
 
   return (

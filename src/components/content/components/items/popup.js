@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import {
   Backdrop,
   Paper,
@@ -15,8 +15,13 @@ import Clear from "@material-ui/icons/Clear";
 
 const Popup = ({ classes, open, setOpen }) => {
   const {
-    state: { item_details },
+    state: { item_details, linkableItems },
+    fetchLinkableItems,
   } = useContext(DataContext);
+
+  useEffect(() => {
+    fetchLinkableItems();
+  }, []);
 
   return (
     <Backdrop open={open} className={classes.backdrop}>
@@ -139,9 +144,17 @@ const Popup = ({ classes, open, setOpen }) => {
             >
               <TextField
                 variant="outlined"
-                defaultValue={item_details && `${item_details.link_items}`}
+                onClick={() => {
+                  console.log(linkableItems);
+                }}
+                value={item_details.link_items
+                  .map((i, k) => {
+                    if (i == linkableItems[k]["item_id"]) {
+                      return linkableItems[k]["name"];
+                    }
+                  })
+                  .toString()}
                 label="link_item_id"
-                type="number"
                 disabled
               />
               <TextField
@@ -168,12 +181,13 @@ const Popup = ({ classes, open, setOpen }) => {
                   display="flex"
                   alignItems="center"
                   justifyContent="space-between"
-                  style={{ margin: "2rem 0" }}
+                  style={{ margin: "2rem 0", width: "100%" }}
                 >
-                  <p>{i.name_en}</p>
+                  <p style={{ width: "30%" }}>{i.name_en}</p>
 
                   <TextField
                     variant="outlined"
+                    style={{ width: "30%" }}
                     label="value_en"
                     defaultValue={i.value_en}
                     disabled
@@ -181,6 +195,7 @@ const Popup = ({ classes, open, setOpen }) => {
                   <TextField
                     variant="outlined"
                     label="value_ar"
+                    style={{ width: "30%" }}
                     defaultValue={i.value_ar}
                     disabled
                   />
@@ -189,9 +204,7 @@ const Popup = ({ classes, open, setOpen }) => {
 
             <Box display="flex" flexDirection="row-reverse">
               <Fab
-                onClick={() => {
-                  console.log(item_details);
-                }}
+                onClick={() => {}}
                 disabled
                 type="submit"
                 variant="extended"

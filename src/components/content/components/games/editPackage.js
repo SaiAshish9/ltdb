@@ -76,7 +76,6 @@ const EditPackage = ({ open, classes, setOpen }) => {
   useEffect(() => {
     getData();
     handleChangedData();
-    console.log("hi");
   }, [package_details]);
 
   const getData = async () => {
@@ -86,7 +85,6 @@ const EditPackage = ({ open, classes, setOpen }) => {
     if (package_details) {
       setNameEn(package_details.name_en);
     }
-    console.log(items);
   };
 
   const onSubmit = async (y) => {
@@ -573,7 +571,6 @@ const EditPackage = ({ open, classes, setOpen }) => {
                         selectedItems.length < selectedSubCategories.length
                       )
                         setSelectedItems([...selectedItems, e.target.value]);
-                      console.log([...selectedItems, e.target.value]);
                     }}
                   >
                     {items ? (

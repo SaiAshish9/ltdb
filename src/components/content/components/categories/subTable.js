@@ -7,8 +7,6 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import Chip from "@material-ui/core/Chip";
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import IconButton from "@material-ui/core/IconButton";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Box from "@material-ui/core/Box";
@@ -66,7 +64,10 @@ export default function DenseTable({
           margin: "0 2rem",
         }}
       >
-        <Search  selected={selected} fetchSubCategories={fetchSubCategories} />
+        <Search
+          categoryId={rows && rows.length>0 && rows[0]["categoryId"]}
+          fetchSubCategories={fetchSubCategories}
+        />
       </Box>
       <br />
       {!open && (
@@ -117,20 +118,10 @@ export default function DenseTable({
                     </TableCell>
                     <TableCell
                       style={{
-                        // paddingLeft: "2rem",
-                        // color: "#8095a1",
                         color: row.status === 1 ? "green" : "red",
                         fontWeight: 500,
                       }}
                     >
-                      {/* <Chip
-                        style={{
-                          color: "#6cc07f",
-                          background: "#fff",
-                          fontWeight: 600,
-                        }}
-                        label={row.status}
-                      /> */}
                       {row.status === 1 ? "Active" : "InActive"}
                     </TableCell>
                     <TableCell

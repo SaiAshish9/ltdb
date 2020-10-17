@@ -54,7 +54,6 @@ const SubCategoryTable = ({
           setOpen(false);
           reset();
         })
-        .catch((error) => console.log(error));
   };
 
   useEffect(() => {
@@ -285,7 +284,6 @@ const SubCategoryTable = ({
                 </Box>
               ))}
             </Box>
-            {/* <Divider /> */}
           </Box>
           <Box style={{ padding: "1rem" }}>
             {!loading ? (

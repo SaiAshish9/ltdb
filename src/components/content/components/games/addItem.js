@@ -77,7 +77,6 @@ const AddItem = () => {
     var reader = new FileReader();
     reader.onload = (e) => {
       setFile(reader.result);
-      console.log(file);
     };
     reader.readAsDataURL(file1);
   };
@@ -301,7 +300,6 @@ const AddItem = () => {
                   value={value}
                   onChange={(e) => {
                     setValue(e.target.value);
-                    console.log(e.target.value);
                   }}
                 >
                   {resolution_list ? (

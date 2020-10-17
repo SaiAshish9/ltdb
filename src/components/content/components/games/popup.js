@@ -39,7 +39,6 @@ const Popup = ({ classes, open, setOpen, setOpenPackageDialog }) => {
     var reader = new FileReader();
     reader.onload = (e) => {
       setFile(reader.result);
-      console.log(file);
     };
     reader.readAsDataURL(file1);
   };
@@ -207,7 +206,6 @@ const Popup = ({ classes, open, setOpen, setOpenPackageDialog }) => {
                       disabled
                       onChange={(e) => {
                         setValue(e.target.value);
-                        console.log(e.target.value);
                       }}
                     >
                       <MenuItem value={0}>
@@ -237,7 +235,6 @@ const Popup = ({ classes, open, setOpen, setOpenPackageDialog }) => {
                       disabled
                       onChange={(e) => {
                         // setValue(e.target.value);
-                        // console.log(e.target.value);
                       }}
                     >
                       <MenuItem value={0}>

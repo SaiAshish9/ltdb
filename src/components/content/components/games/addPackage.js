@@ -54,7 +54,6 @@ const AddPackage = ({ open, classes, setOpen }) => {
     await fetchItems();
     const data = await fetchGameSubCategoryList();
     setSubCategories(data);
-    console.log(items);
   };
 
   const onSubmit = async (y) => {
@@ -440,7 +439,6 @@ const AddPackage = ({ open, classes, setOpen }) => {
                       // setItemValue(e.target.value);
                       if (selectedItems.length < selectedSubCategories.length)
                         setSelectedItems([...selectedItems, e.target.value]);
-                      console.log([...selectedItems, e.target.value]);
                     }}
                   >
                     {items ? (

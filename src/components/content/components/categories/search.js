@@ -4,7 +4,6 @@ import Paper from "@material-ui/core/Paper";
 import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
-import { Context as DataContext } from "../../../../api/dataProvider";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 
 const useStyles = makeStyles((theme) => ({
@@ -28,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CustomizedInputBase({ selected, fetchSubCategories }) {
+export default function CustomizedInputBase({ categoryId, fetchSubCategories }) {
   const classes = useStyles();
   const [value, setValue] = useState("");
   const [searched, setSearched] = useState(false);
@@ -39,7 +38,7 @@ export default function CustomizedInputBase({ selected, fetchSubCategories }) {
         <IconButton
           onClick={async () => {
             if (value) {
-              await fetchSubCategories(selected.categoryId, value);
+              await fetchSubCategories(categoryId, value);
             }
             setSearched(true);
           }}
@@ -52,7 +51,7 @@ export default function CustomizedInputBase({ selected, fetchSubCategories }) {
         <IconButton
           onClick={() => {
             setValue("");
-            fetchSubCategories(selected.categoryId);
+            fetchSubCategories(categoryId);
             setSearched(false);
           }}
           className={classes.iconButton}
