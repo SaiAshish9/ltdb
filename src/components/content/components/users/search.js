@@ -75,7 +75,6 @@ export default function CustomizedInputBase({ active, inActive }) {
       )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        {value && (
           <InputBase
             value={value}
             name="search"
@@ -86,7 +85,6 @@ export default function CustomizedInputBase({ active, inActive }) {
             className={classes.input}
             placeholder="Search "
           />
-        )}
       </form>
     </Paper>
   );

@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CustomizedInputBase({ active, inActive }) {
   const classes = useStyles();
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState("");
   const { fetchItems } = useContext(DataContext);
   const [searched, setSearched] = useState(false);
   const search = useRef();
@@ -75,18 +75,16 @@ export default function CustomizedInputBase({ active, inActive }) {
       )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        {value && (
-          <InputBase
-            value={value}
-            name="search"
-            onChange={(e) => {
-              setValue(e.target.value);
-            }}
-            ref={register()}
-            className={classes.input}
-            placeholder="Search "
-          />
-        )}
+        <InputBase
+          value={value}
+          name="search"
+          onChange={(e) => {
+            setValue(e.target.value);
+          }}
+          ref={register()}
+          className={classes.input}
+          placeholder="Search "
+        />
       </form>
     </Paper>
   );
