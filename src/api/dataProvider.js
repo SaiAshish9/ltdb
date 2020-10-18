@@ -84,6 +84,11 @@ const reducer = (state, action) => {
         ...state,
         linkableItems: action.payload,
       };
+    case "SET_SUB_CATEGORY":
+      return {
+        ...state,
+        sub_category: action.payload,
+      };
     default:
       return state;
   }
@@ -196,8 +201,7 @@ const fetchLinkableItems = (dispatch) => async () => {
       type: "SET_LINKABLE_ITEMS",
       payload: data.data.data,
     });
-  } catch (e) {
-  }
+  } catch (e) {}
 };
 
 const fetchUsers = (dispatch) => async (page, limit, search, status) => {
@@ -264,8 +268,7 @@ const fetchGameSubCategoryList = (dispatch) => async () => {
   try {
     const data = await Api("admin/game/sub-category-list");
     return data.data.data;
-  } catch (e) {
-  }
+  } catch (e) {}
 };
 
 const togglePackage = (dispatch) => async (id, action) => {
@@ -275,10 +278,9 @@ const togglePackage = (dispatch) => async (id, action) => {
     action_type: +action,
   };
   try {
-    await Api.post(`admin/game/package-block-unblock`, { ...x }).then(
-      async (data) => {
-      }
-    );
+    await Api.post(`admin/game/package-block-unblock`, {
+      ...x,
+    }).then(async (data) => {});
 
     dispatch({
       type: "SET_MESSAGE",
@@ -286,8 +288,7 @@ const togglePackage = (dispatch) => async (id, action) => {
     });
 
     await fetchGamePackages();
-  } catch (e) {
-  }
+  } catch (e) {}
 };
 
 const toggleItemStatus = (dispatch) => async (id, action) => {
@@ -297,8 +298,7 @@ const toggleItemStatus = (dispatch) => async (id, action) => {
   };
   clearMessage();
 
-  await Api.post(`admin/item/block-unblock`, { ...x }).then(async (data) => {
-  });
+  await Api.post(`admin/item/block-unblock`, { ...x }).then(async (data) => {});
 
   dispatch({
     type: "SET_MESSAGE",
@@ -315,8 +315,7 @@ const toggleGameStatus = (dispatch) => async (id, action) => {
   };
   clearMessage();
 
-  await Api.post(`admin/game/block-unblock`, { ...x }).then(async (data) => {
-  });
+  await Api.post(`admin/game/block-unblock`, { ...x }).then(async (data) => {});
 
   dispatch({
     type: "SET_MESSAGE",
@@ -339,8 +338,7 @@ const toggleUserStatus = (dispatch) => async (id, action) => {
     action_type: action,
   };
   clearMessage();
-  await Api.post(`admin/user/block-unblock`, { ...x }).then(async (data) => {
-  });
+  await Api.post(`admin/user/block-unblock`, { ...x }).then(async (data) => {});
   dispatch({
     type: "SET_MESSAGE",
     payload: "User Updated Successfully",
@@ -353,15 +351,22 @@ const fetchItem = (dispatch) => async (id) => {
     type: "SET_ITEM",
     payload: null,
   });
-  await Api(`admin/item/getitem?item_id=${id}`)
-    .then((data) => {
-      dispatch({
-        type: "SET_ITEM",
-        payload: data.data.data,
-      });
-    })
-    .catch((e) => {
+  try {
+    const data1 = await Api(`admin/item/getitem?item_id=${id}`);
+    dispatch({
+      type: "SET_ITEM",
+      payload: data1.data.data,
     });
+    const {
+      data: { data },
+    } = await Api.post(`admin/subcategory/subcategory-by-id`, {
+      sub_category_id: data1.data.data.sub_category_id,
+    });
+    dispatch({
+      type: "SET_SUB_CATEGORY",
+      payload: data,
+    });
+  } catch (e) {}
 };
 
 const fetchGame = (dispatch) => async (id) => {
@@ -376,20 +381,69 @@ const fetchGame = (dispatch) => async (id) => {
         payload: data.data.data,
       });
     })
-    .catch((e) => {
+    .catch((e) => {});
+};
+
+const fetchSubCategory = (dispatch) => async (id) => {
+  try {
+    const {
+      data: { data },
+    } = await Api.post(`admin/subcategory/subcategory-by-id`, {
+      sub_category_id: id,
     });
+    dispatch({
+      type: "SET_SUB_CATEGORY",
+      payload: data,
+    });
+  } catch (e) {}
+};
+
+const editItem = (dispatch) => async (data) => {
+  var image;
+  dispatch({
+    type: "SET_MESSAGE",
+    payload: null,
+  });
+  if (data.newImage) {
+    image = await uploadImage("media", data.newImage);
+    await Api.post("admin/item/add", {
+      category_id: data.category_id,
+      sub_category_id: data.sub_category_id,
+      brand_id: data.brand_id,
+      name_en: data.name_en,
+      name_ar: data.name_ar,
+      description_en: data.description_en,
+      description_ar: data.description_ar,
+      link_item_id: data.link_item_id,
+      image: image,
+      price: data.price,
+      status: data.status,
+    });
+  } else {
+    image = data.image;
+    await Api.post("admin/item/add", {
+      category_id: data.category_id,
+      sub_category_id: data.sub_category_id,
+      brand_id: data.brand_id,
+      name_en: data.name_en,
+      name_ar: data.name_ar,
+      description_en: data.description_en,
+      description_ar: data.description_ar,
+      link_item_id: data.link_item_id,
+      image: image,
+      price: data.price,
+      status: data.status,
+    });
+  }
+  dispatch({
+    type: "SET_MESSAGE",
+    payload: "Item Updated Successfully",
+  });
+  await fetchItems();
 };
 
 const addItem = (dispatch) => async (data) => {
-  const config = {
-    bucketName: "lootbox-s3",
-    region: "us-east-2",
-    dirName: "media",
-    accessKeyId: "AKIA3JWMPNMIYUFSR54M",
-    secretAccessKey: "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",
-  };
-  const ReactS3Client = new S3(config);
-  await ReactS3Client.uploadFile(data.image)
+  await uploadImage("media", data.image)
     .then(async (data1) => {
       if (data.link_item_id && data.link_item_id.length > 0) {
         if (data.item_custom_values && data.item_custom_values.length > 0) {
@@ -403,7 +457,7 @@ const addItem = (dispatch) => async (data) => {
             description_ar: data.description_ar,
             item_custom_values: data.item_custom_values,
             link_item_id: data.link_item_id,
-            image: data1 && data1.location.split("com/")[1],
+            image: data1,
             price: data.price,
             status: data.status,
           })
@@ -547,8 +601,7 @@ const addPackage = (dispatch) => async (data) => {
       try {
         var image1 = await uploadImage("game/package", x.file);
         return image1;
-      } catch (err) {
-      }
+      } catch (err) {}
     })
   );
   try {
@@ -557,20 +610,17 @@ const addPackage = (dispatch) => async (data) => {
       cover_images,
       image,
     });
-  } catch (e) {
-  }
+  } catch (e) {}
 };
 
 const editPackage = (dispatch) => async (data) => {
-
   await Promise.all(
     data.deleted_cover_images.map(async (x) => {
       try {
         await Api.post("admin/game/package-delete-image", {
           image_id: x,
         });
-      } catch (e) {
-      }
+      } catch (e) {}
     })
   );
 
@@ -586,8 +636,7 @@ const editPackage = (dispatch) => async (data) => {
       try {
         var image1 = await uploadImage("game/package", x.file);
         return image1;
-      } catch (err) {
-      }
+      } catch (err) {}
     })
   );
 
@@ -603,8 +652,7 @@ const editPackage = (dispatch) => async (data) => {
       package_item: data.package_item,
       cover_images: [...data.cover_images, ...new_cover_images],
     });
-  } catch (e) {
-  }
+  } catch (e) {}
 };
 
 const addGame = (dispatch) => async (data) => {
@@ -618,8 +666,7 @@ const addGame = (dispatch) => async (data) => {
         image,
         game_id: data.game_id,
         status: data.status ? data.status : 1,
-      }).then((data) => {
-      });
+      }).then((data) => {});
     } else {
       const image = await uploadImage("games", data.imgFile);
       await Api.post("admin/game/add", {
@@ -628,8 +675,7 @@ const addGame = (dispatch) => async (data) => {
         resolution: data.value,
         image,
         status: data.status ? data.status : 1,
-      }).then((data) => {
-      });
+      }).then((data) => {});
     }
   } else {
     if (data.game_id) {
@@ -664,8 +710,7 @@ const fetchGamePackages = (dispatch) => async (id) => {
       type: "SET_GAME_PACKAGES",
       payload: data,
     });
-  } catch (e) {
-  }
+  } catch (e) {}
 };
 
 const fetchPackage = (dispatch) => async (id) => {
@@ -719,12 +764,14 @@ export const { Context, Provider } = createDataContext(
     addPackage,
     editPackage,
     addGame,
+    editItem,
     fetchGame,
     togglePackage,
     toggleGameStatus,
     fetchGamePackages,
     fetchGameSubCategoryList,
     fetchLinkableItems,
+    fetchSubCategory,
   },
   {
     items: [],
@@ -740,6 +787,7 @@ export const { Context, Provider } = createDataContext(
     game_packages: [],
     game_package_items: [],
     user_count: 0,
+    sub_category: null,
     game_count: 0,
     game_page_count: 0,
     resolution_list: null,

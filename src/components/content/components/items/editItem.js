@@ -11,6 +11,7 @@ import {
   MenuItem,
   Input,
   FormControl,
+  CircularProgress,
 } from "@material-ui/core";
 import Img from "../../../../assets/thumbnail1.png";
 import { Context as DataContext } from "../../../../api/dataProvider";
@@ -19,10 +20,21 @@ import Clear from "@material-ui/icons/Clear";
 
 const EditItem = ({ classes, open, setOpen, id }) => {
   const {
-    state: { item_details, linkableItems },
+    state: { item_details, linkableItems, sub_category },
     fetchItem,
+    editItem,
+    fetchItems,
   } = useContext(DataContext);
   const [items, setItems] = useState([]);
+  const [file, setFile] = useState(null);
+  const [imgFile, setImgFile] = useState(null);
+  const [name_en, setNameEn] = useState("");
+  const [name_ar, setNameAr] = useState("");
+  const [description_en, setDescriptionEn] = useState("");
+  const [description_ar, setDescriptionAr] = useState("");
+  const [price, setPrice] = useState(0);
+  const [date, setDate] = useState("");
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     const fetchLinks = async () => {
@@ -34,9 +46,69 @@ const EditItem = ({ classes, open, setOpen, id }) => {
   const handleChangeMultiple = (e) => {
     setItems(e.target.value);
   };
+
+  const handleSubmit = async () => {
+    setDisabled(true);
+    if (imgFile) {
+      await editItem({
+        category_id: item_details.category_id,
+        sub_category_id: item_details.sub_category_id,
+        brand_id: item_details.brand_id,
+        name_en: name_en.length > 0 ? name_en : item_details.name_en,
+        name_ar: name_ar.length > 0 ? name_ar : item_details.name_ar,
+        description_en:
+          description_en.length > 0
+            ? description_en
+            : item_details.description_en,
+        description_ar:
+          description_ar.length > 0
+            ? description_ar
+            : item_details.description_ar,
+        link_item_id: item_details.link_items,
+        newImage: imgFile,
+        price: price > 0 ? price : item_details.price,
+        status: item_details.status,
+      });
+    } else {
+      await editItem({
+        category_id: item_details.category_id,
+        sub_category_id: item_details.sub_category_id,
+        brand_id: item_details.brand_id,
+        name_en: name_en.length > 0 ? name_en : item_details.name_en,
+        name_ar: name_ar.length > 0 ? name_ar : item_details.name_ar,
+        description_en:
+          description_en.length > 0
+            ? description_en
+            : item_details.description_en,
+        description_ar:
+          description_ar.length > 0
+            ? description_ar
+            : item_details.description_ar,
+        link_item_id: item_details.link_items,
+        image: item_details.image,
+        price: price > 0 ? price : item_details.price,
+        status: item_details.status,
+      });
+    }
+    await fetchItems();
+    setImgFile(null)
+    setDisabled(false);
+    setOpen(false);
+  };
+
+  const handleImgChange = (e) => {
+    var file1 = e.target.files[0];
+    var reader = new FileReader();
+    reader.onload = (e) => {
+      setFile(reader.result);
+    };
+    setImgFile(e.target.files[0]);
+    reader.readAsDataURL(file1);
+  };
+
   return (
     <Backdrop open={open} className={classes.backdrop}>
-      {item_details && (
+      {item_details && sub_category && (
         <Paper
           style={{
             height: "80vh",
@@ -63,16 +135,32 @@ const EditItem = ({ classes, open, setOpen, id }) => {
               padding: "2rem",
             }}
           >
+            <input
+              id="edit-item"
+              type="file"
+              accept=".png,.jpg,.jpeg"
+              style={{ display: "none" }}
+              onChange={(e) => handleImgChange(e)}
+            />
             <Box display="flex" justifyContent="space-between">
-              <Avatar
-                src={
-                  item_details
-                    ? item_details.image.length > 1 && item_details.image
-                    : Img
-                }
-                style={{ width: "150px", height: "150px", marginRight: "2rem" }}
-                variant="rounded"
-              ></Avatar>
+              <label htmlFor="edit-item">
+                <Avatar
+                  src={
+                    !file
+                      ? item_details
+                        ? item_details.image.length > 1 && item_details.image
+                        : Img
+                      : file
+                  }
+                  style={{
+                    width: "150px",
+                    height: "150px",
+                    marginRight: "2rem",
+                    cursor: "pointer",
+                  }}
+                  variant="rounded"
+                ></Avatar>
+              </label>
               <Box
                 display="flex"
                 flexDirection="column"
@@ -82,11 +170,17 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                   defaultValue={item_details && item_details.name_en}
                   variant="outlined"
                   label="Name_en"
+                  onChange={(e) => {
+                    setNameEn(e.target.value);
+                  }}
                 />
                 <TextField
                   defaultValue={item_details && item_details.name_ar}
                   variant="outlined"
                   label="Name_ar"
+                  onChange={(e) => {
+                    setNameAr(e.target.value);
+                  }}
                 />
               </Box>
               <Box
@@ -98,11 +192,17 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                   multiline
                   label="Description_ar"
                   variant="outlined"
+                  onChange={(e) => {
+                    setDescriptionAr(e.target.value);
+                  }}
                   defaultValue={item_details && item_details.description_ar}
                 />
                 <TextField
                   multiline
                   label="Description_en"
+                  onChange={(e) => {
+                    setDescriptionEn(e.target.value);
+                  }}
                   variant="outlined"
                   value={item_details && item_details.description_en}
                 />
@@ -119,20 +219,25 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                 }
                 variant="outlined"
                 label="Price"
+                onChange={(e) => {
+                  setPrice(e.target.value);
+                }}
                 type="number"
               />
               <TextField
                 variant="outlined"
                 id="date"
+                type="date"
                 label="created_at"
-                value={
+                defaultValue={
                   item_details &&
-                  moment(new Date(item_details.created_at)).format(
-                    "DD MMM YYYY"
-                  )
+                  moment(new Date(item_details.created_at)).format("YYYY-MM-DD")
                 }
                 InputLabelProps={{
                   shrink: true,
+                }}
+                onChange={(e) => {
+                  setDate(e.target.value);
                 }}
               />
             </Box>
@@ -172,7 +277,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
               />
               <TextField
                 variant="outlined"
-                defaultValue={item_details && item_details.sub_category_id}
+                defaultValue={sub_category && sub_category["name_en"]}
                 label="sub-category"
               />
             </Box>
@@ -207,14 +312,20 @@ const EditItem = ({ classes, open, setOpen, id }) => {
               ))}
 
             <Box display="flex" flexDirection="row-reverse">
-              <Fab
-                onClick={() => {}}
-                type="submit"
-                variant="extended"
-                color="primary"
-              >
-                Save
-              </Fab>
+              {disabled ? (
+                <CircularProgress />
+              ) : (
+                <Fab
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                  type="submit"
+                  variant="extended"
+                  color="primary"
+                >
+                  Save
+                </Fab>
+              )}
             </Box>
           </Box>
         </Paper>
