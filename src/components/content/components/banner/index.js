@@ -4,18 +4,21 @@ import Table from "./table";
 import { Context as DataContext } from "../../../../api/dataProvider";
 
 const Items = () => {
-  const {
-    state: {},
-  } = useContext(DataContext);
-  const [loading, isLoading] = useState(!false);
+  const { fetchBanners } = useContext(DataContext);
+  const [loading, isLoading] = useState(false);
 
-
-
-  useEffect(() => {}, []);
+  useEffect(() => {
+    async function fetchdata() {
+      isLoading(true);
+      await fetchBanners();
+      isLoading(false);
+    }
+    fetchdata();
+  }, []);
   return (
     <Box>
       <Box style={{ position: "absolute", top: 1, right: "2vw" }}></Box>
-      {!loading ? (
+      {loading ? (
         <Box
           display="flex"
           alignItems="center"

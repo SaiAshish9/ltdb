@@ -24,6 +24,11 @@ const reducer = (state, action) => {
         ...state,
         item_details: action.payload,
       };
+    case "SET_BANNERS":
+      return {
+        ...state,
+        banners: action.payload,
+      };
     case "SET_GAME":
       return {
         ...state,
@@ -747,6 +752,19 @@ const fetchPackage = (dispatch) => async (id) => {
   } catch (e) {}
 };
 
+const fetchBanners = (dispatch) => async () => {
+  try {
+    const {
+      data: { data },
+    } = await Api("admin/banner/get-list");
+    console.log(data)
+    dispatch({
+      type: "SET_BANNERS",
+      payload: data,
+    });
+  } catch (e) {}
+};
+
 export const { Context, Provider } = createDataContext(
   reducer,
   {
@@ -755,6 +773,7 @@ export const { Context, Provider } = createDataContext(
     toggleItemStatus,
     fetchUser,
     fetchUsers,
+    fetchBanners,
     fetchItem,
     toggleUserStatus,
     clearMessage,
@@ -792,5 +811,6 @@ export const { Context, Provider } = createDataContext(
     game_page_count: 0,
     resolution_list: null,
     linkableItems: [],
+    banners: [],
   }
 );

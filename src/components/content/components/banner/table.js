@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Table,
@@ -9,9 +9,12 @@ import {
   TableRow,
   Paper,
   Box,
+  IconButton,
 } from "@material-ui/core";
 import Search from "./search";
 import AddBannerPopup from "./addBanner";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import { Context as DataContext } from "../../../../api/dataProvider";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -22,6 +25,10 @@ const useStyles = makeStyles((theme) => ({
 const BannerTable = () => {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
+  const [openDialog, setOpenDialog] = useState(false);
+  const {
+    state: { banners },
+  } = useContext(DataContext);
 
   return (
     <React.Fragment>
@@ -110,7 +117,20 @@ const BannerTable = () => {
                   color: "#282b3c",
                 }}
               >
-                Status
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  style={{ paddingLeft: "12rem" }}
+                >
+                  Status{" "}
+                  <IconButton
+                    onClick={() => {
+                      setOpenDialog(!openDialog);
+                    }}
+                  >
+                    <ArrowDropDownIcon />
+                  </IconButton>
+                </Box>{" "}
               </TableCell>
               <TableCell
                 style={{
