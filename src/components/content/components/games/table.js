@@ -18,6 +18,7 @@ import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import Packages from "./viewPackages";
 import Thumbnail from "../../../../assets/thumbnail1.png";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import Search from "./search";
 import AddPackage from "./addPackage";
 import AddItem from "./addItem";
@@ -180,7 +181,6 @@ export default function SimpleTable({ data }) {
                 }}
               >
                 {games && games.length > 0 && "S No."}
-                {/* S No. */}
               </TableCell>
               <TableCell
                 style={{
@@ -221,11 +221,17 @@ export default function SimpleTable({ data }) {
                       setOpenDialog(!openDialog);
                     }}
                   >
-                    <ArrowDropDownIcon />
+                    {openDialog ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
                   </IconButton>
                 </Box>
                 {openDialog && (
-                  <Paper style={{ position: "absolute", width: "10rem",marginLeft:"12rem" }}>
+                  <Paper
+                    style={{
+                      position: "absolute",
+                      width: "10rem",
+                      marginLeft: "12rem",
+                    }}
+                  >
                     <p
                       onClick={() => {
                         fetchGames(null, null, null, null);

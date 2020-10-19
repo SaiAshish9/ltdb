@@ -15,6 +15,7 @@ import Search from "./search";
 import AddBannerPopup from "./addBanner";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import { Context as DataContext } from "../../../../api/dataProvider";
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -128,7 +129,7 @@ const BannerTable = () => {
                       setOpenDialog(!openDialog);
                     }}
                   >
-                    <ArrowDropDownIcon />
+                    {openDialog ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
                   </IconButton>
                 </Box>{" "}
               </TableCell>

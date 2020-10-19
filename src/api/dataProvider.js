@@ -756,7 +756,7 @@ const fetchBanners = (dispatch) => async () => {
   try {
     const {
       data: { data },
-    } = await Api("admin/banner/get-list");
+    } = await Api("admin/banner/list");
     console.log(data)
     dispatch({
       type: "SET_BANNERS",

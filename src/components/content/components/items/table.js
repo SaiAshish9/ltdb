@@ -27,6 +27,8 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import EditItem from "./editItem";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -228,7 +230,7 @@ export default function SimpleTable({ data }) {
                       setOpenDialog(!openDialog);
                     }}
                   >
-                    <ArrowDropDownIcon />
+                    {openDialog ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
                   </IconButton>
                 </Box>
                 {openDialog && (

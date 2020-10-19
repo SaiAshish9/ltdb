@@ -12,6 +12,7 @@ import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import IconButton from "@material-ui/core/IconButton";
 import moment from "moment";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import Popup from "./popup";
 import { Box, CircularProgress } from "@material-ui/core";
 import {
@@ -180,7 +181,7 @@ export default function SimpleTable({ data }) {
                       setOpenDialog(!openDialog);
                     }}
                   >
-                    <ArrowDropDownIcon />
+                    {openDialog ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
                   </IconButton>
                 </Box>
                 {openDialog && (

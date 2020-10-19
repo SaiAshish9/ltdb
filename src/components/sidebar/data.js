@@ -32,10 +32,7 @@ export const options = [
     icon: <CategoryIcon />,
     path: "/categories",
     paths: ["/categories", "/categories/add/subcategory"],
-    options: [
-      // { name: "Add Categories", path: "/categories" },
-      // { name: "Add Sub Categories", path: "/categories/add/subcategory" },
-    ],
+    options: [],
   },
   {
     id: "Items",
@@ -45,7 +42,7 @@ export const options = [
     options: [],
   },
   {
-    id: "Banner",
+    id: "Banners",
     icon: <ViewCarouselIcon />,
     path: "/banner",
     paths: ["/banner"],
