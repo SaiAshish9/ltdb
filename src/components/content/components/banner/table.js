@@ -15,7 +15,9 @@ import Search from "./search";
 import AddBannerPopup from "./addBanner";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import { Context as DataContext } from "../../../../api/dataProvider";
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
+import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -89,6 +91,7 @@ const BannerTable = () => {
                   fontWeight: "bold",
                   fontSize: "0.8rem",
                   color: "#282b3c",
+                  textAlign: "center",
                 }}
               >
                 S. NO.
@@ -97,6 +100,7 @@ const BannerTable = () => {
                 style={{
                   fontWeight: "bold",
                   fontSize: "0.8rem",
+                  textAlign: "center",
                   color: "#282b3c",
                 }}
               >
@@ -107,6 +111,7 @@ const BannerTable = () => {
                   fontWeight: "bold",
                   fontSize: "0.8rem",
                   color: "#282b3c",
+                  textAlign: "center",
                 }}
               >
                 Arabic Name
@@ -116,12 +121,14 @@ const BannerTable = () => {
                   fontWeight: "bold",
                   fontSize: "0.8rem",
                   color: "#282b3c",
+                  textAlign: "center",
                 }}
               >
                 <Box
                   display="flex"
                   alignItems="center"
-                  style={{ paddingLeft: "12rem" }}
+                  justifyContent="center"
+                  style={{ textAlign: "center", paddingLeft: "2rem" }}
                 >
                   Status{" "}
                   <IconButton
@@ -138,13 +145,82 @@ const BannerTable = () => {
                   fontWeight: "bold",
                   fontSize: "0.8rem",
                   color: "#282b3c",
+                  textAlign: "center",
                 }}
               >
                 Action
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody></TableBody>
+          <TableBody>
+            {banners &&
+              banners.length > 0 &&
+              banners.map((i, k) => (
+                <TableRow
+                  key={k}
+                  elevation={0}
+                  style={{
+                    height: "3.4rem",
+                    padding: "0px",
+                    border: "none",
+                  }}
+                >
+                  <TableCell
+                    style={{
+                      textAlign: "center",
+                      color: "#8095a1",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {k + 1}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      color: "#8095a1",
+                      fontWeight: 500,
+                      textAlign: "center",
+                    }}
+                  >
+                    {i.title_en}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      textAlign: "center",
+                      color: "#8095a1",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {i.title_ar}
+                  </TableCell>
+                  <TableCell
+                    onClick={async () => {}}
+                    style={{
+                      cursor: "pointer",
+                      textAlign: "center",
+                      color: +i.status !== 1 ? "red" : "green",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {+i.status === 1 ? "Active" : "InActive"}
+                  </TableCell>
+
+                  <TableCell>
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <IconButton onClick={async () => {}}>
+                        <EditOutlinedIcon style={{ cursor: "pointer" }} />{" "}
+                      </IconButton>
+                      <IconButton onClick={async () => {}}>
+                        <VisibilityOutlinedIcon style={{ cursor: "pointer" }} />{" "}
+                      </IconButton>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
         </Table>
       </TableContainer>
       <AddBannerPopup open={open} setOpen={setOpen} classes={classes} />

@@ -756,11 +756,30 @@ const fetchBanners = (dispatch) => async () => {
   try {
     const {
       data: { data },
-    } = await Api("admin/banner/list");
-    console.log(data)
+    } = await Api("admin/banner/get-list");
     dispatch({
       type: "SET_BANNERS",
       payload: data,
+    });
+  } catch (e) {}
+};
+
+const addBanner = (dispatch) => async (data) => {
+  try {
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: null,
+    });
+    var image = null;
+    image = await uploadImage("banners", data.image);
+    await Api.post("admin/banner/store", {
+      ...data,
+      image: image,
+    });
+    await fetchBanners();
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: "Banner Added Successfully",
     });
   } catch (e) {}
 };
@@ -783,6 +802,7 @@ export const { Context, Provider } = createDataContext(
     addPackage,
     editPackage,
     addGame,
+    addBanner,
     editItem,
     fetchGame,
     togglePackage,
