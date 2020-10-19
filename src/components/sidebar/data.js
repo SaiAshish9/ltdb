@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import ShoppingBasketOutlinedIcon from "@material-ui/icons/ShoppingBasketOutlined";
 import CategoryIcon from "@material-ui/icons/Category";
 import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
@@ -7,6 +7,7 @@ import PeopleIcon from "@material-ui/icons/People";
 import SettingsIcon from "@material-ui/icons/Settings";
 import StorageIcon from "@material-ui/icons/Storage";
 import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
+import ViewCarouselIcon from "@material-ui/icons/ViewCarousel";
 
 export const options = [
   {
@@ -41,6 +42,13 @@ export const options = [
     icon: <StorageIcon />,
     path: "/items",
     paths: ["/items"],
+    options: [],
+  },
+  {
+    id: "Banner",
+    icon: <ViewCarouselIcon />,
+    path: "/banner",
+    paths: ["/banner"],
     options: [],
   },
   {

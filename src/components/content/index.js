@@ -6,7 +6,7 @@ import Categories from './components/categories'
 // import Notifications from "./components/notifications";
 import Items from "./components/items"
 import Games from "./components/games";
-
+import Banner from "./components/banner"
 
 const Content = () => {
 
@@ -19,6 +19,7 @@ const Content = () => {
         {/* <Route exact path="/notifications" component={Notifications} /> */}
         <Route exact path="/items" component={Items} />
         <Route exact path="/games" component={Games} />
+        <Route exact path="/banner" component={Banner} />
       </Switch>
     );
 }
