@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Box, CircularProgress } from "@material-ui/core";
-import AddItem from "./addItem";
 import Table from "./table";
 import { Context as DataContext } from "../../../../api/dataProvider";
 
@@ -8,7 +7,7 @@ const Items = () => {
   const {
     state: { items },
     fetchItems,
-    fetchGames
+    fetchGames,
   } = useContext(DataContext);
   const [loading, isLoading] = useState(false);
 
@@ -22,9 +21,6 @@ const Items = () => {
   }, []);
   return (
     <Box>
-      <Box style={{ position: "absolute", top: 1, right: "2vw" }}>
-        <AddItem />
-      </Box>
       {!loading ? (
         <Box
           display="flex"
@@ -48,7 +44,7 @@ const Items = () => {
             position: "absolute",
             bottom: 0,
             width: "85%",
-            height:"90vh"
+            height: "90vh",
           }}
         >
           <Table data={items} />

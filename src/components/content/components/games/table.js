@@ -17,6 +17,11 @@ import EditGame from "./editGame";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import Packages from "./viewPackages";
 import Thumbnail from "../../../../assets/thumbnail1.png";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import Search from "./search";
+import AddPackage from "./addPackage";
+import AddItem from "./addItem";
+
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -37,6 +42,13 @@ export default function SimpleTable({ data }) {
   const [open, setOpen] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openPackagesDialog, setOpenPackagesDialog] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [active, isActive] = useState(false);
+  const [inActive, isInActive] = useState(false);
+  const [openPackageForm, setOpenPackageForm] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  const [openAddGame,setOpenAddGame] = useState(false);
+
 
   const {
     state: { games, message, game_count },
@@ -73,6 +85,57 @@ export default function SimpleTable({ data }) {
 
   return (
     <React.Fragment>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        style={{
+          position: "fixed",
+          top: 0,
+          height: "10vh",
+          zIndex: 2,
+          width: "85vw",
+          paddingRight: "2rem",
+        }}
+      >
+        <Box style={{ height: "7vh" }}>
+          <Search active={active} inActive={inActive} />
+        </Box>
+
+        <Box display="flex">
+          <p
+            onClick={() => {
+              setOpenAddGame(true);
+            }}
+            style={{
+              color: "#fff",
+              cursor: "pointer",
+              fontWeight: "bold",
+              position: "relative",
+              zIndex: 3,
+              marginRight: "1.5rem",
+            }}
+          >
+            Add Game
+          </p>
+
+          <p
+            onClick={() => {
+              setOpenPackageForm(true);
+            }}
+            style={{
+              color: "#fff",
+              cursor: "pointer",
+              fontWeight: "bold",
+              position: "relative",
+              zIndex: 3,
+              marginRight: "2rem",
+            }}
+          >
+            Add Package
+          </p>
+        </Box>
+      </Box>
       <TableContainer
         style={{
           height: "83vh",
@@ -147,7 +210,83 @@ export default function SimpleTable({ data }) {
                   textAlign: "center",
                 }}
               >
-                Status
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  style={{ paddingLeft: "12rem" }}
+                >
+                  Status{" "}
+                  <IconButton
+                    onClick={() => {
+                      setOpenDialog(!openDialog);
+                    }}
+                  >
+                    <ArrowDropDownIcon />
+                  </IconButton>
+                </Box>
+                {openDialog && (
+                  <Paper style={{ position: "absolute", width: "10rem",marginLeft:"12rem" }}>
+                    <p
+                      onClick={() => {
+                        fetchGames(null, null, null, null);
+                        setOpenDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      All
+                    </p>
+                    <p
+                      onClick={() => {
+                        if (!active) {
+                          isInActive(false);
+                          fetchGames(null, null, null, 1);
+                        }
+                        if (active) {
+                          fetchGames();
+                        }
+                        isActive(!active);
+                        setOpenDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Active
+                    </p>
+                    <p
+                      onClick={() => {
+                        if (!inActive) {
+                          isActive(false);
+                          fetchGames(null, null, null, 0);
+                        }
+                        if (inActive) {
+                          fetchGames();
+                        }
+                        isInActive(!inActive);
+                        setOpenDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      InActive
+                    </p>
+                  </Paper>
+                )}
               </TableCell>
               <TableCell
                 style={{
@@ -327,12 +466,7 @@ export default function SimpleTable({ data }) {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
-      <Popup
-        // setOpenPackageDialog={setOpenPackageDialog}
-        classes={classes}
-        open={open}
-        setOpen={setOpen}
-      />
+      <Popup classes={classes} open={open} setOpen={setOpen} />
       <Packages
         classes={classes}
         open={openPackagesDialog}
@@ -342,6 +476,19 @@ export default function SimpleTable({ data }) {
         classes={classes}
         open={openEditDialog}
         setOpen={setOpenEditDialog}
+      />
+      <AddItem
+        disabled={disabled}
+        setDisabled={setDisabled}
+        open={openAddGame}
+        setOpen={setOpenAddGame}
+      />
+      <AddPackage
+        classes={classes}
+        setOpen={setOpenPackageForm}
+        open={openPackageForm}
+        disabled={disabled}
+        setDisabled={setDisabled}
       />
     </React.Fragment>
   );

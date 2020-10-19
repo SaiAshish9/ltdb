@@ -9,14 +9,24 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import TablePagination from "@material-ui/core/TablePagination";
 import { Context as DataContext } from "../../../../api/dataProvider";
-import { Box, CircularProgress, Snackbar, IconButton } from "@material-ui/core";
+import {
+  Box,
+  CircularProgress,
+  Snackbar,
+  IconButton,
+  FormGroup,
+  Switch,
+  FormControlLabel,
+} from "@material-ui/core";
+import AddItem from "./addItem";
 import moment from "moment";
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import Search from "./search";
 import Popup from "./popup";
 import Thumbnail from "../../../../assets/thumbnail1.png";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import EditItem from "./editItem";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -37,6 +47,10 @@ export default function SimpleTable({ data }) {
   const [open, setOpen] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [id, setId] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [active, isActive] = useState(false);
+  const [inActive, isInActive] = useState(false);
+  const [openAddItem, setOpenAddItem] = useState(false);
 
   const {
     state: { items, items_count, page_count, message },
@@ -85,6 +99,42 @@ export default function SimpleTable({ data }) {
 
   return (
     <React.Fragment>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        style={{
+          position: "fixed",
+          top: 0,
+          height: "10vh",
+          zIndex: 2,
+          width: "85vw",
+          paddingRight: "2rem",
+        }}
+      >
+        <Box display="flex" alignItems="center" style={{ height: "7vh" }}>
+          <Search active={active} inActive={inActive} />
+        </Box>
+        <Box display="flex">
+          <p
+            onClick={() => {
+              setOpenAddItem(true);
+            }}
+            style={{
+              color: "#fff",
+              cursor: "pointer",
+              fontWeight: "bold",
+              position: "relative",
+              top: -5,
+              zIndex: 3,
+              marginRight: "1.5rem",
+            }}
+          >
+            Add Item
+          </p>
+        </Box>
+      </Box>
+
       <TableContainer
         style={{
           height: "83vh",
@@ -127,7 +177,6 @@ export default function SimpleTable({ data }) {
                 }}
               >
                 S No
-                {/* Item Id */}
               </TableCell>
               <TableCell
                 style={{
@@ -172,7 +221,79 @@ export default function SimpleTable({ data }) {
                   color: "#282b3c",
                 }}
               >
-                Status
+                <Box display="flex" alignItems="center">
+                  Status{" "}
+                  <IconButton
+                    onClick={() => {
+                      setOpenDialog(!openDialog);
+                    }}
+                  >
+                    <ArrowDropDownIcon />
+                  </IconButton>
+                </Box>
+                {openDialog && (
+                  <Paper style={{ position: "absolute", width: "10rem" }}>
+                    <p
+                      onClick={() => {
+                        fetchItems(null, null, null, null);
+                        setOpenDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      All
+                    </p>
+                    <p
+                      onClick={() => {
+                        if (!active) {
+                          isInActive(false);
+                          fetchItems(null, null, null, 1);
+                        }
+                        if (active) {
+                          fetchItems();
+                        }
+                        isActive(!active);
+                        setOpenDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Active
+                    </p>
+                    <p
+                      onClick={() => {
+                        if (!inActive) {
+                          isActive(false);
+                          fetchItems(null, null, null, 0);
+                        }
+                        if (inActive) {
+                          fetchItems();
+                        }
+                        isInActive(!inActive);
+                        setOpenDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      InActive
+                    </p>
+                  </Paper>
+                )}
               </TableCell>
               <TableCell
                 style={{
@@ -321,6 +442,7 @@ export default function SimpleTable({ data }) {
         open={openEditDialog}
         setOpen={setOpenEditDialog}
       />
+      <AddItem open={openAddItem} setOpen={setOpenAddItem} />
     </React.Fragment>
   );
 }

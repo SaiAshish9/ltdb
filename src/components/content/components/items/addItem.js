@@ -11,18 +11,14 @@ import {
   MenuItem,
   Input,
   FormControl,
-  FormGroup,
   FormControlLabel,
   Checkbox,
-  Switch,
   CircularProgress,
 } from "@material-ui/core";
-import { Add, Clear, CameraAlt } from "@material-ui/icons";
+import { Clear, CameraAlt } from "@material-ui/icons";
 import Api from "../../../../api";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { useForm } from "react-hook-form";
-import { uploadFile } from "react-s3";
-import Search from "./search";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -30,8 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddItem = () => {
-  const [open, setOpen] = useState(false);
+const AddItem = ({open, setOpen}) => {
   const classes = useStyles();
   const [data, setData] = useState(null);
   const [categories, setCategories] = useState(null);
@@ -57,8 +52,6 @@ const AddItem = () => {
   const [file, setFile] = useState(null);
   const [imgFile, setImgFile] = useState(null);
   const [disabled, setDisabled] = useState(false);
-  const [active, isActive] = useState(false);
-  const [inActive, isInActive] = useState(false);
   const [item_available, is_item_available] = useState(false);
   const [item_value, setItemValue] = useState(null);
   const [items, setItems] = useState([]);
@@ -95,18 +88,16 @@ const AddItem = () => {
   };
 
   useEffect(() => {
-    Api("admin/item/brand-list")
-      .then((data) => {
-        setData(data.data.data);
-      })
+    Api("admin/item/brand-list").then((data) => {
+      setData(data.data.data);
+    });
     fetchCategories();
   }, []);
 
   const fetchCategories = async () => {
-    await Api(`admin/category/list`)
-      .then((data) => {
-        setCategories(data.data.data);
-      })
+    await Api(`admin/category/list`).then((data) => {
+      setCategories(data.data.data);
+    });
   };
 
   const fetchSubCategories = (id) => {
@@ -135,7 +126,6 @@ const AddItem = () => {
   };
 
   const handleSave = async (y) => {
-
     setDisabled(true);
     if (items && items.length > 0) {
       await addItem({
@@ -174,7 +164,7 @@ const AddItem = () => {
     setNameAr("");
     setDescEn("");
     setDescAr("");
-    setItems([])
+    setItems([]);
     setValue(null);
     setBrandValue(null);
     setDescription(null);
@@ -196,7 +186,6 @@ const AddItem = () => {
       alignItems="center"
       style={{ padding: "0.2rem 2rem" }}
     >
-      <Search active={active} inActive={inActive} />
       <form onSubmit={handleSubmit(handleSubmit1)}>
         <input
           accept=".png,.jpeg,.jpg"
@@ -209,74 +198,7 @@ const AddItem = () => {
           id="icon-button-file"
           type="file"
         />
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          style={{ zIndex: 3, position: "relative", width: "80vw" }}
-        >
-          <Box display="flex" alignItems="center">
-            <FormGroup row style={{ marginLeft: "2rem" }}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={active}
-                    onChange={() => {
-                      if (!active) {
-                        isInActive(false);
-                        fetchItems(null, null, null, 1);
-                      }
-                      if (active) {
-                        fetchItems();
-                      }
-                      isActive(!active);
-                    }}
-                    name="checkedA"
-                    color="primary"
-                  />
-                }
-                label={<p style={{ color: "#fff" }}>Active</p>}
-              />
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={inActive}
-                    onChange={() => {
-                      if (!inActive) {
-                        isActive(false);
-                        fetchItems(null, null, null, 0);
-                      }
-                      if (inActive) {
-                        fetchItems();
-                      }
-                      isInActive(!inActive);
-                    }}
-                    name="InActive"
-                  />
-                }
-                label={<p style={{ color: "#fff" }}>InActive</p>}
-              />
-            </FormGroup>
-          </Box>
 
-          <Box display="flex">
-            <p
-              onClick={() => {
-                setOpen(true);
-              }}
-              style={{
-                color: "#fff",
-                cursor: "pointer",
-                fontWeight: "bold",
-                position: "relative",
-                top: -5,
-                zIndex: 3,
-                marginRight: "1.5rem",
-              }}
-            >
-              Add Item
-            </p>
-          </Box>
-        </Box>
         <Backdrop open={open} className={classes.backdrop}>
           <Paper
             style={{
@@ -301,7 +223,7 @@ const AddItem = () => {
                   setItemValue(null);
                   setValue(null);
                   setBrandValue(null);
-                  setItems([])
+                  setItems([]);
                   setDescription(null);
                   setCustomFields(null);
                   setPrice(0);
@@ -670,11 +592,7 @@ const AddItem = () => {
               {disabled ? (
                 <CircularProgress />
               ) : (
-                <Fab
-                  type="submit"
-                  variant="extended"
-                  color="primary"
-                >
+                <Fab type="submit" variant="extended" color="primary">
                   Save
                 </Fab>
               )}

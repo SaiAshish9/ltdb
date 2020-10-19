@@ -11,6 +11,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import IconButton from "@material-ui/core/IconButton";
 import moment from "moment";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import Popup from "./popup";
 import { Box, CircularProgress } from "@material-ui/core";
 import {
@@ -51,7 +52,7 @@ export default function SimpleTable({ data }) {
   const [openSnackbar, setOpenSnackbar] = useState(true);
   const [active, isActive] = useState(false);
   const [inActive, isInActive] = useState(false);
-
+  const [openDialog, setOpenDialog] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleChangeRowsPerPage = (event) => {
@@ -70,55 +71,18 @@ export default function SimpleTable({ data }) {
       <Box
         display="flex"
         justifyContent="space-between"
-        style={{ zIndex: 3, position: "relative", width: "80vw" }}
+        alignItems="center"
+        style={{
+          position: "fixed",
+          top: 0,
+          height: "10vh",
+          zIndex: 2,
+          width: "85vw",
+          paddingRight: "2rem",
+        }}
       >
-        <Box
-          display="flex"
-          alignItems="center"
-          style={{ position: "absolute", top: "-8vh" }}
-        >
+        <Box style={{ height: "7vh" }}>
           <Search active={active} inActive={inActive} />
-          <FormGroup row style={{ marginLeft: "2rem" }}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={active}
-                  onChange={() => {
-                    if (!active) {
-                      isInActive(false);
-                      fetchUsers(null, null, null, 1);
-                    }
-                    if (active) {
-                      fetchUsers();
-                    }
-                    isActive(!active);
-                  }}
-                  name="checkedA"
-                  color="primary"
-                />
-              }
-              label={<p style={{ color: "#fff" }}>Active</p>}
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={inActive}
-                  onChange={() => {
-                    if (!inActive) {
-                      isActive(false);
-                      fetchUsers(null, null, null, 0);
-                    }
-                    if (inActive) {
-                      fetchUsers();
-                    }
-                    isInActive(!inActive);
-                  }}
-                  name="InActive"
-                />
-              }
-              label={<p style={{ color: "#fff" }}>InActive</p>}
-            />
-          </FormGroup>
         </Box>
       </Box>
       <TableContainer
@@ -145,11 +109,16 @@ export default function SimpleTable({ data }) {
           />
         )}
         <Table className={classes.table} aria-label="simple table" size="small">
-          <TableHead>
+          <TableHead
+            style={{
+              background: "#f4f4f4",
+              height: "3.4rem",
+            }}
+          >
             <TableRow
               style={{
                 background: "#f4f4f4",
-                height: "3.4rem",
+                maxHeight: "3.4rem",
               }}
             >
               <TableCell
@@ -204,7 +173,79 @@ export default function SimpleTable({ data }) {
                   color: "#282b3c",
                 }}
               >
-                Status
+                <Box display="flex" alignItems="center">
+                  Status{" "}
+                  <IconButton
+                    onClick={() => {
+                      setOpenDialog(!openDialog);
+                    }}
+                  >
+                    <ArrowDropDownIcon />
+                  </IconButton>
+                </Box>
+                {openDialog && (
+                  <Paper style={{ position: "absolute", width: "10rem" }}>
+                    <p
+                      onClick={() => {
+                        fetchUsers(null, null, null, null);
+                        setOpenDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      All
+                    </p>
+                    <p
+                      onClick={() => {
+                        if (!active) {
+                          isInActive(false);
+                          fetchUsers(null, null, null, 1);
+                        }
+                        if (active) {
+                          fetchUsers();
+                        }
+                        isActive(!active);
+                        setOpenDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Active
+                    </p>
+                    <p
+                      onClick={() => {
+                        if (!inActive) {
+                          isActive(false);
+                          fetchUsers(null, null, null, 0);
+                        }
+                        if (inActive) {
+                          fetchUsers();
+                        }
+                        isInActive(!inActive);
+                        setOpenDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      InActive
+                    </p>
+                  </Paper>
+                )}
               </TableCell>
               <TableCell
                 style={{

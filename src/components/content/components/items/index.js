@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Box, CircularProgress } from "@material-ui/core";
-import AddItem from "./addItem";
 import Table from "./table";
 import { Context as DataContext } from "../../../../api/dataProvider";
 
@@ -21,9 +20,7 @@ const Items = () => {
   }, []);
   return (
     <Box>
-      <Box style={{ position: "absolute", top: 1, right: "2vw" }}>
-        <AddItem />
-      </Box>
+      
       {!loading ? (
         <Box
           display="flex"
