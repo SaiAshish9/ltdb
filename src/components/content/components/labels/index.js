@@ -3,14 +3,14 @@ import { Box, CircularProgress } from "@material-ui/core";
 import Table from "./table";
 import { Context as DataContext } from "../../../../api/dataProvider";
 
-const Banners = () => {
-  const { fetchBanners } = useContext(DataContext);
+const Labels = () => {
+  const { fetchLabels } = useContext(DataContext);
   const [loading, isLoading] = useState(false);
 
   useEffect(() => {
     async function fetchdata() {
       isLoading(true);
-      await fetchBanners();
+      await fetchLabels();
       isLoading(false);
     }
     fetchdata();
@@ -51,4 +51,4 @@ const Banners = () => {
   );
 };
 
-export default Banners;
+export default Labels;

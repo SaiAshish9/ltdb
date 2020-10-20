@@ -13,12 +13,12 @@ import {
   IconButton,
 } from "@material-ui/core";
 // import Search from "./search";
-import AddBannerPopup from "./addBanner";
+// import AddBannerPopup from "./addBanner";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
-import ViewBannerPopup from "./viewBanner";
-import EditBannerPopup from "./editBanner";
+// import ViewBannerPopup from "./viewBanner";
+// import EditBannerPopup from "./editBanner";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -26,17 +26,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BannerTable = () => {
+const LabelTable = () => {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
   const [openDialog, setOpenDialog] = useState(false);
   const [openViewBanner, setOpenViewBanner] = useState(false);
   const [openEditBanner, setOpenEditBanner] = useState(false);
   const {
-    state: { banners, message },
+    state: { labels, message },
     fetchBannerDetails,
     toggleBannerStatus,
-    fetchBanners,
+    fetchLabels,
   } = useContext(DataContext);
   const [openSnackbar, setOpenSnackbar] = useState(true);
 
@@ -70,7 +70,7 @@ const BannerTable = () => {
             marginRight: "2rem",
           }}
         >
-          Add Banner
+          Add Label
         </p>
       </Box>
 
@@ -111,6 +111,16 @@ const BannerTable = () => {
                 }}
               >
                 S. NO.
+              </TableCell>
+              <TableCell
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "0.8rem",
+                  textAlign: "center",
+                  color: "#282b3c",
+                }}
+              >
+                Key
               </TableCell>
               <TableCell
                 style={{
@@ -169,9 +179,9 @@ const BannerTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {banners &&
-              banners.length > 0 &&
-              banners.map((i, k) => (
+            {labels &&
+              labels.length > 0 &&
+              labels.map((i, k) => (
                 <TableRow
                   key={k}
                   elevation={0}
@@ -197,7 +207,16 @@ const BannerTable = () => {
                       textAlign: "center",
                     }}
                   >
-                    {i.title_en}
+                    {i.key}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      color: "#8095a1",
+                      fontWeight: 500,
+                      textAlign: "center",
+                    }}
+                  >
+                    {i.label_en}
                   </TableCell>
                   <TableCell
                     style={{
@@ -206,12 +225,12 @@ const BannerTable = () => {
                       fontWeight: 500,
                     }}
                   >
-                    {i.title_ar}
+                    {i.label_ar}
                   </TableCell>
-                  <TableCell
+                  {/* <TableCell
                     onClick={async () => {
-                      await toggleBannerStatus(i.id, +i.status === 0 ? 1 : 0);
-                      await fetchBanners();
+                      // await toggleBannerStatus(i.id, +i.status === 0 ? 1 : 0);
+                      // await fetchLabels();
                     }}
                     style={{
                       cursor: "pointer",
@@ -221,7 +240,7 @@ const BannerTable = () => {
                     }}
                   >
                     {+i.status === 1 ? "Active" : "InActive"}
-                  </TableCell>
+                  </TableCell> */}
 
                   <TableCell>
                     <Box
@@ -231,8 +250,8 @@ const BannerTable = () => {
                     >
                       <IconButton
                         onClick={async () => {
-                          await fetchBannerDetails(i.id);
-                          setOpenEditBanner(true);
+                          // await fetchBannerDetails(i.id);
+                          // setOpenEditBanner(true);
                         }}
                       >
                         <EditOutlinedIcon style={{ cursor: "pointer" }} />{" "}
@@ -240,8 +259,8 @@ const BannerTable = () => {
                       <IconButton onClick={async () => {}}>
                         <VisibilityOutlinedIcon
                           onClick={async () => {
-                            await fetchBannerDetails(i.id);
-                            setOpenViewBanner(true);
+                            // await fetchBannerDetails(i.id);
+                            // setOpenViewBanner(true);
                           }}
                           style={{ cursor: "pointer" }}
                         />{" "}
@@ -253,7 +272,7 @@ const BannerTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <AddBannerPopup open={open} setOpen={setOpen} classes={classes} />
+      {/* <AddBannerPopup open={open} setOpen={setOpen} classes={classes} />
       <ViewBannerPopup
         open={openViewBanner}
         setOpen={setOpenViewBanner}
@@ -263,9 +282,9 @@ const BannerTable = () => {
         open={openEditBanner}
         setOpen={setOpenEditBanner}
         classes={classes}
-      />
+      /> */}
     </React.Fragment>
   );
 };
 
-export default BannerTable;
+export default LabelTable;

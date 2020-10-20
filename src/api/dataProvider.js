@@ -24,6 +24,11 @@ const reducer = (state, action) => {
         ...state,
         item_details: action.payload,
       };
+    case "SET_LABELS":
+      return {
+        ...state,
+        labels: action.payload,
+      };
     case "SET_BANNERS":
       return {
         ...state,
@@ -106,6 +111,10 @@ const reducer = (state, action) => {
 
 const fetchItems = (dispatch) => async (page, limit, search, status) => {
   var url;
+  dispatch({
+    type: "SET_MESSAGE",
+    payload: null,
+  });
   if (page && limit) {
     url = `admin/item/list?limit=${limit}&&page=${page}`;
   } else {
@@ -827,13 +836,43 @@ const fetchBannerDetails = (dispatch) => async (id) => {
   });
 };
 
+const toggleBannerStatus = (dispatch) => async (id, action) => {
+  try {
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: null,
+    });
+    await Api.post("admin/banner/block-unblock", {
+      banners: [id],
+      action_type: action,
+    });
+    await fetchBanners();
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: "Banner Updated Successfully",
+    });
+  } catch (e) {}
+};
+
+const fetchLabels = (dispatch) => async () => {
+  const {
+    data: { data },
+  } = await Api("admin/label/list");
+  dispatch({
+    type: "SET_LABELS",
+    payload: data,
+  });
+};
+
 export const { Context, Provider } = createDataContext(
   reducer,
   {
     fetchItems,
     addItem,
+    fetchLabels,
     toggleItemStatus,
     fetchUser,
+    toggleBannerStatus,
     fetchUsers,
     fetchBanners,
     fetchItem,
@@ -867,6 +906,7 @@ export const { Context, Provider } = createDataContext(
     game_details: null,
     users: [],
     games: [],
+    labels: [],
     banner_details: null,
     package_details: null,
     game_packages: [],

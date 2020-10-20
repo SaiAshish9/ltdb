@@ -8,16 +8,22 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import StorageIcon from "@material-ui/icons/Storage";
 import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import ViewCarouselIcon from "@material-ui/icons/ViewCarousel";
+import LabelIcon from "@material-ui/icons/Label";
 
 export const options = [
   {
-    id: "Products",
-    icon: <ShoppingBasketOutlinedIcon />,
-    path: "/products",
-    paths: ["/products", "/products/detail", "/products/new"],
+    id: "Label",
+    // id: "Products",
+    icon: <LabelIcon />,
+    // icon: <ShoppingBasketOutlinedIcon />,
+    path: "/labels",
+    paths: [
+      "/labels",
+      // "/products/detail", "/products/new"
+    ],
     options: [
-      { name: "Product Detail", path: "/products/detail" },
-      { name: "New Product", path: "/products/new" },
+      // { name: "Product Detail", path: "/products/detail" },
+      // { name: "New Product", path: "/products/new" },
     ],
   },
   {
