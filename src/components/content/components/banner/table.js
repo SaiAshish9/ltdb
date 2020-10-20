@@ -11,13 +11,13 @@ import {
   Box,
   IconButton,
 } from "@material-ui/core";
-import Search from "./search";
+// import Search from "./search";
 import AddBannerPopup from "./addBanner";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import { Context as DataContext } from "../../../../api/dataProvider";
-import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
+import ViewBannerPopup from "./viewBanner";
+import EditBannerPopup from "./editBanner";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -29,8 +29,11 @@ const BannerTable = () => {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
   const [openDialog, setOpenDialog] = useState(false);
+  const [openViewBanner, setOpenViewBanner] = useState(false);
+  const [openEditBanner, setOpenEditBanner] = useState(false);
   const {
     state: { banners },
+    fetchBannerDetails,
   } = useContext(DataContext);
 
   return (
@@ -48,9 +51,7 @@ const BannerTable = () => {
           paddingRight: "2rem",
         }}
       >
-        <Box style={{ height: "7vh" }}>
-          <Search />
-        </Box>
+        <Box style={{ height: "7vh" }}>{/* <Search /> */}</Box>
 
         <p
           onClick={() => {
@@ -71,7 +72,7 @@ const BannerTable = () => {
 
       <TableContainer
         style={{
-          height: "83vh",
+          minHeight: "83vh",
           width: "100%",
         }}
         elevation={0}
@@ -136,7 +137,7 @@ const BannerTable = () => {
                       setOpenDialog(!openDialog);
                     }}
                   >
-                    {openDialog ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                    {/* {openDialog ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />} */}
                   </IconButton>
                 </Box>{" "}
               </TableCell>
@@ -210,11 +211,22 @@ const BannerTable = () => {
                       justifyContent="center"
                       alignItems="center"
                     >
-                      <IconButton onClick={async () => {}}>
+                      <IconButton
+                        onClick={async () => {
+                          await fetchBannerDetails(i.id);
+                          setOpenEditBanner(true);
+                        }}
+                      >
                         <EditOutlinedIcon style={{ cursor: "pointer" }} />{" "}
                       </IconButton>
                       <IconButton onClick={async () => {}}>
-                        <VisibilityOutlinedIcon style={{ cursor: "pointer" }} />{" "}
+                        <VisibilityOutlinedIcon
+                          onClick={async () => {
+                            await fetchBannerDetails(i.id);
+                            setOpenViewBanner(true);
+                          }}
+                          style={{ cursor: "pointer" }}
+                        />{" "}
                       </IconButton>
                     </Box>
                   </TableCell>
@@ -224,6 +236,16 @@ const BannerTable = () => {
         </Table>
       </TableContainer>
       <AddBannerPopup open={open} setOpen={setOpen} classes={classes} />
+      <ViewBannerPopup
+        open={openViewBanner}
+        setOpen={setOpenViewBanner}
+        classes={classes}
+      />
+      <EditBannerPopup
+        open={openEditBanner}
+        setOpen={setOpenEditBanner}
+        classes={classes}
+      />
     </React.Fragment>
   );
 };

@@ -29,6 +29,11 @@ const reducer = (state, action) => {
         ...state,
         banners: action.payload,
       };
+    case "SET_BANNER_DETAILS":
+      return {
+        ...state,
+        banner_details: action.payload,
+      };
     case "SET_GAME":
       return {
         ...state,
@@ -764,6 +769,33 @@ const fetchBanners = (dispatch) => async () => {
   } catch (e) {}
 };
 
+const editBanner = (dispatch) => async (data) => {
+  try {
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: null,
+    });
+    var image = null;
+    if (data.imgFile) {
+      image = await uploadImage("banners", data.imgFile);
+    } else {
+      image = data.image;
+    }
+    await Api.post("admin/banner/store", {
+      banner_id: data.banner_id,
+      title_en: data.title_en,
+      title_ar: data.title_ar,
+      image: image,
+      status: 1,
+    });
+    await fetchBanners();
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: "Banner Added Successfully",
+    });
+  } catch (e) {}
+};
+
 const addBanner = (dispatch) => async (data) => {
   try {
     dispatch({
@@ -784,6 +816,17 @@ const addBanner = (dispatch) => async (data) => {
   } catch (e) {}
 };
 
+const fetchBannerDetails = (dispatch) => async (id) => {
+  const {
+    data: { data },
+  } = await Api(`admin/banner/get-banner?banner_id=${id}`);
+
+  dispatch({
+    type: "SET_BANNER_DETAILS",
+    payload: data,
+  });
+};
+
 export const { Context, Provider } = createDataContext(
   reducer,
   {
@@ -794,6 +837,7 @@ export const { Context, Provider } = createDataContext(
     fetchUsers,
     fetchBanners,
     fetchItem,
+    fetchBannerDetails,
     toggleUserStatus,
     clearMessage,
     fetchResolutions,
@@ -803,6 +847,7 @@ export const { Context, Provider } = createDataContext(
     editPackage,
     addGame,
     addBanner,
+    editBanner,
     editItem,
     fetchGame,
     togglePackage,
@@ -822,6 +867,7 @@ export const { Context, Provider } = createDataContext(
     game_details: null,
     users: [],
     games: [],
+    banner_details: null,
     package_details: null,
     game_packages: [],
     game_package_items: [],
