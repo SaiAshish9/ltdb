@@ -856,8 +856,8 @@ const toggleBannerStatus = (dispatch) => async (id, action) => {
 
 const fetchLabels = (dispatch) => async () => {
   const {
-    data: { data },
-  } = await Api("admin/label/list");
+    data: { data: {data} },
+  } = await Api("admin/lable/list");
   dispatch({
     type: "SET_LABELS",
     payload: data,

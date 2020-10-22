@@ -56,22 +56,36 @@ const LabelTable = () => {
         }}
       >
         <Box style={{ height: "7vh" }}>{/* <Search /> */}</Box>
-
-        <p
-          onClick={() => {
-            setOpen(true);
-          }}
-          style={{
-            color: "#fff",
-            cursor: "pointer",
-            fontWeight: "bold",
-            position: "relative",
-            zIndex: 3,
-            marginRight: "2rem",
-          }}
-        >
-          Add Label
-        </p>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <p
+            onClick={() => {}}
+            style={{
+              color: "#fff",
+              cursor: "pointer",
+              fontWeight: "bold",
+              position: "relative",
+              zIndex: 3,
+              marginRight: "2rem",
+            }}
+          >
+            Import Label
+          </p>
+          <p
+            onClick={() => {
+              setOpen(true);
+            }}
+            style={{
+              color: "#fff",
+              cursor: "pointer",
+              fontWeight: "bold",
+              position: "relative",
+              zIndex: 3,
+              marginRight: "2rem",
+            }}
+          >
+            Add Label
+          </p>
+        </Box>
       </Box>
 
       <TableContainer
