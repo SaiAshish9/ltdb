@@ -25,7 +25,7 @@ const AddLabel = ({ classes, open, setOpen }) => {
     await addLabel({
       key: key
         .split("")
-        .filter((x) => x !== " ")
+        .filter((x) => x !== "")
         .join(""),
       label_en: name_en,
       label_ar: name_ar,

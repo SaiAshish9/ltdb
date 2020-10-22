@@ -34,6 +34,11 @@ const reducer = (state, action) => {
         ...state,
         banners: action.payload,
       };
+    case "SET_LABEL_DETAILS":
+      return {
+        ...state,
+        label_details: action.payload,
+      };
     case "SET_BANNER_DETAILS":
       return {
         ...state,
@@ -866,26 +871,42 @@ const fetchLabels = (dispatch) => async () => {
   });
 };
 
-const addLabel = (dispatch) => async ({ key, label_en, label_ar }) => {
+const addLabel = (dispatch) => async (data1) => {
   dispatch({
     type: "SET_MESSAGE",
     payload: null,
   });
+  console.log(data1);
   try {
     const {
       data: { data },
-    } = await Api.post("admin/lable/store", {
-      key,
-      label_en,
-      label_ar
-    });
+    } = await Api.post("admin/lable/store", { ...data1 });
     dispatch({
       type: "SET_LABELS",
       payload: data,
     });
+    if (data1.label_id) {
+      dispatch({
+        type: "SET_MESSAGE",
+        payload: "Label Updated Successfully",
+      });
+    } else {
+      dispatch({
+        type: "SET_MESSAGE",
+        payload: "Label Added Successfully",
+      });
+    }
+  } catch (e) {}
+};
+
+const fetchLabelDetails = (dispatch) => async (id) => {
+  try {
+    const {
+      data: { data },
+    } = await Api(`admin/lable/get-label?label_id=${id}`);
     dispatch({
-      type: "SET_MESSAGE",
-      payload: "Label Added Successfully",
+      type: "SET_LABEL_DETAILS",
+      payload: data,
     });
   } catch (e) {}
 };
@@ -894,6 +915,7 @@ export const { Context, Provider } = createDataContext(
   reducer,
   {
     fetchItems,
+    fetchLabelDetails,
     addItem,
     fetchLabels,
     toggleItemStatus,
@@ -936,6 +958,7 @@ export const { Context, Provider } = createDataContext(
     labels: [],
     banner_details: null,
     package_details: null,
+    label_details: null,
     game_packages: [],
     game_package_items: [],
     user_count: 0,

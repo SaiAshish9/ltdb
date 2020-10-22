@@ -12,14 +12,12 @@ import {
   Box,
   IconButton,
 } from "@material-ui/core";
-// import Search from "./search";
-// import AddBannerPopup from "./addBanner";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
-// import ViewBannerPopup from "./viewBanner";
-// import EditBannerPopup from "./editBanner";
 import AddLabel from "./addLabel";
+import EditLabel from "./editLabel";
+import ViewLabel from "./viewLabel";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -29,14 +27,15 @@ const useStyles = makeStyles((theme) => ({
 
 const LabelTable = () => {
   const [open, setOpen] = useState(false);
+  const [openViewLabel, setOpenViewLabel] = useState(false);
+  const [openEditLabel, setOpenEditLabel] = useState(false);
   const classes = useStyles();
   const [openDialog, setOpenDialog] = useState(false);
   const [openViewBanner, setOpenViewBanner] = useState(false);
   const [openEditBanner, setOpenEditBanner] = useState(false);
   const {
     state: { labels, message },
-    fetchBannerDetails,
-    toggleBannerStatus,
+    fetchLabelDetails,
     fetchLabels,
   } = useContext(DataContext);
   const [openSnackbar, setOpenSnackbar] = useState(true);
@@ -265,8 +264,8 @@ const LabelTable = () => {
                     >
                       <IconButton
                         onClick={async () => {
-                          // await fetchBannerDetails(i.id);
-                          // setOpenEditBanner(true);
+                          await fetchLabelDetails(i.id);
+                          setOpenEditLabel(true);
                         }}
                       >
                         <EditOutlinedIcon style={{ cursor: "pointer" }} />{" "}
@@ -274,8 +273,8 @@ const LabelTable = () => {
                       <IconButton onClick={async () => {}}>
                         <VisibilityOutlinedIcon
                           onClick={async () => {
-                            // await fetchBannerDetails(i.id);
-                            // setOpenViewBanner(true);
+                            await fetchLabelDetails(i.id);
+                            setOpenViewLabel(true);
                           }}
                           style={{ cursor: "pointer" }}
                         />{" "}
@@ -288,17 +287,16 @@ const LabelTable = () => {
         </Table>
       </TableContainer>
       <AddLabel classes={classes} open={open} setOpen={setOpen} />
-      {/* <AddBannerPopup open={open} setOpen={setOpen} classes={classes} />
-      <ViewBannerPopup
-        open={openViewBanner}
-        setOpen={setOpenViewBanner}
+      <EditLabel
         classes={classes}
+        open={openEditLabel}
+        setOpen={setOpenEditLabel}
       />
-      <EditBannerPopup
-        open={openEditBanner}
-        setOpen={setOpenEditBanner}
+      <ViewLabel
         classes={classes}
-      /> */}
+        open={openViewLabel}
+        setOpen={setOpenViewLabel}
+      />
     </React.Fragment>
   );
 };
