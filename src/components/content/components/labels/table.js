@@ -19,6 +19,7 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 // import ViewBannerPopup from "./viewBanner";
 // import EditBannerPopup from "./editBanner";
+import AddLabel from "./addLabel";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -156,7 +157,7 @@ const LabelTable = () => {
               >
                 Arabic Name
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 style={{
                   fontWeight: "bold",
                   fontSize: "0.8rem",
@@ -176,10 +177,10 @@ const LabelTable = () => {
                       setOpenDialog(!openDialog);
                     }}
                   >
-                    {/* {openDialog ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />} */}
                   </IconButton>
                 </Box>{" "}
-              </TableCell>
+              </TableCell> */}
+              {/* {openDialog ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />} */}
               <TableCell
                 style={{
                   fontWeight: "bold",
@@ -286,6 +287,7 @@ const LabelTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <AddLabel classes={classes} open={open} setOpen={setOpen} />
       {/* <AddBannerPopup open={open} setOpen={setOpen} classes={classes} />
       <ViewBannerPopup
         open={openViewBanner}

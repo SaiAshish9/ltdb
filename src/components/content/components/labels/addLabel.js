@@ -9,43 +9,31 @@ import {
   Fab,
 } from "@material-ui/core";
 import { Clear, CameraAlt } from "@material-ui/icons";
-import Thumbnail from "../../../../assets/thumbnail1.png";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { useForm } from "react-hook-form";
 
-
-const AddBanner = ({ classes, open, setOpen }) => {
-  const [file, setFile] = useState(null);
+const AddLabel = ({ classes, open, setOpen }) => {
   const [disabled, setDisabled] = useState(false);
-  const [imgFile, setImgFile] = useState(null);
   const [name_en, setNameEn] = useState("");
   const [name_ar, setNameAr] = useState("");
-  const { addBanner, fetchBanners } = useContext(DataContext);
+  const [key, setKey] = useState("");
+  const { addLabel, fetchLabels } = useContext(DataContext);
   const { handleSubmit } = useForm();
-
-  const handleImgChange = (e) => {
-    var file1 = e.target.files[0];
-    var reader = new FileReader();
-    reader.onload = (e) => {
-      setFile(reader.result);
-    };
-    setImgFile(file1);
-    reader.readAsDataURL(file1);
-  };
 
   const onSubmit = async () => {
     setDisabled(true);
-    await addBanner({
-      title_en: name_en,
-      title_ar: name_ar,
-      image: imgFile,
-      status: 1,
+    await addLabel({
+      key: key
+        .split("")
+        .filter((x) => x !== " ")
+        .join(""),
+      label_en: name_en,
+      label_ar: name_ar,
     });
+    await fetchLabels();
     setNameEn("");
     setNameAr("");
-    setImgFile(null);
-    setFile(null);
-    await fetchBanners();
+    setKey("");
     setDisabled(false);
     setOpen(false);
   };
@@ -74,11 +62,39 @@ const AddBanner = ({ classes, open, setOpen }) => {
               <IconButton
                 onClick={() => {
                   setOpen(false);
+                  setNameEn("");
+                  setNameAr("");
+                  setKey("");
                 }}
               >
                 <Clear />
               </IconButton>
             </Box>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <p
+                style={{
+                  fontWeight: "bolder",
+                  color: "#282b3c",
+                }}
+              >
+                Key
+              </p>
+              <TextField
+                variant="outlined"
+                label="Key"
+                value={key}
+                required
+                onChange={(e) => {
+                  setKey(e.target.value);
+                }}
+                style={{ width: "47%" }}
+              />
+            </Box>
+            <br />
             <Box
               display="flex"
               justifyContent="space-between"
@@ -128,59 +144,8 @@ const AddBanner = ({ classes, open, setOpen }) => {
                 style={{ width: "47%" }}
               />
             </Box>
+
             <br />
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <p
-                style={{
-                  fontWeight: "bolder",
-                  color: "#282b3c",
-                }}
-              >
-                Upload Image
-              </p>
-              <Paper style={{ width: "47%" }} onClick={() => {}}>
-                <label htmlFor="add-banner-image">
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    style={{
-                      height: "20vh",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {file ? (
-                      <img
-                        style={{
-                          height: "20vh",
-                        }}
-                        alt="img"
-                        src={file}
-                      />
-                    ) : (
-                      <img
-                        style={{
-                          height: "20vh",
-                        }}
-                        alt="img"
-                        src={Thumbnail}
-                      />
-                    )}
-                  </Box>
-                </label>
-                <input
-                  id="add-banner-image"
-                  style={{ display: "none" }}
-                  type="file"
-                  accept=".png,.jpg,.jpeg"
-                  onChange={(e) => handleImgChange(e)}
-                />
-              </Paper>
-            </Box>
             <Box
               display="flex"
               flexDirection="row-reverse"
@@ -209,4 +174,4 @@ const AddBanner = ({ classes, open, setOpen }) => {
   );
 };
 
-export default AddBanner;
+export default AddLabel;

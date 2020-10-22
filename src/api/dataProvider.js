@@ -856,12 +856,38 @@ const toggleBannerStatus = (dispatch) => async (id, action) => {
 
 const fetchLabels = (dispatch) => async () => {
   const {
-    data: { data: {data} },
+    data: {
+      data: { data },
+    },
   } = await Api("admin/lable/list");
   dispatch({
     type: "SET_LABELS",
     payload: data,
   });
+};
+
+const addLabel = (dispatch) => async ({ key, label_en, label_ar }) => {
+  dispatch({
+    type: "SET_MESSAGE",
+    payload: null,
+  });
+  try {
+    const {
+      data: { data },
+    } = await Api.post("admin/lable/store", {
+      key,
+      label_en,
+      label_ar
+    });
+    dispatch({
+      type: "SET_LABELS",
+      payload: data,
+    });
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: "Label Added Successfully",
+    });
+  } catch (e) {}
 };
 
 export const { Context, Provider } = createDataContext(
@@ -872,6 +898,7 @@ export const { Context, Provider } = createDataContext(
     fetchLabels,
     toggleItemStatus,
     fetchUser,
+    addLabel,
     toggleBannerStatus,
     fetchUsers,
     fetchBanners,
