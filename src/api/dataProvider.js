@@ -911,12 +911,20 @@ const fetchLabelDetails = (dispatch) => async (id) => {
   } catch (e) {}
 };
 
+const importLabel = (dispatch) => async (data1) => {
+  const {
+    data: { data },
+  } = await Api.post("admin/lable/import", data1);
+  console.log(data)
+};
+
 export const { Context, Provider } = createDataContext(
   reducer,
   {
     fetchItems,
     fetchLabelDetails,
     addItem,
+    importLabel,
     fetchLabels,
     toggleItemStatus,
     fetchUser,

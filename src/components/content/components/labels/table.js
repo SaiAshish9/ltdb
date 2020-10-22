@@ -18,6 +18,7 @@ import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import AddLabel from "./addLabel";
 import EditLabel from "./editLabel";
 import ViewLabel from "./viewLabel";
+import ImportLabel from "./importLabel";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -29,6 +30,7 @@ const LabelTable = () => {
   const [open, setOpen] = useState(false);
   const [openViewLabel, setOpenViewLabel] = useState(false);
   const [openEditLabel, setOpenEditLabel] = useState(false);
+  const [openImportLabel, setOpenImportLabel] = useState(false);
   const classes = useStyles();
   const [openDialog, setOpenDialog] = useState(false);
   const [openViewBanner, setOpenViewBanner] = useState(false);
@@ -58,7 +60,9 @@ const LabelTable = () => {
         <Box style={{ height: "7vh" }}>{/* <Search /> */}</Box>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <p
-            onClick={() => {}}
+            onClick={() => {
+              setOpenImportLabel(true)
+            }}
             style={{
               color: "#fff",
               cursor: "pointer",
@@ -296,6 +300,11 @@ const LabelTable = () => {
         classes={classes}
         open={openViewLabel}
         setOpen={setOpenViewLabel}
+      />
+      <ImportLabel
+        classes={classes}
+        open={openImportLabel}
+        setOpen={setOpenImportLabel}
       />
     </React.Fragment>
   );
