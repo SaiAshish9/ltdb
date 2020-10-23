@@ -94,8 +94,10 @@ const LabelTable = () => {
 
       <TableContainer
         style={{
-          minHeight: "83vh",
+          height: "83vh",
           width: "100%",
+          overflowY:"scroll",
+          overflowX:"hidden"
         }}
         elevation={0}
         component={Paper}

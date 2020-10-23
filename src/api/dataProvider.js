@@ -912,10 +912,27 @@ const fetchLabelDetails = (dispatch) => async (id) => {
 };
 
 const importLabel = (dispatch) => async (data1) => {
-  const {
-    data: { data },
-  } = await Api.post("admin/lable/import", data1);
-  console.log(data)
+  try {
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: null,
+    });
+    const {
+      data: { data },
+    } = await Api({
+      method: "post",
+      url: "admin/lable/import",
+      data: data1,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    console.log(data)
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: "Label Added Successfully",
+    });
+  } catch (e) {}
 };
 
 export const { Context, Provider } = createDataContext(

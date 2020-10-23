@@ -12,29 +12,31 @@ import Thumbnail from "../../../../assets/thumbnail1.png";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { useForm } from "react-hook-form";
 
-const ImportLabel= ({ classes, open, setOpen }) => {
+const ImportLabel = ({ classes, open, setOpen }) => {
   const [file, setFile] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [fileName, setFileName] = useState(null);
-  const { fetchBanners } = useContext(DataContext);
+  const { fetchLabels, importLabel } = useContext(DataContext);
   const { handleSubmit } = useForm();
 
   const handleImgChange = (e) => {
     var file1 = e.target.files[0];
     var reader = new FileReader();
-    reader.onload = (e) => {
-      setFile(reader.result);
-    };
+    reader.onload = (e) => {};
+    const formData = new FormData();
+    formData.append("import_file", file1);
+    setFile(formData);
     setFileName(file1.name);
     reader.readAsDataURL(file1);
   };
 
   const onSubmit = async () => {
     setDisabled(true);
-    setFileName(null);
-    setFile(null);
-    await fetchBanners();
+    await importLabel(file);
+    await fetchLabels();
     setDisabled(false);
+    setFile(null);
+    setFileName(null);
     setOpen(false);
   };
 
