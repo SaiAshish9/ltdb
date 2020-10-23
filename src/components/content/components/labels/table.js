@@ -10,7 +10,9 @@ import {
   TableRow,
   Paper,
   Box,
+  TablePagination,
   IconButton,
+  CircularProgress
 } from "@material-ui/core";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
@@ -32,15 +34,26 @@ const LabelTable = () => {
   const [openEditLabel, setOpenEditLabel] = useState(false);
   const [openImportLabel, setOpenImportLabel] = useState(false);
   const classes = useStyles();
-  const [openDialog, setOpenDialog] = useState(false);
-  const [openViewBanner, setOpenViewBanner] = useState(false);
-  const [openEditBanner, setOpenEditBanner] = useState(false);
+  const [page, setPage] = useState(0);
+
   const {
-    state: { labels, message },
+    state: { labels, message, label_count },
     fetchLabelDetails,
     fetchLabels,
   } = useContext(DataContext);
   const [openSnackbar, setOpenSnackbar] = useState(true);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    fetchLabels(page + 1, +event.target.value);
+    setPage(0);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+    fetchLabels(newPage + 1, rowsPerPage);
+  };
 
   return (
     <React.Fragment>
@@ -61,7 +74,7 @@ const LabelTable = () => {
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <p
             onClick={() => {
-              setOpenImportLabel(true)
+              setOpenImportLabel(true);
             }}
             style={{
               color: "#fff",
@@ -96,8 +109,8 @@ const LabelTable = () => {
         style={{
           height: "83vh",
           width: "100%",
-          overflowY:"scroll",
-          overflowX:"hidden"
+          overflowY: "scroll",
+          overflowX: "hidden",
         }}
         elevation={0}
         component={Paper}
@@ -130,7 +143,7 @@ const LabelTable = () => {
                   textAlign: "center",
                 }}
               >
-                S. NO.
+                {labels && "S. NO."}
               </TableCell>
               <TableCell
                 style={{
@@ -198,6 +211,20 @@ const LabelTable = () => {
               </TableCell>
             </TableRow>
           </TableHead>
+          {!labels && (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              style={{ height: "70vh", width: "85vw" }}
+            >
+              <CircularProgress
+                style={{
+                  color: "#151628",
+                }}
+              />
+            </Box>
+          )}
           <TableBody>
             {labels &&
               labels.length > 0 &&
@@ -218,7 +245,7 @@ const LabelTable = () => {
                       fontWeight: 500,
                     }}
                   >
-                    {k + 1}
+                    {i.key.length > 0 && k + 1 + rowsPerPage * page}
                   </TableCell>
                   <TableCell
                     style={{
@@ -292,6 +319,15 @@ const LabelTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        component="div"
+        rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[5, 10]}
+        page={page}
+        count={label_count}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
       <AddLabel classes={classes} open={open} setOpen={setOpen} />
       <EditLabel
         classes={classes}

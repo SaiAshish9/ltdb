@@ -54,6 +54,16 @@ const reducer = (state, action) => {
         ...state,
         items_count: action.payload,
       };
+    case "SET_LABEL_COUNT":
+      return {
+        ...state,
+        label_count: action.payload,
+      };
+    case "SET_LABEL_PAGE_COUNT":
+      return {
+        ...state,
+        label_page_count: action.payload,
+      };
     case "SET_USERS_COUNT":
       return {
         ...state,
@@ -859,15 +869,34 @@ const toggleBannerStatus = (dispatch) => async (id, action) => {
   } catch (e) {}
 };
 
-const fetchLabels = (dispatch) => async () => {
+const fetchLabels = (dispatch) => async (page, limit) => {
+  var url;
+  if (page && limit) {
+    url = `admin/lable/list?limit=${limit}&page=${page}`;
+    dispatch({
+      type: "SET_LABELS",
+      payload: null,
+    });
+  } else {
+    url = "admin/lable/list?limit=10&&page=1";
+  }
   const {
-    data: {
-      data: { data },
-    },
-  } = await Api("admin/lable/list");
+    data: { data },
+  } = await Api(url);
+  if (data) {
+    dispatch({
+      type: "SET_LABEL_PAGE_COUNT",
+      payload: data["last_page"],
+    });
+
+    dispatch({
+      type: "SET_LABEL_COUNT",
+      payload: data["total"],
+    });
+  }
   dispatch({
     type: "SET_LABELS",
-    payload: data,
+    payload: data.data,
   });
 };
 
@@ -876,7 +905,6 @@ const addLabel = (dispatch) => async (data1) => {
     type: "SET_MESSAGE",
     payload: null,
   });
-  console.log(data1);
   try {
     const {
       data: { data },
@@ -927,7 +955,6 @@ const importLabel = (dispatch) => async (data1) => {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log(data)
     dispatch({
       type: "SET_MESSAGE",
       payload: "Label Added Successfully",
@@ -990,6 +1017,8 @@ export const { Context, Provider } = createDataContext(
     sub_category: null,
     game_count: 0,
     game_page_count: 0,
+    label_count: 0,
+    label_page_count: 0,
     resolution_list: null,
     linkableItems: [],
     banners: [],
