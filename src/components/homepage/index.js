@@ -1,8 +1,32 @@
-import React from "react";
-import { Box, Paper } from "@material-ui/core";
+import React, { useContext, useEffect } from "react";
+import { Box, Paper, CircularProgress } from "@material-ui/core";
 // import Lootbox from "../../lootbox.png";
+import { Context as DataContext } from "../../api/dataProvider";
 
 const Home = () => {
+  const data = [
+    "Total Revenue",
+    "Total number of orders",
+    "Total number of New orders",
+    "Total number of confirmed orders",
+    "Total number of on-the-way Orders",
+    "Total number of canceled orders",
+    "Total number of confirmed orders",
+    "Total number of customers",
+  ];
+
+  const {
+    state: { user_count, users },
+    fetchUsers,
+  } = useContext(DataContext);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      await fetchUsers();
+    };
+    getUsers();
+  }, []);
+
   return (
     <Box
       // display="flex"
@@ -15,10 +39,10 @@ const Home = () => {
         // background: "#151628",
         width: "100%",
         height: "90vh",
-        padding: "4rem 0rem",
+        padding: "3rem 0rem",
       }}
     >
-      <p
+      {/* <p
         className="animate__animated animate__fadeIn"
         style={{
           color: "#151628",
@@ -30,60 +54,83 @@ const Home = () => {
       >
         Dashboard
       </p>
-      <br />
+      <br /> */}
       <Box display="flex" alignItems="center" justifyContent="space-around">
-        {[...Array(4).keys()].map((i, k) => (
+        {data.slice(0, 4).map((i, k) => (
           <Paper
             className="animate__animated animate__fadeIn"
             key={k}
             style={{
-              height: "20vh",
-              width: "21%",
+              height: "240px",
+              width: "250px",
               padding: "1rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
+              background: "linear-gradient(135deg,#C01C8A,#865CF4)",
             }}
           >
+            <h1 style={{ color: "#f7f7f7" }}>0</h1>
             <p
               className="animate__animated animate__zoomIn"
               style={{
-                color: "#151628",
-                // opacity: 0.6,
+                color: "#fff",
+                textAlign: "center",
                 fontWeight: "bold",
                 fontSize: "1rem",
               }}
             >
-              lootbox
+              {i}
             </p>
           </Paper>
         ))}
       </Box>
 
       <Box
-        style={{ marginTop: "3rem" }}
+        style={{ marginTop: "2rem" }}
         display="flex"
         alignItems="center"
         justifyContent="space-around"
       >
-        {[...Array(4).keys()].map((i, k) => (
+        {data.slice(4, 8).map((i, k) => (
           <Paper
             key={k}
             className="animate__animated animate__fadeIn"
             elevation={2}
             style={{
-              height: "20vh",
-              width: "21%",
+              height: "240px",
+              width: "250px",
               padding: "1rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
+              background: "linear-gradient(135deg,#C01C8A,#865CF4)",
             }}
           >
+            <h1 style={{ color: "#f7f7f7" }}>
+              {k === 3 ? (
+                users ? (
+                  user_count
+                ) : (
+                  <CircularProgress style={{ color: "#fff" }} />
+                )
+              ) : (
+                0
+              )}
+            </h1>
             <p
               className="animate__animated animate__zoomIn"
               style={{
-                color: "#151628",
+                color: "#fff",
                 // opacity: 0.6,
                 fontWeight: "bold",
                 fontSize: "1rem",
+                textAlign: "center",
               }}
             >
-              lootbox
+              {i}
             </p>
           </Paper>
         ))}

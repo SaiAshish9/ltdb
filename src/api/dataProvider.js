@@ -1005,7 +1005,7 @@ export const { Context, Provider } = createDataContext(
     user_profile: null,
     item_details: null,
     game_details: null,
-    users: [],
+    users: null,
     games: [],
     labels: [],
     banner_details: null,
