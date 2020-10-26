@@ -6,7 +6,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import { Paper } from "@material-ui/core";
+import { Paper, LinearProgress } from "@material-ui/core";
 import TablePagination from "@material-ui/core/TablePagination";
 import Check from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
@@ -105,11 +105,10 @@ function SimpleTable({ data }) {
   };
 
   const handleChangePage = (event, newPage) => {
-    Api(`admin/user/list?page=${newPage + 1}`)
-      .then((data) => {
-        setRows(convertRows(data.data.data));
-        setPage(newPage);
-      })
+    Api(`admin/user/list?page=${newPage + 1}`).then((data) => {
+      setRows(convertRows(data.data.data));
+      setPage(newPage);
+    });
   };
 
   return (
@@ -238,6 +237,15 @@ function SimpleTable({ data }) {
                         data1[i][row.id] > 0 &&
                         `${data1[i][row.id]} - `}
                       {data1 && "Add Sub Category"}
+                      {!data1 &&  (
+                        <LinearProgress
+                          style={{
+                            color: "#151628",
+                            width: "10rem",
+                            // height: 20,
+                          }}
+                        />
+                      )}
                     </Button>{" "}
                   </TableCell>
                   <TableCell
