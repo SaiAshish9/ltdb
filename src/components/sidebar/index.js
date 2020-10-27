@@ -104,10 +104,12 @@ const Sidebar = ({ dispatch }) => {
                           paddingLeft: "4rem",
                         }}
                       >
+                        {a.labelIcon}
                         <p
                           style={{
                             fontSize: "0.8rem",
                             fontWeight: 600,
+                            marginLeft:10
                           }}
                         >
                           {a.name}

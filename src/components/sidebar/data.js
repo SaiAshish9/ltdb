@@ -9,23 +9,24 @@ import StorageIcon from "@material-ui/icons/Storage";
 import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import ViewCarouselIcon from "@material-ui/icons/ViewCarousel";
 import LabelIcon from "@material-ui/icons/Label";
+import ReceiptIcon from "@material-ui/icons/Receipt";
 
 export const options = [
-  {
-    id: "Label",
-    // id: "Products",
-    icon: <LabelIcon />,
-    // icon: <ShoppingBasketOutlinedIcon />,
-    path: "/labels",
-    paths: [
-      "/labels",
-      // "/products/detail", "/products/new"
-    ],
-    options: [
-      // { name: "Product Detail", path: "/products/detail" },
-      // { name: "New Product", path: "/products/new" },
-    ],
-  },
+  // {
+  //   id: "Label",
+  //   // id: "Products",
+  //   icon: <LabelIcon />,
+  //   // icon: <ShoppingBasketOutlinedIcon />,
+  //   path: "/labels",
+  //   paths: [
+  //     "/labels",
+  //     // "/products/detail", "/products/new"
+  //   ],
+  //   options: [
+  //     // { name: "Product Detail", path: "/products/detail" },
+  //     // { name: "New Product", path: "/products/new" },
+  //   ],
+  // },
   {
     id: "Orders",
     path: "/orders",
@@ -93,11 +94,17 @@ export const options = [
     id: "Settings",
     icon: <SettingsIcon />,
     path: "/settings",
-    paths: ["/settings"],
+    paths: ["/settings", "/labels","/delivery-fees"],
     options: [
       {
         name: "Labels",
-        path: "/settings",
+        labelIcon: <LabelIcon />,
+        path: "/labels",
+      },
+      {
+        name: "Delivery Fees",
+        labelIcon: <ReceiptIcon />,
+        path: "/delivery-fees",
       },
     ],
   },

@@ -42,6 +42,7 @@ const Home = () => {
         padding: "3rem 0rem",
       }}
     >
+      <h2 style={{ paddingLeft: "2rem", marginBottom: "2rem" }}>Dashboard</h2>
       {/* <p
         className="animate__animated animate__fadeIn"
         style={{
@@ -61,24 +62,38 @@ const Home = () => {
             className="animate__animated animate__fadeIn"
             key={k}
             style={{
-              height: "240px",
+              height: "20vh",
+              // height: "240px",
               width: "250px",
               padding: "1rem",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               flexDirection: "column",
-              background: "linear-gradient(135deg,#C01C8A,#865CF4)",
+              background: "#fff",
             }}
           >
-            <h1 style={{ color: "#f7f7f7" }}>0</h1>
+            <h1
+              style={
+                {
+                  // color: "#f7f7f7"
+                  // fontSize:32,
+                  // background: "linear-gradient(135deg,#C01C8A,#865CF4)",
+                  // backgroundClip: "text",
+                  // textFillColor: "transparent",
+                }
+              }
+            >
+              0
+            </h1>
             <p
               className="animate__animated animate__zoomIn"
               style={{
-                color: "#fff",
+                color: "#151628",
+                // color: "#fff",
                 textAlign: "center",
                 fontWeight: "bold",
-                fontSize: "1rem",
+                // fontSize: "1rem",
               }}
             >
               {i}
@@ -99,22 +114,30 @@ const Home = () => {
             className="animate__animated animate__fadeIn"
             elevation={2}
             style={{
-              height: "240px",
+              height: "20vh",
               width: "250px",
               padding: "1rem",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               flexDirection: "column",
-              background: "linear-gradient(135deg,#C01C8A,#865CF4)",
+              background: "#fff",
+              // background: "linear-gradient(135deg,#C01C8A,#865CF4)",
             }}
           >
-            <h1 style={{ color: "#f7f7f7" }}>
+            <h1
+              style={
+                {
+                  // color: "linear-gradient(135deg,#C01C8A,#865CF4)",
+                  // color: "#f7f7f7"
+                }
+              }
+            >
               {k === 3 ? (
                 users ? (
                   user_count
                 ) : (
-                  <CircularProgress style={{ color: "#fff" }} />
+                  <CircularProgress style={{ color: "#865CF4" }} />
                 )
               ) : (
                 0
@@ -123,7 +146,8 @@ const Home = () => {
             <p
               className="animate__animated animate__zoomIn"
               style={{
-                color: "#fff",
+                // color: "#fff",
+                color: "#151628",
                 // opacity: 0.6,
                 fontWeight: "bold",
                 fontSize: "1rem",
