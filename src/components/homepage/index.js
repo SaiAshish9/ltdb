@@ -7,7 +7,7 @@ const Home = () => {
   const data = [
     "Total Revenue",
     "Total number of orders",
-    "Total number of New orders",
+    "Total number of new orders",
     "Total number of confirmed orders",
     "Total number of on-the-way Orders",
     "Total number of canceled orders",
