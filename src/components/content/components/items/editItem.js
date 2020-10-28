@@ -228,7 +228,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                 variant="outlined"
                 id="date"
                 type="date"
-                label="created_at"
+                label="Created On"
                 defaultValue={
                   item_details &&
                   moment(new Date(item_details.created_at)).format("YYYY-MM-DD")

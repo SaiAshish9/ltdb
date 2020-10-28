@@ -124,7 +124,7 @@ const Popup = ({ classes, open, setOpen }) => {
                 variant="outlined"
                 id="date"
                 disabled
-                label="created_at"
+                label="Created On"
                 // type="date"
                 value={
                   item_details &&

@@ -93,7 +93,7 @@ export const options = [
   {
     id: "Settings",
     icon: <SettingsIcon />,
-    path: "/settings",
+    path: "/labels",
     paths: ["/settings", "/labels","/delivery-fees"],
     options: [
       {

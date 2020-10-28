@@ -962,10 +962,28 @@ const importLabel = (dispatch) => async (data1) => {
   } catch (e) {}
 };
 
+const toggleSubCategoryStatus = (dispatch) => async (id, action) => {
+  try {
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: null,
+    });
+    await Api.post("admin/subcategory/block-unblock", {
+      subcategories: [id],
+      action_type: action,
+    });
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: "Sub Category Updated Successfully",
+    });
+  } catch (e) {}
+};
+
 export const { Context, Provider } = createDataContext(
   reducer,
   {
     fetchItems,
+    toggleSubCategoryStatus,
     fetchLabelDetails,
     addItem,
     importLabel,

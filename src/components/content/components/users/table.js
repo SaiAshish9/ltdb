@@ -165,7 +165,7 @@ export default function SimpleTable({ data }) {
                   color: "#282b3c",
                 }}
               >
-                Created At
+                Created On
               </TableCell>
               <TableCell
                 style={{

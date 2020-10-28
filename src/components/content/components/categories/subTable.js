@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -11,12 +11,13 @@ import IconButton from "@material-ui/core/IconButton";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Box from "@material-ui/core/Box";
 import { ArrowBack } from "@material-ui/icons";
-import { Tooltip, Fab } from "@material-ui/core";
+import { Tooltip, Fab, Snackbar } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import EditDialog from "./editDialog";
 import Api from "../../../../api";
 import Search from "./search";
+import { Context as DataContext } from "../../../../api/dataProvider";
 
 const useStyles = makeStyles({
   table: {
@@ -37,6 +38,11 @@ export default function DenseTable({
   const [open, setOpen] = useState(false);
   const [data, setData] = useState(null);
   const [selected, setSelected] = useState(null);
+  const {
+    state: { message },
+    toggleSubCategoryStatus,
+  } = useContext(DataContext);
+  const [openSnackbar, setOpenSnackbar] = useState(true);
 
   const fetchCustomFields = useCallback(
     async (id) => {
@@ -64,8 +70,19 @@ export default function DenseTable({
           margin: "0 2rem",
         }}
       >
+        {message && (
+          <Snackbar
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            open={openSnackbar}
+            message={message}
+            onClose={() => {
+              setOpenSnackbar(false);
+            }}
+            autoHideDuration={1000}
+          />
+        )}
         <Search
-          categoryId={rows && rows.length>0 && rows[0]["categoryId"]}
+          categoryId={rows && rows.length > 0 && rows[0]["categoryId"]}
           fetchSubCategories={fetchSubCategories}
         />
       </Box>
@@ -105,10 +122,10 @@ export default function DenseTable({
               {!rows ? (
                 <CircularProgress />
               ) : (
-                rows.map((row) => (
+                rows.map((row, k) => (
                   <TableRow key={row.name}>
                     <TableCell component="th" scope="row">
-                      {row.id}
+                      {k + 1}
                     </TableCell>
                     <TableCell style={{ color: "#a197a3" }}>
                       {row.name}
@@ -117,9 +134,17 @@ export default function DenseTable({
                       {row.name_ar}
                     </TableCell>
                     <TableCell
+                      onClick={async () => {
+                        await toggleSubCategoryStatus(
+                          row.id,
+                          row.status === 1 ? 0 : 1
+                        );
+                        await fetchSubCategories(row.categoryId);
+                      }}
                       style={{
                         color: row.status === 1 ? "green" : "red",
                         fontWeight: 500,
+                        cursor: "pointer",
                       }}
                     >
                       {row.status === 1 ? "Active" : "InActive"}
@@ -192,7 +217,7 @@ export default function DenseTable({
               <TableHead>
                 <TableRow>
                   <TableCell style={{ color: "#4c5172", fontWeight: 600 }}>
-                    Id
+                    S. no.
                   </TableCell>
                   <TableCell style={{ color: "#4c5172", fontWeight: 600 }}>
                     Name
@@ -207,7 +232,7 @@ export default function DenseTable({
                   data.map((i, k) => (
                     <TableRow key={k}>
                       <TableCell component="th" scope="row">
-                        {i.id}
+                        {k + 1}
                       </TableCell>
                       <TableCell style={{ color: "#a197a3" }}>
                         {i.name}

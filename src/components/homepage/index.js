@@ -42,7 +42,7 @@ const Home = () => {
         padding: "3rem 0rem",
       }}
     >
-      <h2 style={{ paddingLeft: "2rem", marginBottom: "2rem" }}>Dashboard</h2>
+      {/* <h2 style={{ paddingLeft: "2rem", marginBottom: "2rem" }}>Dashboard</h2> */}
       {/* <p
         className="animate__animated animate__fadeIn"
         style={{

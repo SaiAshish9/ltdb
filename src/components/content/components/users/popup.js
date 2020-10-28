@@ -97,7 +97,7 @@ const Popup = ({ classes, open, setOpen }) => {
               </FormControl>
               <TextField
                 id="date"
-                label="created_at"
+                label="Created On"
                 disabled={true}
                 style={{ margin: "4rem 0" }}
                 defaultValue={
