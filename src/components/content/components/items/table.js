@@ -178,7 +178,8 @@ export default function SimpleTable({ data }) {
                   color: "#282b3c",
                 }}
               >
-                S No
+                {items && items.length > 0 && "S No."}
+                {/* S No */}
               </TableCell>
               <TableCell
                 style={{
@@ -348,7 +349,7 @@ export default function SimpleTable({ data }) {
           <TableBody>
             {items &&
               items.length > 0 &&
-              items.map((row, i) => (
+              items.map((row, k) => (
                 <TableRow
                   elevation={0}
                   style={{
@@ -366,7 +367,8 @@ export default function SimpleTable({ data }) {
                     component="th"
                     scope="row"
                   >
-                    {i + 1}
+                    {row.name_en.length > 0 && k + 1 + rowsPerPage * page}
+                    {/* {i + 1} */}
                   </TableCell>
                   <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
                     {row.name_en}

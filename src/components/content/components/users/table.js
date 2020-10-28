@@ -315,7 +315,7 @@ export default function SimpleTable({ data }) {
                     component="th"
                     scope="row"
                   >
-                    {i + 1}
+                    {x.full_name.length > 0 && i + 1 + rowsPerPage * page}
                     {/* {x.user_id} */}
                   </TableCell>
                   <TableCell
