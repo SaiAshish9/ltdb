@@ -11,7 +11,7 @@ const DeliveryFees = () => {
     setMessage("Submission Successful");
     console.log(data);
     reset();
-    setOpenSnackbar(true)
+    setOpenSnackbar(true);
   };
 
   return (
@@ -44,7 +44,7 @@ const DeliveryFees = () => {
           }}
         >
           <Box
-            style={{ width: "70%", margin: "0 auto" }}
+            style={{ margin: "0 auto" }}
             display="flex"
             alignItems="center"
             justifyContent="space-between"
@@ -54,17 +54,33 @@ const DeliveryFees = () => {
                 textAlign: "center",
                 color: "#8095a1",
                 fontWeight: 500,
+                marginRight: "1rem"
               }}
             >
-              Order below 100 KD
+              Order between
             </p>
-            <TextField name="below" inputRef={register()} />
-          </Box>
-          <Box
-            style={{ width: "70%", margin: "0 auto" }}
-            display="flex"
-            justifyContent="space-between"
-          >
+            <TextField
+              type="number"
+              style={{ textAlign: "center",display:"flex",alignItems:"center" }}
+              name="below"
+              inputRef={register()}
+            />
+            <p
+              style={{
+                textAlign: "center",
+                color: "#8095a1",
+                fontWeight: 500,
+                margin: "0 1.5rem",
+              }}
+            >
+              KD and
+            </p>
+            <TextField
+              style={{ textAlign: "center" }}
+              type="number"
+              name="above"
+              inputRef={register()}
+            />
             <p
               style={{
                 textAlign: "center",
@@ -72,26 +88,33 @@ const DeliveryFees = () => {
                 fontWeight: 500,
               }}
             >
-              Order between 100-200 KD
+              KD
             </p>
-            <TextField name="between" inputRef={register()} />
-          </Box>{" "}
+          </Box>
           <Box
-            style={{ width: "70%", margin: "0 auto" }}
             display="flex"
             justifyContent="space-between"
+            alignItems="center"
+            style={{ width: "85%", margin: "1rem auto" }}
           >
             <p
               style={{
                 textAlign: "center",
                 color: "#8095a1",
                 fontWeight: 500,
+                margin: "0 1.5rem",
               }}
             >
-              Order above 200 KD
+              Price
             </p>
-            <TextField name="above" inputRef={register()} />
+            <TextField
+              type="number"
+              name="price"
+              style={{ width: "50%",textAlign: "center"}}
+              inputRef={register()}
+            />
           </Box>
+
           <Box
             display="flex"
             alignItems="center"

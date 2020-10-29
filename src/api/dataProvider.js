@@ -438,6 +438,7 @@ const editItem = (dispatch) => async (data) => {
     type: "SET_MESSAGE",
     payload: null,
   });
+  console.log(data)
   if (data.newImage) {
     image = await uploadImage("media", data.newImage);
     await Api.post("admin/item/add", {
@@ -452,6 +453,7 @@ const editItem = (dispatch) => async (data) => {
       image: image,
       price: data.price,
       status: data.status,
+      item_custom_values: data.item_custom_values,
     });
   } else {
     image = data.image;
@@ -467,6 +469,7 @@ const editItem = (dispatch) => async (data) => {
       image: image,
       price: data.price,
       status: data.status,
+      item_custom_values: data.item_custom_values,
     });
   }
   dispatch({
