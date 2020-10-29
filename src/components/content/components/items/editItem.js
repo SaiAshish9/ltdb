@@ -106,7 +106,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
       });
     }
     await fetchItems();
-    reset()
+    reset();
     setImgFile(null);
     setDisabled(false);
     setOpen(false);
@@ -148,18 +148,131 @@ const EditItem = ({ classes, open, setOpen, id }) => {
               </IconButton>
             </Box>
             <Box
-              style={{
-                padding: "2rem",
-              }}
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              style={{ margin: "1rem 0" }}
             >
-              <input
-                id="edit-item"
-                type="file"
-                accept=".png,.jpg,.jpeg"
-                style={{ display: "none" }}
-                onChange={(e) => handleImgChange(e)}
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                English Name
+              </p>
+              <TextField
+                defaultValue={item_details && item_details.name_en}
+                variant="outlined"
+                style={{ width: "50%" }}
+                onChange={(e) => {
+                  setNameEn(e.target.value);
+                }}
               />
-              <Box display="flex" justifyContent="space-between">
+            </Box>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              style={{ margin: "1rem 0" }}
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Arabic Name
+              </p>
+              <TextField
+                defaultValue={item_details && item_details.name_ar}
+                variant="outlined"
+                style={{ width: "50%" }}
+                onChange={(e) => {
+                  setNameAr(e.target.value);
+                }}
+              />
+            </Box>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              style={{ margin: "1rem 0" }}
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Description In English
+              </p>
+              <TextField
+                multiline
+                rows={7}
+                style={{ width: "50%" }}
+                onChange={(e) => {
+                  setDescriptionEn(e.target.value);
+                }}
+                variant="outlined"
+                value={item_details && item_details.description_en}
+              />
+            </Box>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              style={{ margin: "1rem 0" }}
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Description In Arabic
+              </p>
+              <TextField
+                multiline
+                rows={7}
+                style={{ width: "50%" }}
+                variant="outlined"
+                onChange={(e) => {
+                  setDescriptionAr(e.target.value);
+                }}
+                defaultValue={item_details && item_details.description_ar}
+              />
+            </Box>
+            <Box
+              style={{ margin: "2rem 0" }}
+              display="flex"
+              justifyContent="space-between"
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Image
+              </p>
+              <Paper
+                style={{
+                  width: "50%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <input
+                  id="edit-item"
+                  type="file"
+                  accept=".png,.jpg,.jpeg"
+                  style={{ display: "none" }}
+                  onChange={(e) => handleImgChange(e)}
+                />
                 <label htmlFor="edit-item">
                   <Avatar
                     src={
@@ -178,180 +291,189 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                     variant="rounded"
                   ></Avatar>
                 </label>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  justifyContent="space-between"
+              </Paper>
+            </Box>
+            <Box
+              style={{ margin: "2rem 0" }}
+              display="flex"
+              justifyContent="space-between"
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Price
+              </p>
+              <TextField
+                defaultValue={
+                  item_details && item_details.price ? item_details.price : null
+                }
+                variant="outlined"
+                style={{ width: "50%" }}
+                minLength={0}
+                onChange={(e) => {
+                  setPrice(e.target.value);
+                }}
+                type="number"
+              />
+            </Box>
+            <Box
+              style={{ margin: "2rem 0" }}
+              display="flex"
+              justifyContent="space-between"
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Created On
+              </p>
+              <TextField
+                variant="outlined"
+                id="date"
+                type="date"
+                style={{ width: "50%" }}
+                defaultValue={
+                  item_details &&
+                  moment(new Date(item_details.created_at)).format("YYYY-MM-DD")
+                }
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={(e) => {
+                  setDate(e.target.value);
+                }}
+              />
+            </Box>
+            <Box
+              style={{ margin: "2rem 0" }}
+              display="flex"
+              justifyContent="space-between"
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                LinkableItems
+              </p>
+              <FormControl style={{ width: "50%", marginTop: "1rem" }}>
+                <Select
+                  multiple
+                  defaultValue={item_details.link_items}
+                  input={<Input />}
+                  displayEmpty
+                  onChange={handleChangeMultiple}
                 >
+                  {linkableItems &&
+                    linkableItems.map((i, k) => (
+                      <MenuItem key={k} value={i["item_id"]}>
+                        {i["name"]}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
+            </Box>
+            <Box
+              style={{ margin: "2rem 0" }}
+              display="flex"
+              justifyContent="space-between"
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Category
+              </p>
+              <Select
+                style={{ width: "50%" }}
+                defaultValue={item_details && item_details.category_id}
+              >
+                <MenuItem value={0}>PC Parts</MenuItem>
+                <MenuItem value={1}>Gaming Access</MenuItem>
+                <MenuItem value={2}>Gears</MenuItem>
+              </Select>
+            </Box>
+            <Box
+              style={{ margin: "2rem 0" }}
+              display="flex"
+              justifyContent="space-between"
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Sub Category
+              </p>
+              <Select defaultValue={0} style={{ width: "50%" }}>
+                <MenuItem value={0}>
+                  {sub_category && sub_category["name_en"]}
+                </MenuItem>
+              </Select>
+            </Box>
+            <Box display="flex" alignItems="center" justifyContent="center">
+              <p style={{ fontWeight: "bold" }}>Custom Fields</p>
+            </Box>
+
+            {item_details &&
+              item_details.custom_fields_values.map((i, k) => (
+                <Box
+                  key={k}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  style={{ margin: "2rem 0", width: "100%" }}
+                >
+                  <p style={{ width: "30%" }}>{i.name_en}</p>
+
                   <TextField
-                    defaultValue={item_details && item_details.name_en}
                     variant="outlined"
-                    label="Name_en"
-                    onChange={(e) => {
-                      setNameEn(e.target.value);
-                    }}
+                    label="value_en"
+                    required
+                    style={{ width: "30%" }}
+                    inputRef={register()}
+                    name={`value_en${k + 1}`}
+                    defaultValue={i.value_en}
                   />
                   <TextField
-                    defaultValue={item_details && item_details.name_ar}
                     variant="outlined"
-                    label="Name_ar"
-                    onChange={(e) => {
-                      setNameAr(e.target.value);
-                    }}
+                    label="value_ar"
+                    required
+                    inputRef={register()}
+                    name={`value_ar${k + 1}`}
+                    style={{ width: "30%" }}
+                    defaultValue={i.value_ar}
                   />
                 </Box>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  justifyContent="space-between"
+              ))}
+
+            <Box display="flex" flexDirection="row-reverse">
+              {disabled ? (
+                <CircularProgress />
+              ) : (
+                <Fab
+                  onClick={() => {}}
+                  type="submit"
+                  variant="extended"
+                  color="primary"
                 >
-                  <TextField
-                    multiline
-                    label="Description_ar"
-                    variant="outlined"
-                    onChange={(e) => {
-                      setDescriptionAr(e.target.value);
-                    }}
-                    defaultValue={item_details && item_details.description_ar}
-                  />
-                  <TextField
-                    multiline
-                    label="Description_en"
-                    onChange={(e) => {
-                      setDescriptionEn(e.target.value);
-                    }}
-                    variant="outlined"
-                    value={item_details && item_details.description_en}
-                  />
-                </Box>
-              </Box>
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                style={{ margin: "2rem 0" }}
-              >
-                <TextField
-                  defaultValue={
-                    item_details && item_details.price
-                      ? item_details.price
-                      : null
-                  }
-                  variant="outlined"
-                  label="Price"
-                  onChange={(e) => {
-                    setPrice(e.target.value);
-                  }}
-                  type="number"
-                />
-                <TextField
-                  variant="outlined"
-                  id="date"
-                  type="date"
-                  label="Created On"
-                  defaultValue={
-                    item_details &&
-                    moment(new Date(item_details.created_at)).format(
-                      "YYYY-MM-DD"
-                    )
-                  }
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onChange={(e) => {
-                    setDate(e.target.value);
-                  }}
-                />
-              </Box>
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                style={{ margin: "2rem 0" }}
-              >
-                <FormControl style={{ width: "30%", marginTop: "1rem" }}>
-                  <Select
-                    multiple
-                    defaultValue={item_details.link_items}
-                    input={<Input />}
-                    displayEmpty
-                    onChange={handleChangeMultiple}
-                  >
-                    {linkableItems &&
-                      linkableItems.map((i, k) => (
-                        <MenuItem key={k} value={i["item_id"]}>
-                          {i["name"]}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
-                <TextField
-                  variant="outlined"
-                  defaultValue={
-                    item_details && item_details.category_id === 1
-                      ? "Pc Parts"
-                      : item_details.category_id === 2
-                      ? "Gaming Access"
-                      : item_details.category_id === 3
-                      ? "Gears"
-                      : ""
-                  }
-                  label="category"
-                />
-                <TextField
-                  variant="outlined"
-                  defaultValue={sub_category && sub_category["name_en"]}
-                  label="sub-category"
-                />
-              </Box>
-              <Box display="flex" alignItems="center" justifyContent="center">
-                <p style={{ fontWeight: "bold" }}>Custom Fields</p>
-              </Box>
-
-              {item_details &&
-                item_details.custom_fields_values.map((i, k) => (
-                  <Box
-                    key={k}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    style={{ margin: "2rem 0", width: "100%" }}
-                  >
-                    <p style={{ width: "30%" }}>{i.name_en}</p>
-
-                    <TextField
-                      variant="outlined"
-                      label="value_en"
-                      required
-                      style={{ width: "30%" }}
-                      inputRef={register()}
-                      name={`value_en${k + 1}`}
-                      defaultValue={i.value_en}
-                    />
-                    <TextField
-                      variant="outlined"
-                      label="value_ar"
-                      required
-                      inputRef={register()}
-                      name={`value_ar${k + 1}`}
-                      style={{ width: "30%" }}
-                      defaultValue={i.value_ar}
-                    />
-                  </Box>
-                ))}
-
-              <Box display="flex" flexDirection="row-reverse">
-                {disabled ? (
-                  <CircularProgress />
-                ) : (
-                  <Fab
-                    onClick={() => {}}
-                    type="submit"
-                    variant="extended"
-                    color="primary"
-                  >
-                    Save
-                  </Fab>
-                )}
-              </Box>
+                  Save
+                </Fab>
+              )}
             </Box>
           </form>
         </Paper>

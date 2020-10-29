@@ -7,6 +7,8 @@ import {
   Avatar,
   TextField,
   Fab,
+  Select,
+  MenuItem
 } from "@material-ui/core";
 import Img from "../../../../assets/thumbnail1.png";
 import { Context as DataContext } from "../../../../api/dataProvider";
@@ -15,7 +17,7 @@ import Clear from "@material-ui/icons/Clear";
 
 const Popup = ({ classes, open, setOpen }) => {
   const {
-    state: { item_details, linkableItems },
+    state: { item_details, linkableItems,sub_category },
     fetchLinkableItems,
   } = useContext(DataContext);
 
@@ -51,65 +53,169 @@ const Popup = ({ classes, open, setOpen }) => {
               padding: "2rem",
             }}
           >
-            <Box display="flex" justifyContent="space-between">
-              <Avatar
-                src={
-                  item_details
-                    ? item_details.image.length > 1 && item_details.image
-                    : Img
-                }
-                style={{ width: "150px", height: "150px", marginRight: "2rem" }}
-                variant="rounded"
-              ></Avatar>
-              <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="space-between"
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              style={{ margin: "1rem 0" }}
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
               >
-                <TextField
-                  defaultValue={item_details && item_details.name_en}
-                  variant="outlined"
-                  disabled
-                  label="Name_en"
-                />
-                <TextField
-                  defaultValue={item_details && item_details.name_ar}
-                  variant="outlined"
-                  disabled
-                  label="Name_ar"
-                />
-              </Box>
+                English Name
+              </p>
+              <TextField
+                defaultValue={item_details && item_details.name_en}
+                disabled
+                variant="outlined"
+                style={{ width: "50%" }}
+              />
+            </Box>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              style={{ margin: "1rem 0" }}
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Arabic Name
+              </p>
+              <TextField
+                defaultValue={item_details && item_details.name_ar}
+                variant="outlined"
+                disabled
+                style={{ width: "50%" }}
+              />
+            </Box>
+            <Box
+              display="flex"
+              // alignItems="center"
+              justifyContent="space-between"
+              style={{ margin: "1rem 0" }}
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Description In English
+              </p>
               <TextField
                 rows={7}
                 multiline
                 disabled
-                label="Description_en"
                 variant="outlined"
+                style={{ width: "50%" }}
                 value={item_details && item_details.description_en}
               />
+            </Box>
+            <Box
+              display="flex"
+              // alignItems="center"
+              justifyContent="space-between"
+              style={{ margin: "1rem 0" }}
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Description In Arabic
+              </p>
               <TextField
                 rows={7}
                 multiline
                 disabled
-                label="Description_ar"
+                style={{ width: "50%" }}
                 variant="outlined"
                 defaultValue={item_details && item_details.description_ar}
               />
             </Box>
             <Box
+              style={{ margin: "2rem 0" }}
               display="flex"
               justifyContent="space-between"
-              style={{ margin: "2rem 0" }}
             >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Image
+              </p>
+              <Paper
+                style={{
+                  width: "50%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Avatar
+                  src={
+                    item_details
+                      ? item_details.image.length > 1 && item_details.image
+                      : Img
+                  }
+                  style={{ width: "150px", height: "150px" }}
+                  variant="rounded"
+                ></Avatar>
+              </Paper>
+            </Box>
+            <Box
+              style={{ margin: "2rem 0" }}
+              display="flex"
+              justifyContent="space-between"
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Price
+              </p>
               <TextField
                 defaultValue={
                   item_details && item_details.price ? item_details.price : null
                 }
                 variant="outlined"
                 disabled
-                label="Price"
                 type="number"
+                min={0}
+                style={{ width: "50%" }}
               />
+            </Box>
+            <Box
+              style={{ margin: "2rem 0" }}
+              display="flex"
+              justifyContent="space-between"
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Status
+              </p>
               <TextField
                 defaultValue={
                   item_details && item_details.status === 1
@@ -118,14 +224,28 @@ const Popup = ({ classes, open, setOpen }) => {
                 }
                 variant="outlined"
                 disabled
-                label="Status"
+                style={{ width: "50%" }}
               />
+            </Box>
+            <Box
+              style={{ margin: "2rem 0" }}
+              display="flex"
+              justifyContent="space-between"
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Created On
+              </p>
               <TextField
                 variant="outlined"
                 id="date"
+                style={{ width: "50%" }}
                 disabled
-                label="Created On"
-                // type="date"
                 value={
                   item_details &&
                   moment(new Date(item_details.created_at)).format(
@@ -142,8 +262,18 @@ const Popup = ({ classes, open, setOpen }) => {
               justifyContent="space-between"
               style={{ margin: "2rem 0" }}
             >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Linkable Items
+              </p>
               <TextField
                 variant="outlined"
+                style={{ width: "50%" }}
                 onClick={() => {
                   console.log(linkableItems);
                 }}
@@ -154,21 +284,57 @@ const Popup = ({ classes, open, setOpen }) => {
                     }
                   })
                   .toString()}
-                label="link_item_id"
                 disabled
               />
-              <TextField
-                variant="outlined"
+            </Box>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              style={{ margin: "2rem 0" }}
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Category
+              </p>
+              {/* <TextField
                 defaultValue={item_details && item_details.category_id}
-                label="category"
                 disabled
-              />
-              <TextField
-                variant="outlined"
-                defaultValue={item_details && item_details.sub_category_id}
-                label="sub-category"
+                style={{ width: "50%" }}
+              /> */}
+              <Select
                 disabled
-              />
+                style={{ width: "50%" }}
+                defaultValue={item_details && item_details.category_id}
+              >
+                <MenuItem value={0}>PC Parts</MenuItem>
+                <MenuItem value={1}>Gaming Access</MenuItem>
+                <MenuItem value={2}>Gears</MenuItem>
+              </Select>
+            </Box>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              style={{ margin: "2rem 0" }}
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Sub Category
+              </p>
+              <Select defaultValue={0} disabled style={{ width: "50%" }}>
+                <MenuItem value={0}>
+                  {sub_category && sub_category["name_en"]}
+                </MenuItem>
+              </Select>
             </Box>
             <Box display="flex" alignItems="center" justifyContent="center">
               <p style={{ fontWeight: "bold" }}>Custom Fields</p>

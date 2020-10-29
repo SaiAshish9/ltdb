@@ -176,7 +176,7 @@ function SimpleTable({ data }) {
               >
                 Status
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 style={{
                   fontWeight: "bold",
                   fontSize: "0.8rem",
@@ -184,7 +184,7 @@ function SimpleTable({ data }) {
                 }}
               >
                 Action
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -258,9 +258,9 @@ function SimpleTable({ data }) {
                   >
                     {row.status === 1 ? "Active" : "InActive"}
                   </TableCell>
-                  <TableCell
+                  {/* <TableCell
                     style={{ color: "#8095a1", fontWeight: 500 }}
-                  ></TableCell>
+                  ></TableCell> */}
                 </TableRow>
               ))}
           </TableBody>

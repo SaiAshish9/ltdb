@@ -11,8 +11,6 @@ import {
   MenuItem,
   Input,
   FormControl,
-  FormControlLabel,
-  Checkbox,
   CircularProgress,
 } from "@material-ui/core";
 import { Clear, CameraAlt } from "@material-ui/icons";
@@ -372,7 +370,7 @@ const AddItem = ({open, setOpen}) => {
                     </FormControl>
                   </Box>
                 )}
-
+{/* 
                 {customFields && customFields.length > 0 && (
                   <FormControlLabel
                     style={{ marginVertical: "2rem" }}
@@ -388,9 +386,9 @@ const AddItem = ({open, setOpen}) => {
                     }
                     label="Add custom fields"
                   />
-                )}
+                )} */}
 
-                {checked && (
+                {!checked && (
                   <Box
                     justifyContent="space-between"
                     style={{ margin: "1rem 0" }}
@@ -486,7 +484,6 @@ const AddItem = ({open, setOpen}) => {
                     variant="outlined"
                     value={desc_en}
                     onChange={(e) => setDescEn(e.target.value)}
-                    // defaultValue={description.desc}
                     style={{ width: "100%", opacity: 0.8 }}
                   />
                 </div>
@@ -505,7 +502,6 @@ const AddItem = ({open, setOpen}) => {
                     rows={4}
                     value={desc_ar}
                     onChange={(e) => setDescAr(e.target.value)}
-                    // defaultValue={description.desc_ar}
                     variant="outlined"
                     style={{ width: "100%", opacity: 0.8 }}
                   />
