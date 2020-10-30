@@ -320,7 +320,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                 type="number"
               />
             </Box>
-            <Box
+            {/* <Box
               style={{ margin: "2rem 0" }}
               display="flex"
               justifyContent="space-between"
@@ -350,7 +350,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                   setDate(e.target.value);
                 }}
               />
-            </Box>
+            </Box> */}
             <Box
               style={{ margin: "2rem 0" }}
               display="flex"

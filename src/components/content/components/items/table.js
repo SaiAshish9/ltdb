@@ -368,7 +368,6 @@ export default function SimpleTable({ data }) {
                     scope="row"
                   >
                     {row.name_en.length > 0 && k + 1 + rowsPerPage * page}
-                    {/* {i + 1} */}
                   </TableCell>
                   <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
                     {row.name_en}

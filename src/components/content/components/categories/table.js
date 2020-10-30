@@ -201,7 +201,7 @@ function SimpleTable({ data }) {
                 >
                   <TableCell
                     style={{
-                      paddingLeft: "4rem",
+                      paddingLeft: "9rem",
                       color: "#8095a1",
                       fontWeight: 500,
                       // textAlign: "center",

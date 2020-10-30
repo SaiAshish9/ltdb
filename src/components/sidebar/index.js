@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import ScrollArea from "react-scrollbar";
 import Topbar from "./topbar";
@@ -12,6 +12,8 @@ import Cookie from "js-cookie";
 
 const Sidebar = ({ dispatch }) => {
   const history = useHistory();
+  const [expandOption, setExpandOption] = useState("");
+
   return (
     <Box
       display="flex"
@@ -48,7 +50,11 @@ const Sidebar = ({ dispatch }) => {
               <Box key={k}>
                 <Button
                   onClick={() => {
-                    history.push(i.path);
+                    i.path.length > 0
+                      ? history.push(i.path)
+                      : expandOption === i.id
+                      ? setExpandOption("")
+                      : setExpandOption(i.id);
                   }}
                   style={{
                     width: "100%",
@@ -86,7 +92,7 @@ const Sidebar = ({ dispatch }) => {
                   </Box>
                 </Button>
                 <Box>
-                  {i.paths.includes(history.location.pathname) &&
+                  {expandOption === i.id &&
                     i.options.map((a, b) => (
                       <Button
                         key={b}
@@ -109,7 +115,7 @@ const Sidebar = ({ dispatch }) => {
                           style={{
                             fontSize: "0.8rem",
                             fontWeight: 600,
-                            marginLeft:10
+                            marginLeft: 10,
                           }}
                         >
                           {a.name}

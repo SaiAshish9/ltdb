@@ -21,6 +21,7 @@ import {
   FormGroup,
   FormControlLabel,
   Switch,
+  Checkbox,
 } from "@material-ui/core";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import Search from "./search";
@@ -55,6 +56,9 @@ export default function SimpleTable({ data }) {
   const [inActive, isInActive] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [selected, setSelected] = useState([]);
+  const [action, setAction] = useState(0);
+  const [openActionDialog, setOpenActionDialog] = useState(false);
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
@@ -122,6 +126,13 @@ export default function SimpleTable({ data }) {
                 maxHeight: "3.4rem",
               }}
             >
+              <TableCell
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              ></TableCell>
               <TableCell
                 style={{
                   fontWeight: "bold",
@@ -254,7 +265,89 @@ export default function SimpleTable({ data }) {
                   fontSize: "0.8rem",
                   color: "#282b3c",
                 }}
-              ></TableCell>
+              >
+                <Box display="flex" alignItems="center">
+                  Action
+                  <IconButton
+                    onClick={() => {
+                      setOpenActionDialog(!openActionDialog);
+                    }}
+                  >
+                    {openActionDialog ? (
+                      <ArrowDropUpIcon />
+                    ) : (
+                      <ArrowDropDownIcon />
+                    )}
+                  </IconButton>
+                </Box>
+                {openActionDialog && (
+                  <Paper
+                    style={{
+                      position: "absolute",
+                      width: "10rem",
+                      zIndex: 2,
+                      right: 10,
+                    }}
+                  >
+                    <p
+                      onClick={() => {
+                        setAction(1);
+                        setSelected([...selected, ...users.map((x) => x.user_id)]);
+                        setOpenActionDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Bulk Active
+                    </p>
+                    <p
+                      onClick={() => {
+                        setAction(0);
+                        setSelected([...selected, ...users.map((x) => x.user_id)]);
+                        setOpenActionDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Bulk InActive
+                    </p>
+                    <p
+                      onClick={async () => {
+                        if (action === 1) {
+                          await toggleUserStatus([...selected], 1);
+                        } else {
+                          await toggleUserStatus(
+                            [...users.map((x) => x.user_id)],
+                            0
+                          );
+                        }
+                        await fetchUsers();
+                        setSelected([]);
+                        setOpenActionDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Update Status
+                    </p>
+                  </Paper>
+                )}
+              </TableCell>
             </TableRow>
           </TableHead>
           {users && users.length === 0 && (
@@ -305,6 +398,28 @@ export default function SimpleTable({ data }) {
                   }}
                   key={x.user_id}
                 >
+                  <TableCell
+                    style={{
+                      textAlign: "center",
+                      color: "#8095a1",
+                      fontWeight: 500,
+                    }}
+                  >
+                    <Checkbox
+                      disabled
+                      checked={selected.includes(x.user_id)}
+                      onChange={() => {
+                        if (selected.includes(x.user_id)) {
+                          var a = [...selected];
+                          a = a.filter((y) => y !== x.user_id);
+                          setSelected(a);
+                        } else {
+                          setSelected([...selected, x.user_id]);
+                        }
+                      }}
+                      style={{ color: "#8095a1" }}
+                    />
+                  </TableCell>
                   <TableCell
                     style={{
                       color: "#8095a1",
@@ -360,7 +475,7 @@ export default function SimpleTable({ data }) {
                   <TableCell
                     onClick={async () => {
                       await toggleUserStatus(
-                        x.user_id,
+                        [x.user_id],
                         +x.status === 1 ? 0 : 1
                       );
                       await fetchUsers(page + 1);

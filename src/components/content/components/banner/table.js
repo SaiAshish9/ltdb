@@ -11,6 +11,7 @@ import {
   Paper,
   Box,
   IconButton,
+  Checkbox,
 } from "@material-ui/core";
 // import Search from "./search";
 import AddBannerPopup from "./addBanner";
@@ -19,6 +20,8 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import ViewBannerPopup from "./viewBanner";
 import EditBannerPopup from "./editBanner";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -39,6 +42,8 @@ const BannerTable = () => {
     fetchBanners,
   } = useContext(DataContext);
   const [openSnackbar, setOpenSnackbar] = useState(true);
+  const [selected, setSelected] = useState([]);
+  const [action, setAction] = useState(0);
 
   return (
     <React.Fragment>
@@ -76,7 +81,7 @@ const BannerTable = () => {
 
       <TableContainer
         style={{
-          minHeight: "83vh",
+          height: "90vh",
           width: "100%",
         }}
         elevation={0}
@@ -104,6 +109,13 @@ const BannerTable = () => {
             >
               <TableCell
                 style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              ></TableCell>
+              <TableCell
+                style={{
                   fontWeight: "bold",
                   fontSize: "0.8rem",
                   color: "#282b3c",
@@ -116,7 +128,7 @@ const BannerTable = () => {
                 style={{
                   fontWeight: "bold",
                   fontSize: "0.8rem",
-                  textAlign: "center",
+                  // textAlign: "center",
                   color: "#282b3c",
                 }}
               >
@@ -127,7 +139,7 @@ const BannerTable = () => {
                   fontWeight: "bold",
                   fontSize: "0.8rem",
                   color: "#282b3c",
-                  textAlign: "center",
+                  // textAlign: "center",
                 }}
               >
                 Arabic Name
@@ -147,13 +159,6 @@ const BannerTable = () => {
                   style={{ textAlign: "center", paddingLeft: "2rem" }}
                 >
                   Status{" "}
-                  <IconButton
-                    onClick={() => {
-                      setOpenDialog(!openDialog);
-                    }}
-                  >
-                    {/* {openDialog ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />} */}
-                  </IconButton>
                 </Box>{" "}
               </TableCell>
               <TableCell
@@ -165,6 +170,75 @@ const BannerTable = () => {
                 }}
               >
                 Action
+                <IconButton
+                  onClick={() => {
+                    setOpenDialog(!openDialog);
+                  }}
+                >
+                  {openDialog ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                </IconButton>
+                {banners && openDialog && (
+                  <Paper
+                    style={{ zIndex: 2, position: "absolute", width: "10rem" }}
+                  >
+                    <p
+                      onClick={() => {
+                        setAction(1);
+                        setSelected([...selected, ...banners.map((x) => x.id)]);
+                        setOpenDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Bulk Active
+                    </p>
+                    <p
+                      onClick={() => {
+                        setAction(0);
+                        setSelected([...selected, ...banners.map((x) => x.id)]);
+                        setOpenDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Bulk InActive
+                    </p>
+                    <p
+                      onClick={async () => {
+                        if (action === 1) {
+                          await toggleBannerStatus([...selected], 1);
+                        } else {
+                          await toggleBannerStatus(
+                            [...banners.map((x) => x.id)],
+                            0
+                          );
+                        }
+                        await fetchBanners();
+                        setSelected([]);
+                        setOpenDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Update Status
+                    </p>
+                  </Paper>
+                )}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -188,20 +262,42 @@ const BannerTable = () => {
                       fontWeight: 500,
                     }}
                   >
+                    <Checkbox
+                      disabled
+                      checked={selected.includes(i.id)}
+                      onChange={() => {
+                        if (selected.includes(i.id)) {
+                          var x = [...selected];
+                          x = x.filter((x) => x !== i.id);
+                          setSelected(x);
+                        } else {
+                          setSelected([...selected, i.id]);
+                        }
+                      }}
+                      style={{ color: "#8095a1" }}
+                    />
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      textAlign: "center",
+                      color: "#8095a1",
+                      fontWeight: 500,
+                    }}
+                  >
                     {k + 1}
                   </TableCell>
                   <TableCell
                     style={{
                       color: "#8095a1",
                       fontWeight: 500,
-                      textAlign: "center",
+                      // textAlign: "center",
                     }}
                   >
                     {i.title_en}
                   </TableCell>
                   <TableCell
                     style={{
-                      textAlign: "center",
+                      // textAlign: "center",
                       color: "#8095a1",
                       fontWeight: 500,
                     }}
@@ -210,7 +306,7 @@ const BannerTable = () => {
                   </TableCell>
                   <TableCell
                     onClick={async () => {
-                      await toggleBannerStatus(i.id, +i.status === 0 ? 1 : 0);
+                      await toggleBannerStatus([i.id], +i.status === 0 ? 1 : 0);
                       await fetchBanners();
                     }}
                     style={{
@@ -218,6 +314,7 @@ const BannerTable = () => {
                       textAlign: "center",
                       color: +i.status !== 1 ? "red" : "green",
                       fontWeight: 500,
+                      paddingLeft:"4rem"
                     }}
                   >
                     {+i.status === 1 ? "Active" : "InActive"}

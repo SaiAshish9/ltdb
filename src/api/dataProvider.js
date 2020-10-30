@@ -368,7 +368,7 @@ const clearMessage = (dispatch) => async () => {
 
 const toggleUserStatus = (dispatch) => async (id, action) => {
   const x = {
-    users: [id],
+    users: [...id],
     action_type: action,
   };
   clearMessage();
@@ -466,7 +466,7 @@ const editItem = (dispatch) => async (data) => {
       description_en: data.description_en,
       description_ar: data.description_ar,
       link_item_id: data.link_item_id,
-      image: image,
+      image: image.split("com/")[1],
       price: data.price,
       status: data.status,
       item_custom_values: data.item_custom_values,
@@ -861,7 +861,7 @@ const toggleBannerStatus = (dispatch) => async (id, action) => {
       payload: null,
     });
     await Api.post("admin/banner/block-unblock", {
-      banners: [id],
+      banners: [...id],
       action_type: action,
     });
     await fetchBanners();
