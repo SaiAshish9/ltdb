@@ -9,7 +9,13 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import TablePagination from "@material-ui/core/TablePagination";
 import { Context as DataContext } from "../../../../api/dataProvider";
-import { Box, CircularProgress, Snackbar, IconButton } from "@material-ui/core";
+import {
+  Box,
+  CircularProgress,
+  Snackbar,
+  IconButton,
+  Checkbox,
+} from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import Popup from "./popup";
@@ -22,7 +28,6 @@ import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import Search from "./search";
 import AddPackage from "./addPackage";
 import AddItem from "./addItem";
-
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -44,12 +49,14 @@ export default function SimpleTable({ data }) {
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openPackagesDialog, setOpenPackagesDialog] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const [openActionDialog,setOpenActionDialog]=useState(false);
   const [active, isActive] = useState(false);
   const [inActive, isInActive] = useState(false);
   const [openPackageForm, setOpenPackageForm] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  const [openAddGame,setOpenAddGame] = useState(false);
-
+  const [openAddGame, setOpenAddGame] = useState(false);
+  const [selected, setSelected] = useState([]);
+  const [action, setAction] = useState(0);
 
   const {
     state: { games, message, game_count },
@@ -172,6 +179,13 @@ export default function SimpleTable({ data }) {
                 width: "85vw",
               }}
             >
+              <TableCell
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              ></TableCell>
               <TableCell
                 style={{
                   fontWeight: "bolder",
@@ -303,6 +317,79 @@ export default function SimpleTable({ data }) {
                 }}
               >
                 Action
+                <IconButton
+                  onClick={() => {
+                    setOpenActionDialog(!openActionDialog);
+                  }}
+                >
+                  {openActionDialog ? (
+                    <ArrowDropUpIcon />
+                  ) : (
+                    <ArrowDropDownIcon />
+                  )}
+                </IconButton>
+                {games && openActionDialog && (
+                  <Paper
+                    style={{ zIndex: 2, position: "absolute", width: "10rem" }}
+                  >
+                    <p
+                      onClick={() => {
+                        setAction(1);
+                        setSelected([...selected, ...games.map((x) => x.game_id)]);
+                        setOpenDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Bulk Active
+                    </p>
+                    <p
+                      onClick={() => {
+                        setAction(0);
+                        setSelected([...selected, ...games.map((x) => x.game_id)]);
+                        setOpenActionDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Bulk InActive
+                    </p>
+                    <p
+                      onClick={async () => {
+                        if (action === 1) {
+                          await toggleGameStatus([...selected], 1);
+                        } else {
+                          await toggleGameStatus(
+                            [...games.map((x) => x.game_id)],
+                            0
+                          );
+                        }
+                        await fetchGames();
+                        setSelected([]);
+                        setOpenActionDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Update Status
+                    </p>
+                  </Paper>
+                )}
               </TableCell>
               <TableCell
                 style={{
@@ -373,6 +460,29 @@ export default function SimpleTable({ data }) {
                       fontWeight: 500,
                     }}
                   >
+                    <Checkbox
+                      disabled
+                      checked={selected.includes(row.game_id)}
+                      onChange={() => {
+                        if (selected.includes(row.game_id)) {
+                          var x = [...selected];
+                          x = x.filter((x) => x !== row.game_id);
+                          setSelected(x);
+                        } else {
+                          setSelected([...selected, row.game_id]);
+                        }
+                      }}
+                      style={{ color: "#8095a1" }}
+                    />
+                  </TableCell>
+
+                  <TableCell
+                    style={{
+                      textAlign: "center",
+                      color: "#8095a1",
+                      fontWeight: 500,
+                    }}
+                  >
                     {row.name_en.length > 0 && k + 1 + rowsPerPage * page}
                   </TableCell>
                   <TableCell
@@ -396,7 +506,7 @@ export default function SimpleTable({ data }) {
                   <TableCell
                     onClick={async () => {
                       await toggleGameStatus(
-                        row.game_id,
+                        [row.game_id],
                         +row.status === 1 ? 0 : 1
                       );
                       await fetchGames(page + 1);

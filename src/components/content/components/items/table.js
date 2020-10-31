@@ -14,6 +14,7 @@ import {
   CircularProgress,
   Snackbar,
   IconButton,
+  Checkbox,
   FormGroup,
   Switch,
   FormControlLabel,
@@ -28,7 +29,6 @@ import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import EditItem from "./editItem";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
-
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -50,9 +50,12 @@ export default function SimpleTable({ data }) {
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [id, setId] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
+  const [openActionDialog, setOpenActionDialog] = useState(false);
   const [active, isActive] = useState(false);
   const [inActive, isInActive] = useState(false);
   const [openAddItem, setOpenAddItem] = useState(false);
+  const [selected, setSelected] = useState([]);
+  const [action, setAction] = useState(0);
 
   const {
     state: { items, items_count, page_count, message },
@@ -171,6 +174,13 @@ export default function SimpleTable({ data }) {
                 width: "85vw",
               }}
             >
+              <TableCell
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              ></TableCell>
               <TableCell
                 style={{
                   fontWeight: "bold",
@@ -307,6 +317,75 @@ export default function SimpleTable({ data }) {
                 }}
               >
                 Action
+                <IconButton
+                  onClick={() => {
+                    setOpenActionDialog(!openActionDialog);
+                  }}
+                >
+                  {openActionDialog ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                </IconButton>
+                {items && openActionDialog && (
+                  <Paper
+                    style={{ zIndex: 2, position: "absolute", width: "10rem" }}
+                  >
+                    <p
+                      onClick={() => {
+                        setAction(1);
+                        setSelected([...selected, ...items.map((x) => x.item_id)]);
+                        setOpenActionDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Bulk Active
+                    </p>
+                    <p
+                      onClick={() => {
+                        setAction(0);
+                        setSelected([...selected, ...items.map((x) => x.item_id)]);
+                        setOpenActionDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Bulk InActive
+                    </p>
+                    <p
+                      onClick={async () => {
+                        if (action === 1) {
+                          await toggleItemStatus([...selected], 1);
+                        } else {
+                          await toggleItemStatus(
+                            [...items.map((x) => x.item_id)],
+                            0
+                          );
+                        }
+                        await fetchItems();
+                        setSelected([]);
+                        setOpenActionDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Update Status
+                    </p>
+                  </Paper>
+                )}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -361,6 +440,28 @@ export default function SimpleTable({ data }) {
                 >
                   <TableCell
                     style={{
+                      textAlign: "center",
+                      color: "#8095a1",
+                      fontWeight: 500,
+                    }}
+                  >
+                    <Checkbox
+                      disabled
+                      checked={selected.includes(row.item_id)}
+                      onChange={() => {
+                        if (selected.includes(row.item_id)) {
+                          var x = [...selected];
+                          x = x.filter((x) => x !== row.item_id);
+                          setSelected(x);
+                        } else {
+                          setSelected([...selected, row.item_id]);
+                        }
+                      }}
+                      style={{ color: "#8095a1" }}
+                    />
+                  </TableCell>
+                  <TableCell
+                    style={{
                       color: "#8095a1",
                       fontWeight: 500,
                     }}
@@ -384,7 +485,7 @@ export default function SimpleTable({ data }) {
                   <TableCell
                     onClick={async () => {
                       await toggleItemStatus(
-                        row.item_id,
+                        [row.item_id],
                         +row.status === 1 ? 0 : 1
                       );
                       await fetchItems(page + 1);

@@ -327,7 +327,7 @@ const togglePackage = (dispatch) => async (id, action) => {
 
 const toggleItemStatus = (dispatch) => async (id, action) => {
   const x = {
-    items: [id],
+    items: [...id],
     action_type: action,
   };
   clearMessage();
@@ -344,7 +344,7 @@ const toggleItemStatus = (dispatch) => async (id, action) => {
 
 const toggleGameStatus = (dispatch) => async (id, action) => {
   const x = {
-    games: [id],
+    games: [...id],
     action_type: action,
   };
   clearMessage();
