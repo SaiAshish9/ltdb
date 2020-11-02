@@ -8,7 +8,7 @@ import {
   TextField,
   Fab,
   Select,
-  MenuItem
+  MenuItem,
 } from "@material-ui/core";
 import Img from "../../../../assets/thumbnail1.png";
 import { Context as DataContext } from "../../../../api/dataProvider";
@@ -17,7 +17,7 @@ import Clear from "@material-ui/icons/Clear";
 
 const Popup = ({ classes, open, setOpen }) => {
   const {
-    state: { item_details, linkableItems,sub_category },
+    state: { item_details, linkableItems, sub_category },
     fetchLinkableItems,
   } = useContext(DataContext);
 
@@ -110,7 +110,7 @@ const Popup = ({ classes, open, setOpen }) => {
                   fontWeight: 500,
                 }}
               >
-                Description In English
+                Description
               </p>
               <TextField
                 rows={7}
@@ -134,7 +134,7 @@ const Popup = ({ classes, open, setOpen }) => {
                   fontWeight: 500,
                 }}
               >
-                Description In Arabic
+                وصف :
               </p>
               <TextField
                 rows={7}
@@ -195,10 +195,10 @@ const Popup = ({ classes, open, setOpen }) => {
                 defaultValue={
                   item_details && item_details.price ? item_details.price : null
                 }
+                inputProps={{ minLength: 0 }}
                 variant="outlined"
                 disabled
                 type="number"
-                min={0}
                 style={{ width: "50%" }}
               />
             </Box>

@@ -493,6 +493,7 @@ export default function SimpleTable({ data }) {
                     style={{
                       cursor: "pointer",
                       textAlign: "center",
+                      paddingLeft:"4rem",
                       color: row.status !== 1 ? "red" : "green",
                       fontWeight: 500,
                     }}

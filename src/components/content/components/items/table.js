@@ -462,7 +462,7 @@ export default function SimpleTable({ data }) {
                     {moment(row.created_at).format("DD MMM YYYY")}
                   </TableCell>
                   <TableCell style={{ color: "#8095a1", fontWeight: 500 }}>
-                    {row.price}
+                    KD {row.price}
                   </TableCell>
                   <TableCell
                     onClick={async () => {

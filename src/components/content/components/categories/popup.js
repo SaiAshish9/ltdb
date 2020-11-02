@@ -37,10 +37,11 @@ const SubCategoryTable = ({
     let x = Object.values(values).splice(2);
     let y = [];
     for (let i = 0; i < x.length; i += 2) {
-      y.push({
-        name_en: x[i],
-        name_ar: x[i + 1],
-      });
+      customFieldCount > 1 &&
+        y.push({
+          name_en: x[i],
+          name_ar: x[i + 1],
+        });
     }
     let res = {};
     res["name_en"] = values["name_en"];
@@ -49,11 +50,10 @@ const SubCategoryTable = ({
     res["custom_fields"] = y;
     res["category_id"] = categoryId;
     current &&
-      Api.post("admin/subcategory/add", res)
-        .then((data) => {
-          setOpen(false);
-          reset();
-        })
+      Api.post("admin/subcategory/add", res).then((data) => {
+        setOpen(false);
+        reset();
+      });
   };
 
   useEffect(() => {
@@ -123,6 +123,7 @@ const SubCategoryTable = ({
               justifyContent="space-between"
               style={{
                 padding: "1rem",
+                width: "60%",
               }}
             >
               <TextField
@@ -138,7 +139,7 @@ const SubCategoryTable = ({
                 label="اسم"
               />
 
-              <Tooltip
+              {/* <Tooltip
                 title={msg === 0 ? "InActive" : "Active"}
                 placement="left"
               >
@@ -153,7 +154,7 @@ const SubCategoryTable = ({
                 >
                   <ExpandMoreIcon />
                 </Fab>
-              </Tooltip>
+              </Tooltip> */}
 
               <Popover
                 id={id}
@@ -239,13 +240,13 @@ const SubCategoryTable = ({
                     inputRef={register()}
                     name={`name_en${k + 1}`}
                     variant="outlined"
-                    label="name_en"
+                    label="Name"
                   />
                   <TextField
                     inputRef={register()}
                     variant="outlined"
                     name={`name_ar${k + 1}`}
-                    label="name_ar"
+                    label="اسم"
                   />
                   <Box display="flex">
                     {k === [...Array(customFieldCount).keys()].length - 1 && (
@@ -267,8 +268,10 @@ const SubCategoryTable = ({
                     )}
                     <Tooltip title="Delete" placement="left">
                       <Fab
+                        disabled={customFieldCount === 1}
                         onClick={() => {
-                          setCustomFieldCount(customFieldCount - 1);
+                          customFieldCount > 1 &&
+                            setCustomFieldCount(customFieldCount - 1);
                         }}
                         style={{
                           color: "#fff",

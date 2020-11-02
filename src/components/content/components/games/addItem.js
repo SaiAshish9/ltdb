@@ -127,14 +127,14 @@ const AddItem = ({ disabled, setDisabled,open, setOpen}) => {
             >
               <TextField
                 variant="outlined"
-                label="name"
+                label="Name"
                 value={name_en}
                 onChange={(e) => setNameEn(e.target.value)}
                 style={{ width: "47%" }}
               />
               <TextField
                 variant="outlined"
-                label="name_ar"
+                label="اسم"
                 value={name_ar}
                 onChange={(e) => setNameAr(e.target.value)}
                 style={{ width: "47%" }}

@@ -22,9 +22,12 @@ const useStyles = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
   },
+  arabicTf: {
+    direction: "rtl",
+  },
 }));
 
-const AddItem = ({open, setOpen}) => {
+const AddItem = ({ open, setOpen }) => {
   const classes = useStyles();
   const [data, setData] = useState(null);
   const [categories, setCategories] = useState(null);
@@ -370,7 +373,7 @@ const AddItem = ({open, setOpen}) => {
                     </FormControl>
                   </Box>
                 )}
-{/* 
+                {/* 
                 {customFields && customFields.length > 0 && (
                   <FormControlLabel
                     style={{ marginVertical: "2rem" }}
@@ -453,16 +456,27 @@ const AddItem = ({open, setOpen}) => {
               >
                 <TextField
                   variant="outlined"
-                  label="name"
+                  label="Name"
                   value={name_en}
                   onChange={(e) => setNameEn(e.target.value)}
                   style={{ width: "47%" }}
                 />
                 <TextField
                   variant="outlined"
-                  label="name_ar"
+                  label="اسم"
                   value={name_ar}
-                  onChange={(e) => setNameAr(e.target.value)}
+                  inputProps={{
+                    dir: "rtl",
+                    style: {
+                      className: classes.arabicTf,
+                      textAlign: "right",
+                      direction: "rtl",
+                    },
+                  }}
+                  onChange={
+                    (e) => setNameAr(e.target.value)
+                    // setNameAr(e.target.value.split("").reverse().join(""))
+                  }
                   style={{ width: "47%" }}
                 />
               </Box>
@@ -476,7 +490,7 @@ const AddItem = ({open, setOpen}) => {
                       fontWeight: 600,
                     }}
                   >
-                    Description_en :
+                    Description :
                   </p>
                   <TextField
                     multiline
@@ -495,13 +509,15 @@ const AddItem = ({open, setOpen}) => {
                       fontWeight: 600,
                     }}
                   >
-                    Description_ar :
+                    وصف :
                   </p>
                   <TextField
                     multiline
                     rows={4}
                     value={desc_ar}
-                    onChange={(e) => setDescAr(e.target.value)}
+                    onChange={(e) =>
+                      setDescAr(e.target.value.split("").reverse().join(""))
+                    }
                     variant="outlined"
                     style={{ width: "100%", opacity: 0.8 }}
                   />
@@ -528,6 +544,7 @@ const AddItem = ({open, setOpen}) => {
                   </p>
                   <TextField
                     value={price}
+                    inputProps={{ min: 0 }}
                     type="number"
                     onChange={(e) => setPrice(e.target.value)}
                     variant="outlined"

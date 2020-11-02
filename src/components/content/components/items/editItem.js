@@ -188,10 +188,11 @@ const EditItem = ({ classes, open, setOpen, id }) => {
               </p>
               <TextField
                 defaultValue={item_details && item_details.name_ar}
+                value={name_ar.length > 0 ? name_ar : item_details.name_ar}
                 variant="outlined"
                 style={{ width: "50%" }}
                 onChange={(e) => {
-                  setNameAr(e.target.value);
+                  setNameAr(e.target.value.split("").reverse().join(""));
                 }}
               />
             </Box>
@@ -207,7 +208,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                   fontWeight: 500,
                 }}
               >
-                Description In English
+                Description
               </p>
               <TextField
                 multiline
@@ -217,7 +218,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                   setDescriptionEn(e.target.value);
                 }}
                 variant="outlined"
-                value={item_details && item_details.description_en}
+                defaultValue={item_details && item_details.description_en}
               />
             </Box>
             <Box
@@ -232,15 +233,20 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                   fontWeight: 500,
                 }}
               >
-                Description In Arabic
+                وصف :
               </p>
               <TextField
                 multiline
                 rows={7}
                 style={{ width: "50%" }}
                 variant="outlined"
+                value={
+                  description_ar.length > 0
+                    ? description_ar
+                    : item_details.name_ar
+                }
                 onChange={(e) => {
-                  setDescriptionAr(e.target.value);
+                  setDescriptionAr(e.target.value.split("").reverse().join(""));
                 }}
                 defaultValue={item_details && item_details.description_ar}
               />
@@ -313,7 +319,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                 }
                 variant="outlined"
                 style={{ width: "50%" }}
-                minLength={0}
+                inputProps={{ min: 0 }}
                 onChange={(e) => {
                   setPrice(e.target.value);
                 }}

@@ -118,6 +118,7 @@ const EditDialog = ({
               justifyContent="space-between"
               style={{
                 padding: "1rem",
+                width:"80%"
               }}
             >
               <TextField
@@ -135,7 +136,7 @@ const EditDialog = ({
                 label="اسم"
               />
 
-              <Tooltip
+              {/* <Tooltip
                 title={msg === 0 ? "InActive" : "Active"}
                 placement="left"
               >
@@ -150,7 +151,7 @@ const EditDialog = ({
                 >
                   <ExpandMoreIcon />
                 </Fab>
-              </Tooltip>
+              </Tooltip> */}
 
               <Popover
                 id={id}
@@ -237,15 +238,15 @@ const EditDialog = ({
                       inputRef={register()}
                       name={`name_en${k + 1}`}
                       variant="outlined"
-                      label="name_en"
-                      defaultValue={i.name}
+                      label="Name"
+                      value={i.name}
                     />
                     <TextField
                       inputRef={register()}
                       variant="outlined"
                       name={`name_ar${k + 1}`}
-                      label="name_ar"
-                      defaultValue={i.name_ar}
+                      label="اسم"
+                      value={i.name_ar}
                     />
                     <Box display="flex">
                       {k === data1.length - 1 && (
@@ -271,7 +272,9 @@ const EditDialog = ({
                       <Tooltip title="Delete" placement="left">
                         <Fab
                           onClick={() => {
-                            setData1(data1.filter((x, i) => i !== k));
+                            const x = [...data1];
+                            x.splice(k, 1);
+                            setData1(x);
                           }}
                           style={{
                             color: "#fff",

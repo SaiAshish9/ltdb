@@ -121,9 +121,12 @@ const AddBanner = ({ classes, open, setOpen }) => {
                 variant="outlined"
                 label="Arabic Name"
                 value={name_ar}
+                style={{
+                  direction: "RTL"
+                }}
                 required
                 onChange={(e) => {
-                  setNameAr(e.target.value);
+                  setNameAr(e.target.value.split("").reverse().join(""));
                 }}
                 style={{ width: "47%" }}
               />
