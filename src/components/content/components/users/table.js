@@ -290,9 +290,10 @@ export default function SimpleTable({ data }) {
                     }}
                   >
                     <p
-                      onClick={() => {
+                      onClick={async () => {
                         setAction(1);
-                        setSelected([...selected, ...users.map((x) => x.user_id)]);
+                         await toggleUserStatus([...selected], 1);
+                         await fetchUsers();
                         setOpenActionDialog(false);
                       }}
                       style={{
@@ -306,9 +307,10 @@ export default function SimpleTable({ data }) {
                       Bulk Active
                     </p>
                     <p
-                      onClick={() => {
+                      onClick={async () => {
                         setAction(0);
-                        setSelected([...selected, ...users.map((x) => x.user_id)]);
+                        await toggleUserStatus([...selected], 0);
+                        await fetchUsers();
                         setOpenActionDialog(false);
                       }}
                       style={{
@@ -320,30 +322,6 @@ export default function SimpleTable({ data }) {
                       }}
                     >
                       Bulk InActive
-                    </p>
-                    <p
-                      onClick={async () => {
-                        if (action === 1) {
-                          await toggleUserStatus([...selected], 1);
-                        } else {
-                          await toggleUserStatus(
-                            [...users.map((x) => x.user_id)],
-                            0
-                          );
-                        }
-                        await fetchUsers();
-                        setSelected([]);
-                        setOpenActionDialog(false);
-                      }}
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: "0.8rem",
-                        color: "#282b3c",
-                        textAlign: "center",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Update Status
                     </p>
                   </Paper>
                 )}
@@ -406,8 +384,8 @@ export default function SimpleTable({ data }) {
                     }}
                   >
                     <Checkbox
-                      disabled
-                      checked={selected.includes(x.user_id)}
+                      // disabled
+                      // checked={selected.includes(x.user_id)}
                       onChange={() => {
                         if (selected.includes(x.user_id)) {
                           var a = [...selected];

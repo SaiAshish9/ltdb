@@ -49,7 +49,7 @@ export default function SimpleTable({ data }) {
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openPackagesDialog, setOpenPackagesDialog] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-  const [openActionDialog,setOpenActionDialog]=useState(false);
+  const [openActionDialog, setOpenActionDialog] = useState(false);
   const [active, isActive] = useState(false);
   const [inActive, isInActive] = useState(false);
   const [openPackageForm, setOpenPackageForm] = useState(false);
@@ -333,9 +333,10 @@ export default function SimpleTable({ data }) {
                     style={{ zIndex: 2, position: "absolute", width: "10rem" }}
                   >
                     <p
-                      onClick={() => {
+                      onClick={async () => {
                         setAction(1);
-                        setSelected([...selected, ...games.map((x) => x.game_id)]);
+                        await toggleGameStatus([...selected], 1);
+                        await fetchGames();
                         setOpenDialog(false);
                       }}
                       style={{
@@ -349,9 +350,10 @@ export default function SimpleTable({ data }) {
                       Bulk Active
                     </p>
                     <p
-                      onClick={() => {
+                      onClick={async () => {
                         setAction(0);
-                        setSelected([...selected, ...games.map((x) => x.game_id)]);
+                        await toggleGameStatus([...selected], 0);
+                        await fetchGames();
                         setOpenActionDialog(false);
                       }}
                       style={{
@@ -363,30 +365,6 @@ export default function SimpleTable({ data }) {
                       }}
                     >
                       Bulk InActive
-                    </p>
-                    <p
-                      onClick={async () => {
-                        if (action === 1) {
-                          await toggleGameStatus([...selected], 1);
-                        } else {
-                          await toggleGameStatus(
-                            [...games.map((x) => x.game_id)],
-                            0
-                          );
-                        }
-                        await fetchGames();
-                        setSelected([]);
-                        setOpenActionDialog(false);
-                      }}
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: "0.8rem",
-                        color: "#282b3c",
-                        textAlign: "center",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Update Status
                     </p>
                   </Paper>
                 )}
@@ -461,8 +439,8 @@ export default function SimpleTable({ data }) {
                     }}
                   >
                     <Checkbox
-                      disabled
-                      checked={selected.includes(row.game_id)}
+                      // disabled
+                      // checked={selected.includes(row.game_id)}
                       onChange={() => {
                         if (selected.includes(row.game_id)) {
                           var x = [...selected];

@@ -182,9 +182,11 @@ const BannerTable = () => {
                     style={{ zIndex: 2, position: "absolute", width: "10rem" }}
                   >
                     <p
-                      onClick={() => {
+                      onClick={async () => {
                         setAction(1);
-                        setSelected([...selected, ...banners.map((x) => x.id)]);
+                        await toggleBannerStatus([...selected], 1);
+                        await fetchBanners();
+                        // setSelected([]);
                         setOpenDialog(false);
                       }}
                       style={{
@@ -198,9 +200,12 @@ const BannerTable = () => {
                       Bulk Active
                     </p>
                     <p
-                      onClick={() => {
+                      onClick={async () => {
                         setAction(0);
-                        setSelected([...selected, ...banners.map((x) => x.id)]);
+                        await toggleBannerStatus([...selected], 0);
+                        await fetchBanners();
+                        // setSelected([])
+                        // setSelected([...selected, ...banners.map((x) => x.id)]);
                         setOpenDialog(false);
                       }}
                       style={{
@@ -212,30 +217,6 @@ const BannerTable = () => {
                       }}
                     >
                       Bulk InActive
-                    </p>
-                    <p
-                      onClick={async () => {
-                        if (action === 1) {
-                          await toggleBannerStatus([...selected], 1);
-                        } else {
-                          await toggleBannerStatus(
-                            [...banners.map((x) => x.id)],
-                            0
-                          );
-                        }
-                        await fetchBanners();
-                        setSelected([]);
-                        setOpenDialog(false);
-                      }}
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: "0.8rem",
-                        color: "#282b3c",
-                        textAlign: "center",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Update Status
                     </p>
                   </Paper>
                 )}
@@ -263,8 +244,8 @@ const BannerTable = () => {
                     }}
                   >
                     <Checkbox
-                      disabled
-                      checked={selected.includes(i.id)}
+                      // disabled
+                      // checked={selected.includes(i.id)}
                       onChange={() => {
                         if (selected.includes(i.id)) {
                           var x = [...selected];
@@ -314,7 +295,7 @@ const BannerTable = () => {
                       textAlign: "center",
                       color: +i.status !== 1 ? "red" : "green",
                       fontWeight: 500,
-                      paddingLeft:"4rem"
+                      paddingLeft: "4rem",
                     }}
                   >
                     {+i.status === 1 ? "Active" : "InActive"}
