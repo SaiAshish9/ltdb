@@ -19,6 +19,16 @@ const reducer = (state, action) => {
         ...state,
         users: action.payload,
       };
+    case "SET_ORDERS":
+      return {
+        ...state,
+        orders: action.payload,
+      };
+    case "SET_ORDER_COUNT":
+      return {
+        ...state,
+        order_count: action.payload,
+      }
     case "SET_ITEM":
       return {
         ...state,
@@ -438,7 +448,7 @@ const editItem = (dispatch) => async (data) => {
     type: "SET_MESSAGE",
     payload: null,
   });
-  console.log(data)
+  console.log(data);
   if (data.newImage) {
     image = await uploadImage("media", data.newImage);
     await Api.post("admin/item/add", {
@@ -982,10 +992,24 @@ const toggleSubCategoryStatus = (dispatch) => async (id, action) => {
   } catch (e) {}
 };
 
+const fetchOrders = (dispatch) => async () => {
+  try {
+    const {
+      data
+    } = await Api("admin/order/list");
+    dispatch({ type: "SET_ORDERS", payload: data.data });
+    dispatch({
+      type: "SET_ORDER_COUNT",
+      payload: data["parameter"]["total"],
+    });
+  } catch (e) {}
+};
+
 export const { Context, Provider } = createDataContext(
   reducer,
   {
     fetchItems,
+    fetchOrders,
     toggleSubCategoryStatus,
     fetchLabelDetails,
     addItem,
@@ -1039,9 +1063,11 @@ export const { Context, Provider } = createDataContext(
     game_count: 0,
     game_page_count: 0,
     label_count: 0,
+    order_count: 0,
     label_page_count: 0,
     resolution_list: null,
     linkableItems: [],
     banners: [],
+    orders: [],
   }
 );

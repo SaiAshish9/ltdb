@@ -9,6 +9,7 @@ import Games from "./components/games";
 import Banner from "./components/banner";
 import Labels from "./components/labels";
 import DeliveryFees from "./components/delivery-fees";
+import Orders from "./components/orders";
 
 const Content = () => {
   return (
@@ -20,6 +21,7 @@ const Content = () => {
       <Route exact path="/labels" component={Labels} />
       <Route exact path="/items" component={Items} />
       <Route exact path="/games" component={Games} />
+      <Route exact path="/orders" component={Orders} />
       <Route exact path="/banner" component={Banner} />
       <Route exact path="/delivery-fees" component={DeliveryFees} />
     </Switch>
