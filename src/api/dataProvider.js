@@ -531,7 +531,7 @@ const addItem = (dispatch) => async (data) => {
             description_en: data.description_en,
             description_ar: data.description_ar,
             link_item_id: data.link_item_id,
-            image: data1 && data1.location.split("com/")[1],
+            image: data1,
             price: data.price,
             status: data.status,
           })
@@ -560,7 +560,7 @@ const addItem = (dispatch) => async (data) => {
             description_en: data.description_en,
             description_ar: data.description_ar,
             item_custom_values: data.item_custom_values,
-            image: data1 && data1.location.split("com/")[1],
+            image: data1,
             price: data.price,
             status: data.status,
           })
@@ -586,7 +586,7 @@ const addItem = (dispatch) => async (data) => {
             name_ar: data.name_ar,
             description_en: data.description_en,
             description_ar: data.description_ar,
-            image: data1 && data1.location.split("com/")[1],
+            image: data1,
             price: data.price,
             status: data.status,
           })

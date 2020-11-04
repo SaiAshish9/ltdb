@@ -54,10 +54,12 @@ const Login = ({ dispatch }) => {
       .catch((e) => {
         if (!password) {
           setMsg("Password is required ");
-        }
-        if (!email) {
+        } else if (!email) {
           setMsg("Email is required ");
+        }else {
+          setMsg("Invalid Credentials")
         }
+
         // setOpen(false);
       });
   };

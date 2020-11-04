@@ -12,12 +12,14 @@ import {
   Input,
   FormControl,
   CircularProgress,
+  LinearProgress,
 } from "@material-ui/core";
 import Img from "../../../../assets/thumbnail1.png";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import moment from "moment";
 import Clear from "@material-ui/icons/Clear";
 import { useForm } from "react-hook-form";
+import Api from "../../../../api";
 
 const EditItem = ({ classes, open, setOpen, id }) => {
   const {
@@ -38,6 +40,8 @@ const EditItem = ({ classes, open, setOpen, id }) => {
   const [date, setDate] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [customFields, setCustomFields] = useState([]);
+  const [categoryValue, setCategoryValue] = useState(null);
+  const [subCategories, setSubCategories] = useState(null);
 
   useEffect(() => {
     const fetchLinks = async () => {
@@ -48,6 +52,14 @@ const EditItem = ({ classes, open, setOpen, id }) => {
 
   const handleChangeMultiple = (e) => {
     setItems(e.target.value);
+  };
+
+  const fetchSubCategories = (id) => {
+    Api.post("admin/subcategory/category-wise-list", {
+      category_id: id,
+    }).then(async (data) => {
+      setSubCategories(data.data.data);
+    });
   };
 
   const onSubmit = async (data) => {
@@ -109,6 +121,8 @@ const EditItem = ({ classes, open, setOpen, id }) => {
     reset();
     setImgFile(null);
     setDisabled(false);
+    setCategoryValue(null);
+    setSubCategories(null);
     setOpen(false);
   };
 
@@ -141,6 +155,8 @@ const EditItem = ({ classes, open, setOpen, id }) => {
               <IconButton
                 onClick={() => {
                   setItems([]);
+                  setCategoryValue(null);
+                  setSubCategories(null);
                   setOpen(false);
                 }}
               >
@@ -402,18 +418,38 @@ const EditItem = ({ classes, open, setOpen, id }) => {
               >
                 Category
               </p>
-              <Select
-                style={{ width: "50%" }}
-                defaultValue={item_details && item_details.category_id}
-              >
-                <MenuItem value={0}>PC Parts</MenuItem>
-                <MenuItem value={1}>Gaming Access</MenuItem>
-                <MenuItem value={2}>Gears</MenuItem>
-              </Select>
+              {categoryValue ? (
+                <Select
+                  style={{ width: "50%" }}
+                  value={categoryValue}
+                  onChange={(e) => {
+                    setCategoryValue(e.target.value);
+                    fetchSubCategories(e.target.value);
+                  }}
+                >
+                  <MenuItem value={1}>PC Parts</MenuItem>
+                  <MenuItem value={2}>Gaming Access</MenuItem>
+                  <MenuItem value={3}>Gears</MenuItem>
+                </Select>
+              ) : (
+                <Select
+                  style={{ width: "50%" }}
+                  value={item_details.category_id}
+                  onChange={(e) => {
+                    setCategoryValue(e.target.value);
+                    fetchSubCategories(e.target.value);
+                  }}
+                >
+                  <MenuItem value={1}>PC Parts</MenuItem>
+                  <MenuItem value={2}>Gaming Access</MenuItem>
+                  <MenuItem value={3}>Gears</MenuItem>
+                </Select>
+              )}
             </Box>
             <Box
               style={{ margin: "2rem 0" }}
               display="flex"
+              alignItems="center"
               justifyContent="space-between"
             >
               <p
@@ -425,11 +461,29 @@ const EditItem = ({ classes, open, setOpen, id }) => {
               >
                 Sub Category
               </p>
-              <Select defaultValue={0} style={{ width: "50%" }}>
-                <MenuItem value={0}>
-                  {sub_category && sub_category["name_en"]}
-                </MenuItem>
-              </Select>
+              {subCategories ? (
+                <Select
+                  defaultValue={sub_category["name_en"]}
+                  style={{ width: "50%" }}
+                >
+                  {subCategories ? (
+                    subCategories.map((i, k) => (
+                      <MenuItem value={i["name_en"]}>{i["name_en"]}</MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem value={sub_category["name_en"]}>
+                      {sub_category["name_en"]}
+                    </MenuItem>
+                  )}
+                </Select>
+              ) : (
+                <LinearProgress
+                  style={{
+                    color: "#8095a1",
+                    width: "50%",
+                  }}
+                />
+              )}
             </Box>
             <Box display="flex" alignItems="center" justifyContent="center">
               <p style={{ fontWeight: "bold" }}>Custom Fields</p>
