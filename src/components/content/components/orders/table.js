@@ -20,6 +20,7 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import ViewOrderPopup from "./viewOrder";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -31,11 +32,12 @@ const OrderTable = () => {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
   const [openDialog, setOpenDialog] = useState(false);
-  const [openViewBanner, setOpenViewBanner] = useState(false);
+  const [openViewOrderPopup, setOpenViewOrderPopup] = useState(false);
   const [openEditBanner, setOpenEditBanner] = useState(false);
   const {
     state: { orders, message, order_count },
-    fetchOrders
+    fetchOrders,
+    fetchOrder
   } = useContext(DataContext);
   const [openSnackbar, setOpenSnackbar] = useState(true);
   //   const [selected, setSelected] = useState([]);
@@ -348,8 +350,8 @@ const OrderTable = () => {
                       <IconButton onClick={async () => {}}>
                         <VisibilityOutlinedIcon
                           onClick={async () => {
-                            // await fetchBannerDetails(i.id);
-                            // setOpenViewBanner(true);
+                            await fetchOrder(i.order_id);
+                            setOpenViewOrderPopup(true);
                           }}
                           style={{ cursor: "pointer" }}
                         />{" "}
@@ -362,16 +364,17 @@ const OrderTable = () => {
         </Table>
       </TableContainer>
       {/* <AddBannerPopup open={open} setOpen={setOpen} classes={classes} />
-      <ViewBannerPopup
-        open={openViewBanner}
-        setOpen={setOpenViewBanner}
-        classes={classes}
-      />
+
       <EditBannerPopup
         open={openEditBanner}
         setOpen={setOpenEditBanner}
         classes={classes}
       /> */}
+      <ViewOrderPopup
+        open={openViewOrderPopup}
+        setOpen={setOpenViewOrderPopup}
+        classes={classes}
+      />
       <TablePagination
         component="div"
         rowsPerPage={rowsPerPage}

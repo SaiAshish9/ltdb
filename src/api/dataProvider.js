@@ -19,6 +19,11 @@ const reducer = (state, action) => {
         ...state,
         users: action.payload,
       };
+    case "SET_ORDER":
+      return {
+        ...state,
+        order_details: action.payload,
+      };
     case "SET_ORDERS":
       return {
         ...state,
@@ -682,9 +687,9 @@ const editPackage = (dispatch) => async (data) => {
   new_cover_images = await Promise.all(
     data.new_cover_images.map(async (x) => {
       try {
-        console.log(x)
+        console.log(x);
         var image1 = await uploadImage("packages", x.file);
-        console.log(image1)
+        console.log(image1);
         return image1;
       } catch (err) {}
     })
@@ -1026,6 +1031,18 @@ const fetchOrders = (dispatch) => async () => {
   } catch (e) {}
 };
 
+const fetchOrder = (dispatch) => async (id) => {
+  try {
+    const {
+      data: { data },
+    } = await Api.post("admin/order/order-details", { order_id: id });
+    dispatch({
+      type: "SET_ORDER",
+      payload: data,
+    });
+  } catch (e) {}
+};
+
 export const { Context, Provider } = createDataContext(
   reducer,
   {
@@ -1043,6 +1060,7 @@ export const { Context, Provider } = createDataContext(
     fetchUsers,
     fetchBanners,
     fetchItem,
+    fetchOrder,
     fetchBannerDetails,
     toggleUserStatus,
     clearMessage,
@@ -1090,5 +1108,6 @@ export const { Context, Provider } = createDataContext(
     linkableItems: [],
     banners: [],
     orders: [],
+    order_details: null,
   }
 );
