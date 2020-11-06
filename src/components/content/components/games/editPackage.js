@@ -52,6 +52,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
   const [newCoverImages, setNewCoverImages] = useState([]);
   const [deletedCoverImages, setDeletedCoverImages] = useState([]);
   const [newImgFile, setNewImgFile] = useState(null);
+  const [filteredItems, setFilteredItems] = useState([]);
 
   const handleChangedData = useCallback(async () => {
     setDisabled(true);
@@ -106,6 +107,21 @@ const EditPackage = ({ open, classes, setOpen }) => {
         item_id: +selectedItems[k].split("###")[0],
       })),
     });
+    setNameAr(null);
+    setNameEn(null);
+    reset();
+    setFile(null);
+    setNewFile(null);
+    setImgFile(null);
+    setNewImgFile(null);
+    setSelectedItems(null);
+    setSelectedSubCategories(null);
+    setQuality(null);
+    setDisabled(false);
+    setValue(null);
+    setCoverImages([]);
+    setNewCoverImages([]);
+    setDeletedCoverImages([]);
     setDisabled(false);
     setOpen(false);
   };
@@ -521,11 +537,15 @@ const EditPackage = ({ open, classes, setOpen }) => {
                   <Select
                     value={subCategoryValue}
                     onChange={(e) => {
+                      setFilteredItems(
+                        items.filter(
+                          (x) =>
+                            x.sub_category_id ===
+                            +e.target.value.split("###")[0]
+                        )
+                      );
                       // setSubCategoryValue(e.target.value);
-                      if (
-                        // !selectedSubCategories.includes(e.target.value)
-                        selectedItems.length === selectedSubCategories.length
-                      )
+                      if (selectedItems.length === selectedSubCategories.length)
                         setSelectedSubCategories([
                           ...selectedSubCategories,
                           e.target.value,
@@ -574,7 +594,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
                     }}
                   >
                     {items ? (
-                      items.map((i, k) => (
+                      filteredItems.map((i, k) => (
                         <MenuItem value={`${i.item_id}###${i.name_en}`}>
                           {i.name_en}
                         </MenuItem>

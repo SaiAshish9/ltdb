@@ -146,9 +146,11 @@ export default function SimpleTable({ data }) {
       </Box>
       <TableContainer
         style={{
-          height: "83vh",
-          maxHeight: "83vh",
+          height: "90vh",
+          maxHeight: "90vh",
           width: "100%",
+          position: "absolute",
+          bottom: 0,
         }}
         elevation={0}
         component={Paper}
@@ -201,7 +203,7 @@ export default function SimpleTable({ data }) {
                   fontWeight: "bolder",
                   fontSize: "0.8rem",
                   color: "#282b3c",
-                  textAlign: "center",
+                  // textAlign: "center",
                 }}
               >
                 Name
@@ -210,7 +212,7 @@ export default function SimpleTable({ data }) {
                 style={{
                   fontWeight: "bold",
                   fontSize: "0.8rem",
-                  textAlign: "center",
+                  // textAlign: "center",
                   color: "#282b3c",
                 }}
               >
@@ -227,7 +229,7 @@ export default function SimpleTable({ data }) {
                 <Box
                   display="flex"
                   alignItems="center"
-                  style={{ paddingLeft: "12rem" }}
+                  style={{ paddingLeft: "8rem" }}
                 >
                   Status{" "}
                   <IconButton
@@ -456,7 +458,7 @@ export default function SimpleTable({ data }) {
 
                   <TableCell
                     style={{
-                      textAlign: "center",
+                      // textAlign: "center",
                       color: "#8095a1",
                       fontWeight: 500,
                     }}
@@ -465,7 +467,7 @@ export default function SimpleTable({ data }) {
                   </TableCell>
                   <TableCell
                     style={{
-                      textAlign: "center",
+                      // textAlign: "center",
                       color: "#8095a1",
                       fontWeight: 500,
                     }}
@@ -474,7 +476,7 @@ export default function SimpleTable({ data }) {
                   </TableCell>
                   <TableCell
                     style={{
-                      textAlign: "center",
+                      // textAlign: "center",
                       color: "#8095a1",
                       fontWeight: 500,
                     }}
@@ -493,7 +495,7 @@ export default function SimpleTable({ data }) {
                     style={{
                       cursor: "pointer",
                       textAlign: "center",
-                      paddingLeft:"4rem",
+                      paddingLeft: "4rem",
                       color: row.status !== 1 ? "red" : "green",
                       fontWeight: 500,
                     }}
@@ -553,6 +555,7 @@ export default function SimpleTable({ data }) {
         </Table>
       </TableContainer>
       <TablePagination
+        style={{ position: "absolute", bottom: 0,width:"100%" }}
         component="div"
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10]}

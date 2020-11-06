@@ -150,6 +150,15 @@ const OrderTable = () => {
                   fontWeight: "bold",
                   fontSize: "0.8rem",
                   color: "#282b3c",
+                }}
+              >
+                Grand Total
+              </TableCell>
+              <TableCell
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "0.8rem",
+                  color: "#282b3c",
                   textAlign: "center",
                 }}
               >
@@ -280,6 +289,15 @@ const OrderTable = () => {
                     }}
                   >
                     {i.user_name}
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      // textAlign: "center",
+                      color: "#8095a1",
+                      fontWeight: 500,
+                    }}
+                  >
+                    KD {i.grand_total}
                   </TableCell>
                   <TableCell
                     onClick={async () => {

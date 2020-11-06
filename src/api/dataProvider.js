@@ -28,7 +28,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         order_count: action.payload,
-      }
+      };
     case "SET_ITEM":
       return {
         ...state,
@@ -661,6 +661,7 @@ const addPackage = (dispatch) => async (data) => {
 };
 
 const editPackage = (dispatch) => async (data) => {
+  // console.log(data);
   await Promise.all(
     data.deleted_cover_images.map(async (x) => {
       try {
@@ -675,19 +676,36 @@ const editPackage = (dispatch) => async (data) => {
   var new_cover_images = [];
 
   if (data.newImgFile) {
-    image = await uploadImage("game/package", data.newImgFile);
+    image = await uploadImage("packages", data.newImgFile);
   } else image = data && data.image.split("com/")[1];
 
   new_cover_images = await Promise.all(
     data.new_cover_images.map(async (x) => {
       try {
-        var image1 = await uploadImage("game/package", x.file);
+        console.log(x)
+        var image1 = await uploadImage("packages", x.file);
+        console.log(image1)
         return image1;
       } catch (err) {}
     })
   );
 
   try {
+    // console.log(data.new_cover_images,new_cover_images)
+    // console.log({
+    //   image,
+    //   game_id: data.game_id,
+    //   package_id: data.package_id,
+    //   name_en: data.name_en,
+    //   name_ar: data.name_ar,
+    //   graphic_quality: data.graphic_quality,
+    //   status: data.status,
+    //   package_item: data.package_item,
+    //   cover_images: [
+    //     ...data.cover_images.map((x) => x["imgFile"]),
+    //     ...new_cover_images,
+    //   ],
+    // });
     const x = await Api.post("admin/game/add-package", {
       image,
       game_id: data.game_id,
@@ -697,9 +715,14 @@ const editPackage = (dispatch) => async (data) => {
       graphic_quality: data.graphic_quality,
       status: data.status,
       package_item: data.package_item,
-      cover_images: [...data.cover_images, ...new_cover_images],
+      cover_images: [
+        ...data.cover_images.map((x) => x["imgFile"].split("com/")[1]),
+        ...new_cover_images,
+      ],
     });
-  } catch (e) {}
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const addGame = (dispatch) => async (data) => {
@@ -994,9 +1017,7 @@ const toggleSubCategoryStatus = (dispatch) => async (id, action) => {
 
 const fetchOrders = (dispatch) => async () => {
   try {
-    const {
-      data
-    } = await Api("admin/order/list");
+    const { data } = await Api("admin/order/list");
     dispatch({ type: "SET_ORDERS", payload: data.data });
     dispatch({
       type: "SET_ORDER_COUNT",

@@ -38,6 +38,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
   const { register, handleSubmit } = useForm();
   const [coverImages, setCoverImages] = useState([]);
   const [disabled, setDisabled] = useState(false);
+  const [filteredItems, setFilteredItems] = useState([]);
 
   const {
     state: { games, items },
@@ -393,6 +394,13 @@ const AddPackage = ({ open, classes, setOpen }) => {
                   <Select
                     value={subCategoryValue}
                     onChange={(e) => {
+                      setFilteredItems(
+                        items.filter(
+                          (x) =>
+                            x.sub_category_id ===
+                            +e.target.value.split("###")[0]
+                        )
+                      );
                       // setSubCategoryValue(e.target.value);
                       if (
                         // !selectedSubCategories.includes(e.target.value)
@@ -406,7 +414,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                   >
                     {subCategories ? (
                       subCategories.map((i, k) => (
-                        <MenuItem value={`${i.sub_category_id} ${i.name_en}`}>
+                        <MenuItem value={`${i.sub_category_id}###${i.name_en}`}>
                           {i.name_en}
                         </MenuItem>
                       ))
@@ -437,12 +445,12 @@ const AddPackage = ({ open, classes, setOpen }) => {
                     value={itemValue}
                     onChange={(e) => {
                       // setItemValue(e.target.value);
-                      if (selectedItems.length < selectedSubCategories.length)
+                      // if (selectedItems.length < selectedSubCategories.length)
                         setSelectedItems([...selectedItems, e.target.value]);
                     }}
                   >
                     {items ? (
-                      items.map((i, k) => (
+                      filteredItems.map((i, k) => (
                         <MenuItem value={`${i.item_id} ${i.name_en}`}>
                           {i.name_en}
                         </MenuItem>
@@ -513,7 +521,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                               fontWeight: 500,
                             }}
                           >
-                            {i && i.split(" ")[1]}
+                            {i && i.split("###")[1]}
                           </TableCell>
                           <TableCell
                             style={{
@@ -569,7 +577,10 @@ const AddPackage = ({ open, classes, setOpen }) => {
                 <CircularProgress />
               ) : (
                 <Fab
-                  disabled={selectedItems < 1 || selectedItems.length !== selectedSubCategories.length}
+                  disabled={
+                    selectedItems < 1 ||
+                    selectedItems.length !== selectedSubCategories.length
+                  }
                   type="submit"
                   variant="extended"
                   color="primary"
