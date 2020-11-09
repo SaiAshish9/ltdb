@@ -144,60 +144,6 @@ const reducer = (state, action) => {
   }
 };
 
-const fetchItems = (dispatch) => async (page, limit, search, status) => {
-  var url;
-  dispatch({
-    type: "SET_MESSAGE",
-    payload: null,
-  });
-  if (page && limit) {
-    url = `admin/item/list?limit=${limit}&&page=${page}`;
-  } else {
-    url = "admin/item/list?limit=10";
-  }
-  if (search) {
-    url = `admin/item/list?limit=10&&page=1&&search=${search}`;
-  }
-  if (status === 1) {
-    url = `admin/item/list?limit=10&&page=1&&status=1`;
-  }
-
-  if (status === 0) {
-    url = `admin/item/list?limit=10&&page=1&&status=0`;
-  }
-
-  if (status === 0 && search) {
-    url = `admin/item/list?limit=10&&page=1&&search=${search}&&status=0`;
-  }
-
-  if (status === 1 && search) {
-    url = `admin/item/list?limit=10&&page=1&&search=${search}&&status=1`;
-  }
-
-  if (page || limit) {
-    dispatch({
-      type: "SET_ITEMS",
-      payload: null,
-    });
-  }
-  const data = await Api(url);
-  if (data) {
-    dispatch({
-      type: "SET_PAGE_COUNT",
-      payload: JSON.parse(data.request.response)["parameter"]["last_page"],
-    });
-
-    dispatch({
-      type: "SET_ITEM_COUNT",
-      payload: JSON.parse(data.request.response)["parameter"]["total"],
-    });
-    dispatch({
-      type: "SET_ITEMS",
-      payload: data.data.data,
-    });
-  }
-};
-
 const fetchGames = (dispatch) => async (page, limit, search, status) => {
   var url;
   if (page && limit) {
@@ -1025,9 +971,65 @@ const toggleSubCategoryStatus = (dispatch) => async (id, action) => {
   } catch (e) {}
 };
 
-const fetchOrders = (dispatch) => async () => {
+const fetchItems = (dispatch) => async (page, limit, search, status) => {
+  var url;
+  dispatch({
+    type: "SET_MESSAGE",
+    payload: null,
+  });
+  if (page && limit) {
+    url = `admin/item/list?limit=${limit}&&page=${page}`;
+  } else {
+    url = "admin/item/list?limit=10";
+  }
+  if (search) {
+    url = `admin/item/list?limit=10&&page=1&&search=${search}`;
+  }
+  if (status === 1) {
+    url = `admin/item/list?limit=10&&page=1&&status=1`;
+  }
+  if (status === 0) {
+    url = `admin/item/list?limit=10&&page=1&&status=0`;
+  }
+  if (status === 0 && search) {
+    url = `admin/item/list?limit=10&&page=1&&search=${search}&&status=0`;
+  }
+  if (status === 1 && search) {
+    url = `admin/item/list?limit=10&&page=1&&search=${search}&&status=1`;
+  }
+  if (page || limit) {
+    dispatch({
+      type: "SET_ITEMS",
+      payload: null,
+    });
+  }
+  const data = await Api(url);
+  if (data) {
+    dispatch({
+      type: "SET_PAGE_COUNT",
+      payload: JSON.parse(data.request.response)["parameter"]["last_page"],
+    });
+    dispatch({
+      type: "SET_ITEM_COUNT",
+      payload: JSON.parse(data.request.response)["parameter"]["total"],
+    });
+    dispatch({
+      type: "SET_ITEMS",
+      payload: data.data.data,
+    });
+  }
+};
+
+const fetchOrders = (dispatch) => async (page, limit, query) => {
   try {
-    const { data } = await Api("admin/order/list");
+    var url = "admin/order/list?limit=10";
+    if (page && limit) {
+      url = `admin/order/list?page=${page}&&limit=${limit}`;
+    }
+    if (query) {
+      url += `&&search=${query}`;
+    }
+    const { data } = await Api(url);
     dispatch({ type: "SET_ORDERS", payload: data.data });
     dispatch({
       type: "SET_ORDER_COUNT",
@@ -1055,14 +1057,14 @@ const fetchDeliveryDetails = (dispatch) => async () => {
       type: "SET_DELIVERY_DETAILS",
       payload: data.data.data,
     });
-    return data.data.data
+    return data.data.data;
   } catch (e) {}
 };
 
 const addDeliveryFees = (dispatch) => async (data) => {
   try {
     await Api.post("admin/delivery/add-upadte", data);
-    await fetchDeliveryDetails()
+    await fetchDeliveryDetails();
   } catch (e) {}
 };
 

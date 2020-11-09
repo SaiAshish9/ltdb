@@ -44,6 +44,8 @@ const OrderTable = () => {
   const [action, setAction] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     fetchOrders(page + 1, +event.target.value);
@@ -127,7 +129,7 @@ const OrderTable = () => {
                   textAlign: "center",
                 }}
               >
-                S. NO.
+                {orders && orders.length > 0 && "S No."}
               </TableCell>
               <TableCell
                 style={{
@@ -213,9 +215,6 @@ const OrderTable = () => {
                     <p
                       onClick={async () => {
                         setAction(1);
-                        // await toggleBannerStatus([...selected], 1);
-                        // await fetchBanners();
-                        // setSelected([]);
                         setOpenDialog(false);
                       }}
                       style={{
@@ -231,10 +230,6 @@ const OrderTable = () => {
                     <p
                       onClick={async () => {
                         setAction(0);
-                        // await toggleBannerStatus([...selected], 0);
-                        // await fetchBanners();
-                        // setSelected([])
-                        // setSelected([...selected, ...banners.map((x) => x.id)]);
                         setOpenDialog(false);
                       }}
                       style={{
@@ -272,13 +267,12 @@ const OrderTable = () => {
                       fontWeight: 500,
                     }}
                   >
-                    {k + 1}
+                    {i.order_id && k + 1 + rowsPerPage * page}
                   </TableCell>
                   <TableCell
                     style={{
                       color: "#8095a1",
                       fontWeight: 500,
-                      // textAlign: "center",
                     }}
                   >
                     {i.order_id}

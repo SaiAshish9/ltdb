@@ -31,24 +31,23 @@ const useStyles = makeStyles((theme) => ({
 export default function CustomizedInputBase({ active, inActive }) {
   const classes = useStyles();
   const [value, setValue] = useState("");
-  const { fetchGames } = useContext(DataContext);
+  const { fetchOrders } = useContext(DataContext);
   const [searched, setSearched] = useState(false);
-
-  const onSubmit = (data) => {};
 
   return (
     <Paper className={classes.root}>
       {!searched ? (
         <IconButton
           onClick={async () => {
-            if (value) {
-              if (active) await fetchGames(null, null, value, 1);
-              else if (inActive) {
-                await fetchGames(null, null, value, 0);
-              } else {
-                await fetchGames(null, null, value);
-              }
-            }
+            // if (value) {
+            //   if (active) await fetchOrders(null, null, value, 1);
+            //   else if (inActive) {
+            //     await fetchOrders(null, null, value, 0);
+            //   } else {
+            //     await fetchGames(null, null, value);
+            //   }
+            // }
+            fetchOrders(null,null,value);
             setSearched(true);
             // setValue(null);
           }}
@@ -61,7 +60,7 @@ export default function CustomizedInputBase({ active, inActive }) {
         <IconButton
           onClick={() => {
             setValue("");
-            fetchGames();
+            fetchOrders();
             setSearched(false);
           }}
           className={classes.iconButton}
