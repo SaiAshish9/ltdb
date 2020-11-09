@@ -304,7 +304,7 @@ const DeliveryFees = () => {
                           <Fab
                             onClick={() => {
                               setNewData([
-                                ...data,
+                                ...newData,
                                 {
                                   min_price: 0,
                                   max_price: 0,
@@ -320,11 +320,11 @@ const DeliveryFees = () => {
                         )}
                         <Fab
                           onClick={() => {
-                            const x = [...data];
+                            const x = [...newData];
                             x.splice(k, 1);
                             setNewData(x);
                           }}
-                          // disabled={data.length === 1}
+                          disabled={newData.length === 1 && data && data.length ===0}
                           color="secondary"
                         >
                           <DeleteOutlineIcon />

@@ -14,6 +14,11 @@ const reducer = (state, action) => {
         ...state,
         delivery_details: action.payload,
       };
+    case "SET_DASHBOARD_DETAILS":
+      return {
+        ...state,
+        dashboard_details: action.payload,
+      };
     case "SET_GAMES":
       return {
         ...state,
@@ -1068,12 +1073,21 @@ const addDeliveryFees = (dispatch) => async (data) => {
   } catch (e) {}
 };
 
+const fetchDashboardDetails = (dispatch) => async () => {
+  try {
+    const data = await Api("admin/dashboard");
+    console.log(data)
+    dispatch({ type: "SET_DASHBOARD_DETAILS", payload: data });
+  } catch (e) {}
+};
+
 export const { Context, Provider } = createDataContext(
   reducer,
   {
     fetchItems,
     fetchOrders,
     toggleSubCategoryStatus,
+    fetchDashboardDetails,
     fetchDeliveryDetails,
     fetchLabelDetails,
     addItem,
@@ -1117,6 +1131,7 @@ export const { Context, Provider } = createDataContext(
     item_details: null,
     game_details: null,
     users: null,
+    dashboard_details: null,
     games: [],
     labels: [],
     delivery_details: null,

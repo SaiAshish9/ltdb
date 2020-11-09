@@ -37,14 +37,13 @@ const OrderTable = () => {
   const {
     state: { orders, message, order_count },
     fetchOrders,
-    fetchOrder
+    fetchOrder,
   } = useContext(DataContext);
   const [openSnackbar, setOpenSnackbar] = useState(true);
   //   const [selected, setSelected] = useState([]);
   const [action, setAction] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
@@ -201,49 +200,6 @@ const OrderTable = () => {
                 }}
               >
                 Action
-                <IconButton
-                  onClick={() => {
-                    setOpenDialog(!openDialog);
-                  }}
-                >
-                  {openDialog ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-                </IconButton>
-                {orders && openDialog && (
-                  <Paper
-                    style={{ zIndex: 2, position: "absolute", width: "10rem" }}
-                  >
-                    <p
-                      onClick={async () => {
-                        setAction(1);
-                        setOpenDialog(false);
-                      }}
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: "0.8rem",
-                        color: "#282b3c",
-                        textAlign: "center",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Bulk Active
-                    </p>
-                    <p
-                      onClick={async () => {
-                        setAction(0);
-                        setOpenDialog(false);
-                      }}
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: "0.8rem",
-                        color: "#282b3c",
-                        textAlign: "center",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Bulk InActive
-                    </p>
-                  </Paper>
-                )}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -341,14 +297,13 @@ const OrderTable = () => {
                       >
                         <EditOutlinedIcon style={{ cursor: "pointer" }} />{" "}
                       </IconButton>
-                      <IconButton onClick={async () => {}}>
-                        <VisibilityOutlinedIcon
-                          onClick={async () => {
-                            await fetchOrder(i.order_id);
-                            setOpenViewOrderPopup(true);
-                          }}
-                          style={{ cursor: "pointer" }}
-                        />{" "}
+                      <IconButton
+                        onClick={async () => {
+                          await fetchOrder(i.order_id);
+                          setOpenViewOrderPopup(true);
+                        }}
+                      >
+                        <VisibilityOutlinedIcon style={{ cursor: "pointer" }} />{" "}
                       </IconButton>
                     </Box>
                   </TableCell>

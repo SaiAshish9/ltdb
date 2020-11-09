@@ -16,15 +16,15 @@ const Home = () => {
   ];
 
   const {
-    state: { user_count, users },
-    fetchUsers,
+    state: { dashboard_details },
+    fetchDashboardDetails,
   } = useContext(DataContext);
 
   useEffect(() => {
-    const getUsers = async () => {
-      await fetchUsers();
+    const getDashboardDetails = async () => {
+      await fetchDashboardDetails();
     };
-    getUsers();
+    getDashboardDetails();
   }, []);
 
   return (
@@ -84,7 +84,11 @@ const Home = () => {
                 }
               }
             >
-              0
+              {dashboard_details ? (
+                dashboard_details.total_revenue
+              ) : (
+                <CircularProgress style={{ color: "#865CF4" }} />
+              )}
             </h1>
             <p
               className="animate__animated animate__zoomIn"
@@ -133,14 +137,10 @@ const Home = () => {
                 }
               }
             >
-              {k === 3 ? (
-                users ? (
-                  user_count
-                ) : (
-                  <CircularProgress style={{ color: "#865CF4" }} />
-                )
+              {dashboard_details ? (
+                dashboard_details.total_revenue
               ) : (
-                0
+                <CircularProgress style={{ color: "#865CF4" }} />
               )}
             </h1>
             <p
