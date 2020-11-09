@@ -7,10 +7,11 @@ import { Context as DataContext } from "../../../../api/dataProvider";
 const ViewOrderPopup = ({ open, setOpen, classes }) => {
   const { register, handleSubmit, reset } = useForm();
   const {
-    state: { order_details },
+    state: { order_details,cart_items },
   } = useContext(DataContext);
   const onSubmit = () => {};
 
+  
   return (
     <Backdrop open={open} className={classes.backdrop}>
       <Paper

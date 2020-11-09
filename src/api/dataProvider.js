@@ -9,6 +9,11 @@ const reducer = (state, action) => {
         ...state,
         items: action.payload,
       };
+    case "SET_DELIVERY_DETAILS":
+      return {
+        ...state,
+        delivery_details: action.payload,
+      };
     case "SET_GAMES":
       return {
         ...state,
@@ -1043,12 +1048,31 @@ const fetchOrder = (dispatch) => async (id) => {
   } catch (e) {}
 };
 
+const fetchDeliveryDetails = (dispatch) => async () => {
+  try {
+    const data = await Api("admin/delivery/list");
+    dispatch({
+      type: "SET_DELIVERY_DETAILS",
+      payload: data.data.data,
+    });
+    return data.data.data
+  } catch (e) {}
+};
+
+const addDeliveryFees = (dispatch) => async (data) => {
+  try {
+    await Api.post("admin/delivery/add-upadte", data);
+    await fetchDeliveryDetails()
+  } catch (e) {}
+};
+
 export const { Context, Provider } = createDataContext(
   reducer,
   {
     fetchItems,
     fetchOrders,
     toggleSubCategoryStatus,
+    fetchDeliveryDetails,
     fetchLabelDetails,
     addItem,
     importLabel,
@@ -1056,6 +1080,7 @@ export const { Context, Provider } = createDataContext(
     toggleItemStatus,
     fetchUser,
     addLabel,
+    addDeliveryFees,
     toggleBannerStatus,
     fetchUsers,
     fetchBanners,
@@ -1092,6 +1117,7 @@ export const { Context, Provider } = createDataContext(
     users: null,
     games: [],
     labels: [],
+    delivery_details: null,
     banner_details: null,
     package_details: null,
     label_details: null,
