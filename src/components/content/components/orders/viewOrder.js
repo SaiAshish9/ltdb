@@ -1,9 +1,18 @@
 import React, { useContext, useState } from "react";
-import { Backdrop, Paper, Box, IconButton, TextField } from "@material-ui/core";
+import {
+  Backdrop,
+  Paper,
+  Box,
+  IconButton,
+  MenuItem,
+  Select,
+  TextField,
+} from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import { Clear } from "@material-ui/icons";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import moment from "moment";
+import OrderUsersTable from "./orderUsersTable";
 
 const ViewOrderPopup = ({ open, setOpen, classes }) => {
   const { register, handleSubmit, reset } = useForm();
@@ -294,15 +303,42 @@ const ViewOrderPopup = ({ open, setOpen, classes }) => {
                   fontWeight: 600,
                 }}
               >
+                Payment Status :
+              </p>
+              <Select
+                disabled
+                style={{ width: "47%" }}
+                defaultValue={order_details && order_details.payment_status}
+              >
+                <MenuItem value={"Pending"}>Pending</MenuItem>
+                <MenuItem value={"Success"}>Success</MenuItem>
+                <MenuItem value={"Failed"}>Failed</MenuItem>
+              </Select>
+            </Box>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              style={{ margin: "1rem 0" }}
+            >
+              <p
+                style={{
+                  fontSize: "1rem",
+                  color: "#282b3c",
+                  fontWeight: 600,
+                }}
+              >
                 Order Status :
               </p>
-              <TextField
-                type="email"
-                value={order_details.phone}
+              <Select
                 disabled
-                variant="outlined"
                 style={{ width: "47%" }}
-              />
+                defaultValue={order_details && +order_details.order_status}
+              >
+                <MenuItem value={0}>Pending</MenuItem>
+                <MenuItem value={1}>Confirmed</MenuItem>
+                <MenuItem value={2}>On the way</MenuItem>
+                <MenuItem value={3}>Success</MenuItem>
+              </Select>
             </Box>
             <Box
               display="flex"
@@ -329,17 +365,20 @@ const ViewOrderPopup = ({ open, setOpen, classes }) => {
               />
             </Box>
             {order_details.order_items && order_details.order_items.length > 0 && (
-              <p
-                style={{
-                  fontSize: "1rem",
-                  color: "#282b3c",
-                  fontWeight: 600,
-                  textAlign: "center",
-                  margin: "2rem 0",
-                }}
-              >
-                Order Items :
-              </p>
+              <Box>
+                <p
+                  style={{
+                    fontSize: "1rem",
+                    color: "#282b3c",
+                    fontWeight: 600,
+                    textAlign: "center",
+                    margin: "2rem 0",
+                  }}
+                >
+                  Order Items :
+                </p>
+                <OrderUsersTable data={order_details.order_items} />
+              </Box>
             )}
 
             {order_details.order_address && (
@@ -413,10 +452,10 @@ const ViewOrderPopup = ({ open, setOpen, classes }) => {
                   <Box style={{ width: "50%" }}>
                     <p
                       style={{
+                        fontWeight: 600,
                         fontSize: "1rem",
                         color: "#282b3c",
                         margin: "1rem 0",
-                        fontWeight: 600,
                       }}
                     >
                       Full Name :

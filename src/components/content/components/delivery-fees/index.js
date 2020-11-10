@@ -38,7 +38,6 @@ const DeliveryFees = () => {
 
   const onSubmit = async (data1) => {
     setMessage("Submission Successful");
-    // var x = Object.values(data).map((x) => +x);
     var x = [...Object.values(data1).map((x) => +x)];
     var y = [];
     if (deletedCount > 0) x = x.slice(deletedCount * 3, x.length);

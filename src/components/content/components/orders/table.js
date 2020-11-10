@@ -40,7 +40,6 @@ const OrderTable = () => {
     fetchOrder,
   } = useContext(DataContext);
   const [openSnackbar, setOpenSnackbar] = useState(true);
-  //   const [selected, setSelected] = useState([]);
   const [action, setAction] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -74,22 +73,6 @@ const OrderTable = () => {
         <Box style={{ height: "7vh" }}>
           <Search />
         </Box>
-
-        {/* <p
-          onClick={() => {
-            setOpen(true);
-          }}
-          style={{
-            color: "#fff",
-            cursor: "pointer",
-            fontWeight: "bold",
-            position: "relative",
-            zIndex: 3,
-            marginRight: "2rem",
-          }}
-        >
-          Add Banner
-        </p> */}
       </Box>
 
       <TableContainer
@@ -235,7 +218,6 @@ const OrderTable = () => {
                   </TableCell>
                   <TableCell
                     style={{
-                      // textAlign: "center",
                       color: "#8095a1",
                       fontWeight: 500,
                     }}
@@ -244,7 +226,6 @@ const OrderTable = () => {
                   </TableCell>
                   <TableCell
                     style={{
-                      // textAlign: "center",
                       color: "#8095a1",
                       fontWeight: 500,
                     }}
@@ -252,10 +233,6 @@ const OrderTable = () => {
                     KD {i.grand_total}
                   </TableCell>
                   <TableCell
-                    onClick={async () => {
-                      //   await toggleBannerStatus([i.id], +i.status === 0 ? 1 : 0);
-                      //   await fetchBanners();
-                    }}
                     style={{
                       cursor: "pointer",
                       textAlign: "center",
@@ -265,13 +242,8 @@ const OrderTable = () => {
                     }}
                   >
                     {i.payment_status}
-                    {/* {+i.status === 1 ? "Active" : "InActive"} */}
                   </TableCell>
                   <TableCell
-                    onClick={async () => {
-                      //   await toggleBannerStatus([i.id], +i.status === 0 ? 1 : 0);
-                      //   await fetchBanners();
-                    }}
                     style={{
                       cursor: "pointer",
                       textAlign: "center",
@@ -281,7 +253,6 @@ const OrderTable = () => {
                     }}
                   >
                     {i.order_status_text}
-                    {/* {+i.order_status === 1 ? "Active" : "InActive"} */}
                   </TableCell>
                   <TableCell>
                     <Box
@@ -289,12 +260,7 @@ const OrderTable = () => {
                       justifyContent="center"
                       alignItems="center"
                     >
-                      <IconButton
-                        onClick={async () => {
-                          //   await fetchBannerDetails(i.id);
-                          //   setOpenEditBanner(true);
-                        }}
-                      >
+                      <IconButton>
                         <EditOutlinedIcon style={{ cursor: "pointer" }} />{" "}
                       </IconButton>
                       <IconButton
@@ -312,13 +278,6 @@ const OrderTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      {/* <AddBannerPopup open={open} setOpen={setOpen} classes={classes} />
-
-      <EditBannerPopup
-        open={openEditBanner}
-        setOpen={setOpenEditBanner}
-        classes={classes}
-      /> */}
       <ViewOrderPopup
         open={openViewOrderPopup}
         setOpen={setOpenViewOrderPopup}
