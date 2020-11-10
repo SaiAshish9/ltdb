@@ -15,6 +15,17 @@ const Home = () => {
     "Total number of customers",
   ];
 
+  const fields = [
+    'total_revenue',
+    'total_order',
+    'total_new_order',
+    'total_confirmed_order',
+    'total_ontheway_order',
+    'total_canceled_order',
+    'total_completed_order',
+    'total_user'
+  ]
+
   const {
     state: { dashboard_details },
     fetchDashboardDetails,
@@ -85,7 +96,7 @@ const Home = () => {
               }
             >
               {dashboard_details ? (
-                dashboard_details.total_revenue
+                parseInt(dashboard_details[fields[k]])
               ) : (
                 <CircularProgress style={{ color: "#865CF4" }} />
               )}
@@ -138,7 +149,7 @@ const Home = () => {
               }
             >
               {dashboard_details ? (
-                dashboard_details.total_revenue
+                parseInt(dashboard_details[fields[k+4]])
               ) : (
                 <CircularProgress style={{ color: "#865CF4" }} />
               )}

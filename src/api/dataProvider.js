@@ -1075,8 +1075,9 @@ const addDeliveryFees = (dispatch) => async (data) => {
 
 const fetchDashboardDetails = (dispatch) => async () => {
   try {
-    const data = await Api("admin/dashboard");
-    console.log(data)
+    const {
+      data: { data },
+    } = await Api("admin/dashboard");
     dispatch({ type: "SET_DASHBOARD_DETAILS", payload: data });
   } catch (e) {}
 };

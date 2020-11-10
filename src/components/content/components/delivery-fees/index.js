@@ -20,25 +20,28 @@ const DeliveryFees = () => {
   const { fetchDeliveryDetails, addDeliveryFees } = useContext(DataContext);
   const [data, setData] = useState(null);
   const [newData, setNewData] = useState(null);
+  const [deletedCount, setDeletedCount] = useState(0);
 
+  const getData = async () => {
+    const x = await fetchDeliveryDetails();
+    if (x.length > 0) {
+      setData(x);
+      setNewData([]);
+    } else {
+      setData([]);
+      setNewData([]);
+    }
+  };
   useEffect(() => {
-    const getData = async () => {
-      const x = await fetchDeliveryDetails();
-      if (x.length > 0) {
-        setData(x);
-        setNewData([]);
-      } else {
-        setData([]);
-        setNewData([]);
-      }
-    };
     getData();
   }, []);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data1) => {
     setMessage("Submission Successful");
-    const x = Object.values(data).map((x) => +x);
+    // var x = Object.values(data).map((x) => +x);
+    var x = [...Object.values(data1).map((x) => +x)];
     var y = [];
+    if (deletedCount > 0) x = x.slice(deletedCount * 3, x.length);
     for (let i = 0; i < x.length; i += 3) {
       y.push({
         min_price: x[i],
@@ -47,10 +50,10 @@ const DeliveryFees = () => {
       });
     }
     await addDeliveryFees(y);
-    await fetchDeliveryDetails();
     reset();
     setData(null);
-    setOpenSnackbar(true);
+    await getData()
+    await setOpenSnackbar(true);
   };
 
   return (
@@ -183,7 +186,7 @@ const DeliveryFees = () => {
                       </p>{" "}
                       <TextField
                         type="number"
-                        name={`max_price${k}`}
+                        name={`max_price${k + data.length}`}
                         inputRef={register()}
                         inputProps={{
                           min: 0,
@@ -262,6 +265,7 @@ const DeliveryFees = () => {
                             const x = [...data];
                             x.splice(k, 1);
                             setData(x);
+                            setDeletedCount(deletedCount + 1);
                           }}
                           color="secondary"
                         >
@@ -324,7 +328,9 @@ const DeliveryFees = () => {
                             x.splice(k, 1);
                             setNewData(x);
                           }}
-                          disabled={newData.length === 1 && data && data.length ===0}
+                          disabled={
+                            newData.length === 1 && data && data.length === 0
+                          }
                           color="secondary"
                         >
                           <DeleteOutlineIcon />
