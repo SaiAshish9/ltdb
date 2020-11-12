@@ -21,6 +21,7 @@ import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import ViewOrderPopup from "./viewOrder";
+import EditOrderPopup from "./editOrder";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -29,11 +30,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrderTable = () => {
-  const [open, setOpen] = useState(false);
   const classes = useStyles();
-  const [openDialog, setOpenDialog] = useState(false);
   const [openViewOrderPopup, setOpenViewOrderPopup] = useState(false);
-  const [openEditBanner, setOpenEditBanner] = useState(false);
+  const [openEditOrderPopup, setOpenEditOrderPopup] = useState(false);
   const {
     state: { orders, message, order_count },
     fetchOrders,
@@ -260,14 +259,19 @@ const OrderTable = () => {
                       justifyContent="center"
                       alignItems="center"
                     >
-                      <IconButton>
+                      <IconButton
+                             onClick={async () => {
+                             await fetchOrder(i.order_id);
+                          setOpenEditOrderPopup(true);
+                        }}   
+                      >
                         <EditOutlinedIcon style={{ cursor: "pointer" }} />{" "}
                       </IconButton>
                       <IconButton
-                        onClick={async () => {
-                          await fetchOrder(i.order_id);
+                  onClick={async () => {
+                             await fetchOrder(i.order_id);
                           setOpenViewOrderPopup(true);
-                        }}
+                        }}   
                       >
                         <VisibilityOutlinedIcon style={{ cursor: "pointer" }} />{" "}
                       </IconButton>
@@ -281,6 +285,11 @@ const OrderTable = () => {
       <ViewOrderPopup
         open={openViewOrderPopup}
         setOpen={setOpenViewOrderPopup}
+        classes={classes}
+      />
+      <EditOrderPopup
+        open={openEditOrderPopup}
+        setOpen={setOpenEditOrderPopup}
         classes={classes}
       />
       <TablePagination

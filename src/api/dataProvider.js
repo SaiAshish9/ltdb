@@ -618,7 +618,8 @@ const addPackage = (dispatch) => async (data) => {
       cover_images,
       image,
     });
-  } catch (e) {}
+  } catch (e) {
+  }
 };
 
 const editPackage = (dispatch) => async (data) => {

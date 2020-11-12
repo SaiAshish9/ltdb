@@ -68,7 +68,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
       game_id: value,
       cover_images: coverImages,
       package_item: selectedSubCategories.map((i, k) => ({
-        sub_category_id: +selectedSubCategories[k].split(" ")[0],
+        sub_category_id: +selectedSubCategories[k].split("###")[0],
         item_id: +selectedItems[k].split(" ")[0],
       })),
     });
@@ -401,7 +401,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
                             +e.target.value.split("###")[0]
                         )
                       );
-                      // setSubCategoryValue(e.target.value);
+                      setSubCategoryValue(e.target.value);
                       if (
                         // !selectedSubCategories.includes(e.target.value)
                         selectedItems.length === selectedSubCategories.length
