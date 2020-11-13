@@ -39,6 +39,9 @@ const AddPackage = ({ open, classes, setOpen }) => {
   const [coverImages, setCoverImages] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const [filteredItems, setFilteredItems] = useState([]);
+  const [selectedSubCategoryValues, setSelectedSubCategoryValues] = useState(
+    []
+  );
 
   const {
     state: { games, items },
@@ -377,7 +380,6 @@ const AddPackage = ({ open, classes, setOpen }) => {
               style={{ width: "100%" }}
             >
               <Box
-                // display="flex"
                 justifyContent="space-between"
                 style={{ margin: "1rem 0", width: "47%" }}
               >
@@ -401,23 +403,43 @@ const AddPackage = ({ open, classes, setOpen }) => {
                             +e.target.value.split("###")[0]
                         )
                       );
-                      setSubCategoryValue(e.target.value);
                       if (
-                        // !selectedSubCategories.includes(e.target.value)
-                        selectedItems.length === selectedSubCategories.length
-                      )
-                        setSelectedSubCategories([
-                          ...selectedSubCategories,
-                          e.target.value,
-                        ]);
+                        items.filter(
+                          (x) =>
+                            x.sub_category_id ===
+                            +e.target.value.split("###")[0]
+                        ).length > 0
+                      ) {
+                        setSubCategoryValue(e.target.value);
+                        if (
+                          selectedItems.length === selectedSubCategories.length
+                        )
+                          setSelectedSubCategories([
+                            ...selectedSubCategories,
+                            e.target.value,
+                          ]);
+                      }
+                      setSelectedSubCategoryValues([
+                        ...selectedSubCategoryValues,
+                        +e.target.value.split("###")[0],
+                      ]);
                     }}
                   >
                     {subCategories ? (
-                      subCategories.map((i, k) => (
-                        <MenuItem value={`${i.sub_category_id}###${i.name_en}`}>
-                          {i.name_en}
-                        </MenuItem>
-                      ))
+                      subCategories
+                        .filter(
+                          (x) =>
+                            !selectedSubCategoryValues.includes(
+                              x.sub_category_id
+                            )
+                        )
+                        .map((i, k) => (
+                          <MenuItem
+                            value={`${i.sub_category_id}###${i.name_en}`}
+                          >
+                            {i.name_en}
+                          </MenuItem>
+                        ))
                     ) : (
                       <MenuItem value={0}></MenuItem>
                     )}
@@ -426,7 +448,6 @@ const AddPackage = ({ open, classes, setOpen }) => {
               </Box>
 
               <Box
-                // display="flex"
                 justifyContent="space-between"
                 style={{ margin: "1rem 0", width: "47%" }}
               >
@@ -441,17 +462,14 @@ const AddPackage = ({ open, classes, setOpen }) => {
                 </p>
                 <FormControl style={{ width: "100%" }}>
                   <Select
-                    // multiple
                     value={itemValue}
                     onChange={(e) => {
-                      // setItemValue(e.target.value);
-                      // if (selectedItems.length < selectedSubCategories.length)
-                        setSelectedItems([...selectedItems, e.target.value]);
+                      setSelectedItems([...selectedItems, e.target.value]);
                     }}
                   >
                     {items ? (
                       filteredItems.map((i, k) => (
-                        <MenuItem value={`${i.item_id} ${i.name_en}`}>
+                        <MenuItem value={`${i.item_id}###${i.name_en}`}>
                           {i.name_en}
                         </MenuItem>
                       ))
@@ -530,7 +548,8 @@ const AddPackage = ({ open, classes, setOpen }) => {
                               fontWeight: 500,
                             }}
                           >
-                            {selectedItems[k] && selectedItems[k].split(" ")[1]}
+                            {selectedItems[k] &&
+                              selectedItems[k].split("###")[1]}
                           </TableCell>
                           <TableCell
                             style={{
