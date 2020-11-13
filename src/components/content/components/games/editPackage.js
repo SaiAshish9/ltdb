@@ -32,6 +32,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
     fetchGameSubCategoryList,
     editPackage,
     fetchPackage,
+    fetchGamePackages
   } = useContext(DataContext);
 
   const [file, setFile] = useState(null);
@@ -56,7 +57,6 @@ const EditPackage = ({ open, classes, setOpen }) => {
 
   const handleChangedData = useCallback(async () => {
     setDisabled(true);
-    // await fetchGamePackages()
     if (package_details) {
       setNameEn(package_details.name_en);
       setNameAr(package_details.name_ar);
@@ -114,14 +114,15 @@ const EditPackage = ({ open, classes, setOpen }) => {
     setNewFile(null);
     setImgFile(null);
     setNewImgFile(null);
-    setSelectedItems(null);
-    setSelectedSubCategories(null);
+    setSelectedItems([]);
+    setSelectedSubCategories([]);
     setQuality(null);
     setDisabled(false);
     setValue(null);
     setCoverImages([]);
     setNewCoverImages([]);
     setDeletedCoverImages([]);
+    // await fetchGamePackages(game_details.game_id);
     setDisabled(false);
     setOpen(false);
   };
@@ -180,8 +181,8 @@ const EditPackage = ({ open, classes, setOpen }) => {
                   setNewFile(null);
                   setImgFile(null);
                   setNewImgFile(null);
-                  setSelectedItems(null);
-                  setSelectedSubCategories(null);
+                  setSelectedItems([]);
+                  setSelectedSubCategories([]);
                   setQuality(null);
                   setDisabled(false);
                   setValue(null);
