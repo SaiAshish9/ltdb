@@ -161,17 +161,26 @@ export default function SimpleTable({ data }) {
         )}
 
         <Table
-          style={{ width: "100%" }}
+          style={{ minWidth: "90vw" }}
           className={classes.table}
           aria-label="simple table"
           size="small"
         >
-          <TableHead>
+          <TableHead
+            style={{
+              maxHeight: "3.4rem",
+              overflowY: "hidden",
+              width:"90vw",
+              background: "#f4f4f4",
+            }}
+          >
             <TableRow
               style={{
                 background: "#f4f4f4",
                 height: "3.4rem",
-                width: "85vw",
+                width: "90vw",
+                overflowX: "scroll",
+                overflowY: "hidden",
               }}
             >
               <TableCell
@@ -188,7 +197,7 @@ export default function SimpleTable({ data }) {
                   color: "#282b3c",
                 }}
               >
-                {items && items.length > 0 && "S No."}
+                {items && items.length > 0 && "S No"}
                 {/* S No */}
               </TableCell>
               <TableCell
@@ -214,6 +223,7 @@ export default function SimpleTable({ data }) {
                   fontWeight: "bold",
                   fontSize: "0.8rem",
                   color: "#282b3c",
+                  // display: "flex",
                 }}
               >
                 Created On
@@ -245,7 +255,9 @@ export default function SimpleTable({ data }) {
                   </IconButton>
                 </Box>
                 {openDialog && (
-                  <Paper style={{ position: "absolute", width: "10rem" }}>
+                  <Paper
+                    style={{ position: "absolute", width: "10rem", zIndex: 5 }}
+                  >
                     <p
                       onClick={() => {
                         fetchItems(null, null, null, null);
@@ -313,6 +325,8 @@ export default function SimpleTable({ data }) {
                   fontWeight: "bold",
                   fontSize: "0.8rem",
                   paddingLeft: "2rem",
+                  // display: "flex",
+                  // alignItems: "center",
                   color: "#282b3c",
                 }}
               >

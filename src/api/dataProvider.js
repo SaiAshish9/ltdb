@@ -613,6 +613,11 @@ const addPackage = (dispatch) => async (data) => {
     })
   );
   try {
+    console.log( {
+      ...data,
+      cover_images,
+      image,
+    })
     const x = await Api.post("admin/game/add-package", {
       ...data,
       cover_images,
@@ -663,7 +668,7 @@ const editPackage = (dispatch) => async (data) => {
       status: data.status,
       package_item: data.package_item,
       cover_images: [
-        ...data.cover_images.map((x) => x["imgFile"].split("com/")[1]),
+        // ...data.cover_images.map((x) => x["imgFile"].split("com/")[1]),
         ...new_cover_images,
       ],
     });
@@ -677,7 +682,7 @@ const editPackage = (dispatch) => async (data) => {
       status: data.status,
       package_item: data.package_item,
       cover_images: [
-        ...data.cover_images.map((x) => x["imgFile"].split("com/")[1]),
+        // ...data.cover_images.map((x) => x["imgFile"].split("com/")[1]),
         ...new_cover_images,
       ],
     });

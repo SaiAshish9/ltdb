@@ -72,7 +72,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
       cover_images: coverImages,
       package_item: selectedSubCategories.map((i, k) => ({
         sub_category_id: +selectedSubCategories[k].split("###")[0],
-        item_id: +selectedItems[k].split(" ")[0],
+        item_id: +selectedItems[k].split("###")[0],
       })),
     });
     setNameEn("");
