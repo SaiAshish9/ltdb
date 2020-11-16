@@ -122,7 +122,6 @@ const EditPackage = ({ open, classes, setOpen }) => {
     setCoverImages([]);
     setNewCoverImages([]);
     setDeletedCoverImages([]);
-    // await fetchGamePackages(game_details.game_id);
     setDisabled(false);
     setOpen(false);
   };

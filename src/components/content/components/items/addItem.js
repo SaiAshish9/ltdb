@@ -475,7 +475,6 @@ const AddItem = ({ open, setOpen }) => {
                   }}
                   onChange={
                     (e) => setNameAr(e.target.value)
-                    // setNameAr(e.target.value.split("").reverse().join(""))
                   }
                   style={{ width: "47%" }}
                 />
@@ -544,7 +543,7 @@ const AddItem = ({ open, setOpen }) => {
                   </p>
                   <TextField
                     value={price}
-                    inputProps={{ min: 0 }}
+                    inputProps={{ min: 0,step:0.01 }}
                     type="number"
                     onChange={(e) => setPrice(e.target.value)}
                     variant="outlined"

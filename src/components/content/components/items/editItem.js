@@ -335,7 +335,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                 }
                 variant="outlined"
                 style={{ width: "50%" }}
-                inputProps={{ min: 0 }}
+                inputProps={{ min: 0,step : 0.01 }}
                 onChange={(e) => {
                   setPrice(e.target.value);
                 }}

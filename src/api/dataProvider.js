@@ -653,22 +653,21 @@ const editPackage = (dispatch) => async (data) => {
   );
 
   try {
-    // console.log(data.new_cover_images,new_cover_images)
-    // console.log({
-    //   image,
-    //   game_id: data.game_id,
-    //   package_id: data.package_id,
-    //   name_en: data.name_en,
-    //   name_ar: data.name_ar,
-    //   graphic_quality: data.graphic_quality,
-    //   status: data.status,
-    //   package_item: data.package_item,
-    //   cover_images: [
-    //     ...data.cover_images.map((x) => x["imgFile"]),
-    //     ...new_cover_images,
-    //   ],
-    // });
-    const x = await Api.post("admin/game/add-package", {
+    console.log({
+      image,
+      game_id: data.game_id,
+      package_id: data.package_id,
+      name_en: data.name_en,
+      name_ar: data.name_ar,
+      graphic_quality: data.graphic_quality,
+      status: data.status,
+      package_item: data.package_item,
+      cover_images: [
+        ...data.cover_images.map((x) => x["imgFile"].split("com/")[1]),
+        ...new_cover_images,
+      ],
+    });
+      await Api.post("admin/game/add-package", {
       image,
       game_id: data.game_id,
       package_id: data.package_id,
@@ -750,7 +749,7 @@ const fetchPackage = (dispatch) => async (id) => {
     const {
       data: { data },
     } = await Api(`admin/game/get-package?package_id=${id}`);
-
+     console.log(data)
     const package_items = await Promise.all(
       data.package_items.map(async (i, k) => {
         try {

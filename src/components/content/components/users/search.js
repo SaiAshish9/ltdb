@@ -6,6 +6,7 @@ import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
+import { useForm } from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,53 +34,72 @@ export default function CustomizedInputBase({ active, inActive }) {
   const [value, setValue] = useState("");
   const { fetchUsers } = useContext(DataContext);
   const [searched, setSearched] = useState(false);
+  const { handleSubmit } = useForm();
 
-  const onSubmit = (data) => {};
+  const onSubmit = async () => {
+    if (!searched) {
+      if (value) {
+        if (active) await fetchUsers(null, null, value, 1);
+        else if (inActive) {
+          await fetchUsers(null, null, value, 0);
+        } else {
+          await fetchUsers(null, null, value, null);
+        }
+
+        setSearched(true);
+      }
+    } else {
+      setValue("");
+      fetchUsers();
+      setSearched(false);
+    }
+  };
 
   return (
     <Paper className={classes.root}>
-      {!searched ? (
-        <IconButton
-          onClick={async () => {
-            if (value) {
-              if (active) await fetchUsers(null, null, value, 1);
-              else if (inActive) {
-                await fetchUsers(null, null, value, 0);
-              } else {
-                await fetchUsers(null, null, value, null);
-              }
-            }
-            setSearched(true);
-            // setValue(null);
-          }}
-          className={classes.iconButton}
-          aria-label="menu"
-        >
-          <SearchIcon />
-        </IconButton>
-      ) : (
-        <IconButton
-          onClick={() => {
-            setValue("");
-            fetchUsers();
-            setSearched(false);
-          }}
-          className={classes.iconButton}
-          aria-label="menu"
-        >
-          <KeyboardBackspaceIcon />
-        </IconButton>
-      )}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {!searched ? (
+          <IconButton
+            // onClick={async () => {
+            // if (value) {
+            //   if (active) await fetchUsers(null, null, value, 1);
+            //   else if (inActive) {
+            //     await fetchUsers(null, null, value, 0);
+            //   } else {
+            //     await fetchUsers(null, null, value, null);
+            //   }
+            // }
+            // setSearched(true);
+            // }}
+            className={classes.iconButton}
+            aria-label="menu"
+          >
+            <SearchIcon />
+          </IconButton>
+        ) : (
+          <IconButton
+            onClick={() => {
+              // setValue("");
+              // fetchUsers();
+              // setSearched(false);
+            }}
+            className={classes.iconButton}
+            aria-label="menu"
+          >
+            <KeyboardBackspaceIcon />
+          </IconButton>
+        )}
 
-      <InputBase
-        value={value}
-        name="search"
-        onChange={(e) => {
-          setValue(e.target.value);
-        }}
-        className={classes.input}
-        placeholder="Search "
-      />
+        <InputBase
+          value={value}
+          name="search"
+          onChange={(e) => {
+            setValue(e.target.value);
+          }}
+          className={classes.input}
+          placeholder="Search "
+        />
+      </form>
     </Paper>
   );
 }
