@@ -409,7 +409,6 @@ const editItem = (dispatch) => async (data) => {
     type: "SET_MESSAGE",
     payload: null,
   });
-  console.log(data);
   if (data.newImage) {
     image = await uploadImage("media", data.newImage);
     await Api.post("admin/item/add", {
@@ -417,12 +416,14 @@ const editItem = (dispatch) => async (data) => {
       sub_category_id: data.sub_category_id,
       brand_id: data.brand_id,
       name_en: data.name_en,
+      item_id: data.item_id,
       name_ar: data.name_ar,
       description_en: data.description_en,
       description_ar: data.description_ar,
       link_item_id: data.link_item_id,
       image: image,
       price: data.price,
+      is_linkable: data.is_linkable,
       status: data.status,
       item_custom_values: data.item_custom_values,
     });
@@ -434,12 +435,14 @@ const editItem = (dispatch) => async (data) => {
       brand_id: data.brand_id,
       name_en: data.name_en,
       name_ar: data.name_ar,
+      item_id: data.item_id,
       description_en: data.description_en,
       description_ar: data.description_ar,
       link_item_id: data.link_item_id,
       image: image.split("com/")[1],
       price: data.price,
       status: data.status,
+      is_linkable: data.is_linkable,
       item_custom_values: data.item_custom_values,
     });
   }
@@ -453,6 +456,7 @@ const editItem = (dispatch) => async (data) => {
 const addItem = (dispatch) => async (data) => {
   await uploadImage("media", data.image)
     .then(async (data1) => {
+      console.log({data,data1})
       if (data.link_item_id && data.link_item_id.length > 0) {
         if (data.item_custom_values && data.item_custom_values.length > 0) {
           await Api.post("admin/item/add", {
@@ -466,6 +470,7 @@ const addItem = (dispatch) => async (data) => {
             item_custom_values: data.item_custom_values,
             link_item_id: data.link_item_id,
             image: data1,
+            is_linkable: 0,
             price: data.price,
             status: data.status,
           })
@@ -493,6 +498,7 @@ const addItem = (dispatch) => async (data) => {
             description_ar: data.description_ar,
             link_item_id: data.link_item_id,
             image: data1,
+            is_linkable: 0,
             price: data.price,
             status: data.status,
           })
@@ -523,6 +529,7 @@ const addItem = (dispatch) => async (data) => {
             item_custom_values: data.item_custom_values,
             image: data1,
             price: data.price,
+            is_linkable: 1,
             status: data.status,
           })
             .then(async (data) => {
@@ -550,6 +557,7 @@ const addItem = (dispatch) => async (data) => {
             image: data1,
             price: data.price,
             status: data.status,
+            is_linkable: 1,
           })
             .then(async (data) => {
               dispatch({
@@ -690,10 +698,13 @@ const editPackage = (dispatch) => async (data) => {
   }
 };
 
-const toggleOrderStatus = (dispatch) => async (id) => {
+const toggleOrderStatus = (dispatch) => async (id, status) => {
   try {
     console.log({ order_id: id });
-    await Api.post("admin/order/chnage-status", { order_id: id });
+    await Api.post("admin/order/chnage-status", {
+      order_id: id,
+      order_status: status,
+    });
     await fetchOrders();
   } catch (e) {}
 };

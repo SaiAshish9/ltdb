@@ -89,6 +89,8 @@ const EditItem = ({ classes, open, setOpen, id }) => {
             ? description_ar
             : item_details.description_ar,
         link_item_id: item_details.link_items,
+        is_linkable:item_details.is_linkable,
+        item_id: item_details.item_id,
         newImage: imgFile,
         price: price > 0 ? price : item_details.price,
         status: item_details.status,
@@ -114,6 +116,8 @@ const EditItem = ({ classes, open, setOpen, id }) => {
         price: price > 0 ? price : item_details.price,
         status: item_details.status,
         item_custom_values: y,
+        item_id: item_details.item_id,
+        is_linkable: item_details.is_linkable,
       });
     }
     await fetchItems();
@@ -525,6 +529,13 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                   <TextField
                     variant="outlined"
                     label="value_ar"
+                    inputProps={{
+                      dir: "rtl",
+                      style: {
+                        textAlign: "right",
+                        direction: "rtl",
+                      },
+                    }}
                     required
                     inputRef={register()}
                     name={`value_ar${k + 1}`}

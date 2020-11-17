@@ -32,7 +32,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
     fetchGameSubCategoryList,
     editPackage,
     fetchPackage,
-    fetchGamePackages
+    fetchGamePackages,
   } = useContext(DataContext);
 
   const [file, setFile] = useState(null);
@@ -54,6 +54,9 @@ const EditPackage = ({ open, classes, setOpen }) => {
   const [deletedCoverImages, setDeletedCoverImages] = useState([]);
   const [newImgFile, setNewImgFile] = useState(null);
   const [filteredItems, setFilteredItems] = useState([]);
+  const [selectedSubCategoryValues, setSelectedSubCategoryValues] = useState(
+    []
+  );
 
   const handleChangedData = useCallback(async () => {
     setDisabled(true);
@@ -123,6 +126,7 @@ const EditPackage = ({ open, classes, setOpen }) => {
     setNewCoverImages([]);
     setDeletedCoverImages([]);
     setDisabled(false);
+    await fetchGamePackages(game_details.game_id);
     setOpen(false);
   };
 
@@ -551,20 +555,43 @@ const EditPackage = ({ open, classes, setOpen }) => {
                             +e.target.value.split("###")[0]
                         )
                       );
-                      // setSubCategoryValue(e.target.value);
-                      if (selectedItems.length === selectedSubCategories.length)
-                        setSelectedSubCategories([
-                          ...selectedSubCategories,
-                          e.target.value,
-                        ]);
+                      if (
+                        items.filter(
+                          (x) =>
+                            x.sub_category_id ===
+                            +e.target.value.split("###")[0]
+                        ).length > 0
+                      ) {
+                        setSubCategoryValue(e.target.value);
+                        if (
+                          selectedItems.length === selectedSubCategories.length
+                        )
+                          setSelectedSubCategories([
+                            ...selectedSubCategories,
+                            e.target.value,
+                          ]);
+                      }
+                      setSelectedSubCategoryValues([
+                        ...selectedSubCategoryValues,
+                        +e.target.value.split("###")[0],
+                      ]);
                     }}
                   >
                     {subCategories ? (
-                      subCategories.map((i, k) => (
-                        <MenuItem value={`${i.sub_category_id}###${i.name_en}`}>
-                          {i.name_en}
-                        </MenuItem>
-                      ))
+                      subCategories
+                        .filter(
+                          (x) =>
+                            !selectedSubCategoryValues.includes(
+                              x.sub_category_id
+                            )
+                        )
+                        .map((i, k) => (
+                          <MenuItem
+                            value={`${i.sub_category_id}###${i.name_en}`}
+                          >
+                            {i.name_en}
+                          </MenuItem>
+                        ))
                     ) : (
                       <MenuItem value={0}></MenuItem>
                     )}

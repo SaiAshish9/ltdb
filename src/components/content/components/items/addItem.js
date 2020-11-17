@@ -49,7 +49,7 @@ const AddItem = ({ open, setOpen }) => {
   } = useContext(DataContext);
   const [customFields, setCustomFields] = useState([]);
   const [fields, setFields] = useState([]);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, errors } = useForm();
   const [file, setFile] = useState(null);
   const [imgFile, setImgFile] = useState(null);
   const [disabled, setDisabled] = useState(false);
@@ -57,6 +57,7 @@ const AddItem = ({ open, setOpen }) => {
   const [item_value, setItemValue] = useState(null);
   const [items, setItems] = useState([]);
   const [checked, setChecked] = useState(false);
+  const [checkCF, setCheckCF] = useState(true);
 
   const handleChangeMultiple = (e) => {
     setItems(e.target.value);
@@ -71,11 +72,8 @@ const AddItem = ({ open, setOpen }) => {
     reader.readAsDataURL(file1);
   };
 
-  const handleChange = (e) => {
-    setFields(e.target.value);
-  };
-
   const handleSubmit1 = async (data) => {
+    console.log(errors);
     const y = [];
     var x = Object.values(data);
     for (let i = 0; i < x.length; i += 2) {
@@ -85,6 +83,7 @@ const AddItem = ({ open, setOpen }) => {
         value_ar: x[i + 1],
       });
     }
+    if (y.filter((x) => x.value_en.length > 0).length > 0) setCheckCF(!true);
     await handleSave(y);
   };
 
@@ -174,6 +173,7 @@ const AddItem = ({ open, setOpen }) => {
     setPrice(0);
     setChecked(false);
     setFile(null);
+    setImgFile(null);
     await fetchItems();
     await fetchCategories();
     setDisabled(false);
@@ -230,6 +230,7 @@ const AddItem = ({ open, setOpen }) => {
                   setPrice(0);
                   setChecked(false);
                   setFile(null);
+                  setImgFile(null);
                   setDisabled(false);
                   setOpen(false);
                 }}
@@ -439,6 +440,13 @@ const AddItem = ({ open, setOpen }) => {
                               variant="outlined"
                               label="value_ar"
                               required
+                              inputProps={{
+                                dir: "rtl",
+                                style: {
+                                  textAlign: "right",
+                                  direction: "rtl",
+                                },
+                              }}
                               inputRef={register}
                               name={`value_ar${k + 1}`}
                               style={{ width: "47%" }}
@@ -503,7 +511,7 @@ const AddItem = ({ open, setOpen }) => {
                       fontSize: "1rem",
                       color: "#282b3c",
                       fontWeight: 600,
-                      textAlign:"end"
+                      textAlign: "end",
                     }}
                   >
                     وصف :
@@ -520,9 +528,7 @@ const AddItem = ({ open, setOpen }) => {
                         direction: "rtl",
                       },
                     }}
-                    onChange={(e) =>
-                      setDescAr(e.target.value)
-                    }
+                    onChange={(e) => setDescAr(e.target.value)}
                     variant="outlined"
                     style={{ width: "100%", opacity: 0.8 }}
                   />
@@ -610,7 +616,12 @@ const AddItem = ({ open, setOpen }) => {
               {disabled ? (
                 <CircularProgress />
               ) : (
-                <Fab type="submit" variant="extended" color="primary">
+                <Fab
+                  disabled={imgFile === null}
+                  type="submit"
+                  variant="extended"
+                  color="primary"
+                >
                   Save
                 </Fab>
               )}

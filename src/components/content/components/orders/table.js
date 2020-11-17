@@ -195,7 +195,7 @@ const OrderTable = () => {
                   fontSize: "0.8rem",
                   color: "#282b3c",
                   textAlign: "center",
-                  paddingLeft:"4rem"
+                  paddingLeft: "4rem",
                 }}
               >
                 <Box display="flex" alignItems="center">
@@ -223,9 +223,9 @@ const OrderTable = () => {
                   >
                     <p
                       onClick={async () => {
-                        await toggleOrderStatus(selected)
-                        await fetchOrders()
-                        setOpenActionDialog(false)
+                        await toggleOrderStatus(selected, 0);
+                        await fetchOrders();
+                        setOpenActionDialog(false);
                       }}
                       style={{
                         fontWeight: "bold",
@@ -235,7 +235,71 @@ const OrderTable = () => {
                         cursor: "pointer",
                       }}
                     >
-                      Update Status
+                      Pending
+                    </p>
+                    <p
+                      onClick={async () => {
+                        await toggleOrderStatus(selected, 1);
+                        await fetchOrders();
+                        setOpenActionDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Confirmed
+                    </p>
+                    <p
+                      onClick={async () => {
+                        await toggleOrderStatus(selected, 2);
+                        await fetchOrders();
+                        setOpenActionDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      On the way
+                    </p>
+                    <p
+                      onClick={async () => {
+                        await toggleOrderStatus(selected, 3);
+                        await fetchOrders();
+                        setOpenActionDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Completed
+                    </p>
+                    <p
+                      onClick={async () => {
+                        await toggleOrderStatus(selected, 4);
+                        await fetchOrders();
+                        setOpenActionDialog(false);
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Cancelled
                     </p>
                   </Paper>
                 )}
@@ -318,7 +382,7 @@ const OrderTable = () => {
                     style={{
                       cursor: "pointer",
                       textAlign: "center",
-                      color: +i.order_status !== 1 ? "red" : "green",
+                      color: +i.order_status === 1 || +i.order_status === 3 ? "green" : "red",
                       fontWeight: 500,
                       paddingLeft: "4rem",
                     }}
