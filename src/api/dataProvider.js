@@ -613,18 +613,17 @@ const addPackage = (dispatch) => async (data) => {
     })
   );
   try {
-    console.log( {
+    console.log({
       ...data,
       cover_images,
       image,
-    })
+    });
     const x = await Api.post("admin/game/add-package", {
       ...data,
       cover_images,
       image,
     });
-  } catch (e) {
-  }
+  } catch (e) {}
 };
 
 const editPackage = (dispatch) => async (data) => {
@@ -672,7 +671,7 @@ const editPackage = (dispatch) => async (data) => {
         ...new_cover_images,
       ],
     });
-      await Api.post("admin/game/add-package", {
+    await Api.post("admin/game/add-package", {
       image,
       game_id: data.game_id,
       package_id: data.package_id,
@@ -689,6 +688,14 @@ const editPackage = (dispatch) => async (data) => {
   } catch (e) {
     console.log(e);
   }
+};
+
+const toggleOrderStatus = (dispatch) => async (id) => {
+  try {
+    console.log({ order_id: id });
+    await Api.post("admin/order/chnage-status", { order_id: id });
+    await fetchOrders();
+  } catch (e) {}
 };
 
 const addGame = (dispatch) => async (data) => {
@@ -754,7 +761,7 @@ const fetchPackage = (dispatch) => async (id) => {
     const {
       data: { data },
     } = await Api(`admin/game/get-package?package_id=${id}`);
-     console.log(data)
+    console.log(data);
     const package_items = await Promise.all(
       data.package_items.map(async (i, k) => {
         try {
@@ -764,7 +771,6 @@ const fetchPackage = (dispatch) => async (id) => {
           );
 
           const item = await Api(`admin/item/getitem?item_id=${i.item_id}`);
-
           return {
             sub_category:
               subcategory.data.data.sub_category_id +
@@ -1126,6 +1132,7 @@ export const { Context, Provider } = createDataContext(
     fetchGamePackages,
     fetchGameSubCategoryList,
     fetchLinkableItems,
+    toggleOrderStatus,
     fetchSubCategory,
   },
   {

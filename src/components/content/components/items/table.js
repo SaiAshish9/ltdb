@@ -198,7 +198,6 @@ export default function SimpleTable({ data }) {
                 }}
               >
                 {items && items.length > 0 && "S No"}
-                {/* S No */}
               </TableCell>
               <TableCell
                 style={{
@@ -325,8 +324,6 @@ export default function SimpleTable({ data }) {
                   fontWeight: "bold",
                   fontSize: "0.8rem",
                   paddingLeft: "2rem",
-                  // display: "flex",
-                  // alignItems: "center",
                   color: "#282b3c",
                 }}
               >
@@ -442,8 +439,6 @@ export default function SimpleTable({ data }) {
                     }}
                   >
                     <Checkbox
-                      // disabled
-                      // checked={selected.includes(row.item_id)}
                       onChange={() => {
                         if (selected.includes(row.item_id)) {
                           var x = [...selected];

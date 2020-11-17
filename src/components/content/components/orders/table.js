@@ -36,12 +36,14 @@ const OrderTable = () => {
   const {
     state: { orders, message, order_count },
     fetchOrders,
+    toggleOrderStatus,
     fetchOrder,
   } = useContext(DataContext);
   const [openSnackbar, setOpenSnackbar] = useState(true);
-  const [action, setAction] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [openActionDialog, setOpenActionDialog] = useState(false);
+  const [selected, setSelected] = useState(-1);
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
@@ -94,14 +96,28 @@ const OrderTable = () => {
           />
         )}
         <Table style={{ width: "100%" }} size="small">
-          <TableHead>
+          <TableHead
+            style={{
+              maxHeight: "3.4rem",
+              overflowY: "hidden",
+              background: "#f4f4f4",
+            }}
+          >
             <TableRow
               style={{
                 background: "#f4f4f4",
                 height: "3.4rem",
                 width: "85vw",
+                overflowY: "hidden",
               }}
             >
+              <TableCell
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "0.8rem",
+                  color: "#282b3c",
+                }}
+              ></TableCell>
               <TableCell
                 style={{
                   fontWeight: "bold",
@@ -179,9 +195,50 @@ const OrderTable = () => {
                   fontSize: "0.8rem",
                   color: "#282b3c",
                   textAlign: "center",
+                  paddingLeft:"4rem"
                 }}
               >
-                Action
+                <Box display="flex" alignItems="center">
+                  Action
+                  <IconButton
+                    onClick={() => {
+                      setOpenActionDialog(!openActionDialog);
+                    }}
+                  >
+                    {openActionDialog ? (
+                      <ArrowDropUpIcon />
+                    ) : (
+                      <ArrowDropDownIcon />
+                    )}
+                  </IconButton>
+                </Box>
+                {orders && openActionDialog && (
+                  <Paper
+                    style={{
+                      zIndex: 5,
+                      position: "absolute",
+                      width: "10rem",
+                      right: 10,
+                    }}
+                  >
+                    <p
+                      onClick={async () => {
+                        await toggleOrderStatus(selected)
+                        await fetchOrders()
+                        setOpenActionDialog(false)
+                      }}
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "0.8rem",
+                        color: "#282b3c",
+                        textAlign: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Update Status
+                    </p>
+                  </Paper>
+                )}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -198,6 +255,21 @@ const OrderTable = () => {
                     border: "none",
                   }}
                 >
+                  <TableCell
+                    style={{
+                      textAlign: "center",
+                      color: "#8095a1",
+                      fontWeight: 500,
+                    }}
+                  >
+                    <Checkbox
+                      checked={selected === i.order_id}
+                      onChange={() => {
+                        setSelected(i.order_id);
+                      }}
+                      style={{ color: "#8095a1" }}
+                    />
+                  </TableCell>
                   <TableCell
                     style={{
                       textAlign: "center",
@@ -260,18 +332,18 @@ const OrderTable = () => {
                       alignItems="center"
                     >
                       <IconButton
-                             onClick={async () => {
-                             await fetchOrder(i.order_id);
+                        onClick={async () => {
+                          await fetchOrder(i.order_id);
                           setOpenEditOrderPopup(true);
-                        }}   
+                        }}
                       >
                         <EditOutlinedIcon style={{ cursor: "pointer" }} />{" "}
                       </IconButton>
                       <IconButton
-                  onClick={async () => {
-                             await fetchOrder(i.order_id);
+                        onClick={async () => {
+                          await fetchOrder(i.order_id);
                           setOpenViewOrderPopup(true);
-                        }}   
+                        }}
                       >
                         <VisibilityOutlinedIcon style={{ cursor: "pointer" }} />{" "}
                       </IconButton>
