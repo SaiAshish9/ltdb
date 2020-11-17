@@ -29,7 +29,13 @@ const DeliveryFees = () => {
       setNewData([]);
     } else {
       setData([]);
-      setNewData([]);
+      setNewData([
+                    {
+                                  min_price: 0,
+                                  max_price: 0,
+                                  delivery_fee: 0,
+                                }
+      ]);
     }
   };
   useEffect(() => {
@@ -155,7 +161,7 @@ const DeliveryFees = () => {
                     </Box>
                   ))}
                 {newData &&
-                  newData.length > 0 &&
+                  // newData.length > 0 &&
                   newData.map((i, k) => (
                     <Box
                       key={k}
@@ -288,6 +294,7 @@ const DeliveryFees = () => {
                         inputRef={register()}
                         inputProps={{
                           min: 0,
+                          step:0.01,
                           style: {
                             textAlign: "center",
                           },
