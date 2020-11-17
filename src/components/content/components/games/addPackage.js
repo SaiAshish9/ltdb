@@ -195,6 +195,13 @@ const AddPackage = ({ open, classes, setOpen }) => {
               <TextField
                 variant="outlined"
                 label="Arabic Name"
+                inputProps={{
+                  dir: "rtl",
+                  style: {
+                    textAlign: "right",
+                    direction: "rtl",
+                  },
+                }}
                 value={name_ar}
                 onChange={(e) => setNameAr(e.target.value)}
                 style={{ width: "47%" }}

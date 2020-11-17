@@ -164,6 +164,13 @@ const EditPopup = ({ classes, open, setOpen }) => {
                     variant="outlined"
                     label="name_ar"
                     value={name_ar}
+                    inputProps={{
+                      dir: "rtl",
+                      style: {
+                        textAlign: "right",
+                        direction: "rtl",
+                      },
+                    }}
                     onChange={(e) => setNameAr(e.target.value)}
                     style={{ width: "47%" }}
                     // defaultValue={game_details.name_ar}
@@ -256,8 +263,6 @@ const EditPopup = ({ classes, open, setOpen }) => {
                     </Select>
                   </FormControl>
                 </Box>
-
-          
 
                 <Box
                   display="flex"

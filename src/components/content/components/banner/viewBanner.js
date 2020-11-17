@@ -125,6 +125,13 @@ const ViewBanner = ({ classes, open, setOpen }) => {
                   //   label="Arabic Name"
                   value={banner_details.title_ar}
                   required
+                  inputProps={{
+                    dir: "rtl",
+                    style: {
+                      textAlign: "right",
+                      direction: "rtl",
+                    },
+                  }}
                   disabled
                   onChange={(e) => {
                     setNameAr(e.target.value);

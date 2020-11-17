@@ -135,6 +135,13 @@ const SubCategoryTable = ({
               <TextField
                 inputRef={register()}
                 name="name_ar"
+                inputProps={{
+                  dir: "rtl",
+                  style: {
+                    textAlign: "right",
+                    direction: "rtl",
+                  },
+                }}
                 variant="outlined"
                 label="اسم"
               />
@@ -245,6 +252,13 @@ const SubCategoryTable = ({
                   <TextField
                     inputRef={register()}
                     variant="outlined"
+                    inputProps={{
+                      dir: "rtl",
+                      style: {
+                        textAlign: "right",
+                        direction: "rtl",
+                      },
+                    }}
                     name={`name_ar${k + 1}`}
                     label="اسم"
                   />

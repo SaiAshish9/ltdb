@@ -220,6 +220,13 @@ const AddPackage = ({ open, classes, setOpen }) => {
                 variant="outlined"
                 label="Arabic Name"
                 disabled
+                inputProps={{
+                  dir: "rtl",
+                  style: {
+                    textAlign: "right",
+                    direction: "rtl",
+                  },
+                }}
                 name="name1"
                 inputRef={register()}
                 value={package_details && package_details.name_ar}

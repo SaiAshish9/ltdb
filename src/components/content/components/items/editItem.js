@@ -16,7 +16,6 @@ import {
 } from "@material-ui/core";
 import Img from "../../../../assets/thumbnail1.png";
 import { Context as DataContext } from "../../../../api/dataProvider";
-import moment from "moment";
 import Clear from "@material-ui/icons/Clear";
 import { useForm } from "react-hook-form";
 import Api from "../../../../api";
@@ -206,9 +205,16 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                 defaultValue={item_details && item_details.name_ar}
                 value={name_ar.length > 0 ? name_ar : item_details.name_ar}
                 variant="outlined"
+                inputProps={{
+                  dir: "rtl",
+                  style: {
+                    textAlign: "right",
+                    direction: "rtl",
+                  },
+                }}
                 style={{ width: "50%" }}
                 onChange={(e) => {
-                  setNameAr(e.target.value.split("").reverse().join(""));
+                  setNameAr(e.target.value.split(""));
                 }}
               />
             </Box>
@@ -256,13 +262,20 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                 rows={7}
                 style={{ width: "50%" }}
                 variant="outlined"
+                inputProps={{
+                  dir: "rtl",
+                  style: {
+                    textAlign: "right",
+                    direction: "rtl",
+                  },
+                }}
                 value={
                   description_ar.length > 0
                     ? description_ar
                     : item_details.name_ar
                 }
                 onChange={(e) => {
-                  setDescriptionAr(e.target.value.split("").reverse().join(""));
+                  setDescriptionAr(e.target.value);
                 }}
                 defaultValue={item_details && item_details.description_ar}
               />
@@ -335,7 +348,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                 }
                 variant="outlined"
                 style={{ width: "50%" }}
-                inputProps={{ min: 0,step : 0.01 }}
+                inputProps={{ min: 0, step: 0.01 }}
                 onChange={(e) => {
                   setPrice(e.target.value);
                 }}

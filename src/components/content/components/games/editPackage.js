@@ -267,6 +267,13 @@ const EditPackage = ({ open, classes, setOpen }) => {
                 variant="outlined"
                 label="Arabic Name"
                 name="name1"
+                inputProps={{
+                  dir: "rtl",
+                  style: {
+                    textAlign: "right",
+                    direction: "rtl",
+                  },
+                }}
                 inputRef={register()}
                 defaultValue={package_details.name_ar}
                 onChange={(e) => setNameAr(e.target.value)}

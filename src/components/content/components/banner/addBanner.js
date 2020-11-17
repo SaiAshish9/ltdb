@@ -121,8 +121,15 @@ const AddBanner = ({ classes, open, setOpen }) => {
                 variant="outlined"
                 label="Arabic Name"
                 value={name_ar}
+                inputProps={{
+                  dir: "rtl",
+                  style: {
+                    textAlign: "right",
+                    direction: "rtl",
+                  },
+                }}
                 style={{
-                  direction: "RTL"
+                  direction: "RTL",
                 }}
                 required
                 onChange={(e) => {

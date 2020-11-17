@@ -118,7 +118,7 @@ const EditDialog = ({
               justifyContent="space-between"
               style={{
                 padding: "1rem",
-                width:"80%"
+                width: "80%",
               }}
             >
               <TextField
@@ -131,6 +131,13 @@ const EditDialog = ({
               <TextField
                 inputRef={register()}
                 name="name_ar"
+                inputProps={{
+                  dir: "rtl",
+                  style: {
+                    textAlign: "right",
+                    direction: "rtl",
+                  },
+                }}
                 defaultValue={current.name_ar}
                 variant="outlined"
                 label="اسم"
@@ -245,6 +252,13 @@ const EditDialog = ({
                       inputRef={register()}
                       variant="outlined"
                       name={`name_ar${k + 1}`}
+                      inputProps={{
+                        dir: "rtl",
+                        style: {
+                          textAlign: "right",
+                          direction: "rtl",
+                        },
+                      }}
                       label="اسم"
                       value={i.name_ar}
                     />

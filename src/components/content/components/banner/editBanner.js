@@ -144,6 +144,13 @@ const EditBanner = ({ classes, open, setOpen }) => {
                     // value={name_ar}
                     defaultValue={banner_details.title_ar}
                     required
+                    inputProps={{
+                      dir: "rtl",
+                      style: {
+                        textAlign: "right",
+                        direction: "rtl",
+                      },
+                    }}
                     onChange={(e) => {
                       setNameAr(e.target.value);
                     }}

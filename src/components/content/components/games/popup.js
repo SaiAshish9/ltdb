@@ -125,6 +125,13 @@ const Popup = ({ classes, open, setOpen, setOpenPackageDialog }) => {
                   <TextField
                     variant="outlined"
                     disabled
+                    inputProps={{
+                      dir: "rtl",
+                      style: {
+                        textAlign: "right",
+                        direction: "rtl",
+                      },
+                    }}
                     label="name_ar"
                     name={name_ar}
                     onChange={(e) => setNameAr(e.target.value)}

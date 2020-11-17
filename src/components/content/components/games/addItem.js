@@ -135,6 +135,13 @@ const AddItem = ({ disabled, setDisabled,open, setOpen}) => {
               <TextField
                 variant="outlined"
                 label="اسم"
+                inputProps={{
+                  dir: "rtl",
+                  style: {
+                    textAlign: "right",
+                    direction: "rtl",
+                  },
+                }}
                 value={name_ar}
                 onChange={(e) => setNameAr(e.target.value)}
                 style={{ width: "47%" }}

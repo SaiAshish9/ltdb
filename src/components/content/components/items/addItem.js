@@ -468,14 +468,11 @@ const AddItem = ({ open, setOpen }) => {
                   inputProps={{
                     dir: "rtl",
                     style: {
-                      className: classes.arabicTf,
                       textAlign: "right",
                       direction: "rtl",
                     },
                   }}
-                  onChange={
-                    (e) => setNameAr(e.target.value)
-                  }
+                  onChange={(e) => setNameAr(e.target.value)}
                   style={{ width: "47%" }}
                 />
               </Box>
@@ -506,6 +503,7 @@ const AddItem = ({ open, setOpen }) => {
                       fontSize: "1rem",
                       color: "#282b3c",
                       fontWeight: 600,
+                      textAlign:"end"
                     }}
                   >
                     وصف :
@@ -514,8 +512,16 @@ const AddItem = ({ open, setOpen }) => {
                     multiline
                     rows={4}
                     value={desc_ar}
+                    inputProps={{
+                      dir: "rtl",
+                      style: {
+                        className: classes.arabicTf,
+                        textAlign: "right",
+                        direction: "rtl",
+                      },
+                    }}
                     onChange={(e) =>
-                      setDescAr(e.target.value.split("").reverse().join(""))
+                      setDescAr(e.target.value)
                     }
                     variant="outlined"
                     style={{ width: "100%", opacity: 0.8 }}
@@ -543,7 +549,7 @@ const AddItem = ({ open, setOpen }) => {
                   </p>
                   <TextField
                     value={price}
-                    inputProps={{ min: 0,step:0.01 }}
+                    inputProps={{ min: 0, step: 0.01 }}
                     type="number"
                     onChange={(e) => setPrice(e.target.value)}
                     variant="outlined"
