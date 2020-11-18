@@ -1090,6 +1090,7 @@ const fetchDeliveryDetails = (dispatch) => async () => {
 
 const addDeliveryFees = (dispatch) => async (data) => {
   try {
+    console.log(data)
     await Api.post("admin/delivery/add-upadte", data);
     await fetchDeliveryDetails();
   } catch (e) {}
