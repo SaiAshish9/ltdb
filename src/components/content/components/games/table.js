@@ -106,9 +106,9 @@ export default function SimpleTable({ data }) {
           paddingRight: "2rem",
         }}
       >
-        <Box style={{ height: "7vh" }}>
+        {/* <Box style={{ height: "7vh" }}> */}
           <Search active={active} inActive={inActive} />
-        </Box>
+        {/* </Box> */}
 
         <Box display="flex">
           <p

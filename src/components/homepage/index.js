@@ -75,7 +75,8 @@ const Home = () => {
             style={{
               height: "20vh",
               // height: "240px",
-              width: "250px",
+              // width: "250px",
+              width:"21%",
               padding: "1rem",
               display: "flex",
               alignItems: "center",
@@ -130,7 +131,7 @@ const Home = () => {
             elevation={2}
             style={{
               height: "20vh",
-              width: "250px",
+              width:"21%",
               padding: "1rem",
               display: "flex",
               alignItems: "center",

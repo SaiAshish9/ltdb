@@ -218,7 +218,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                 }}
                 style={{ width: "50%" }}
                 onChange={(e) => {
-                  setNameAr(e.target.value.split(""));
+                  setNameAr(e.target.value);
                 }}
               />
             </Box>
@@ -276,7 +276,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                 value={
                   description_ar.length > 0
                     ? description_ar
-                    : item_details.name_ar
+                    : item_details.description_ar
                 }
                 onChange={(e) => {
                   setDescriptionAr(e.target.value);

@@ -29,3 +29,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default withRouter(connect(mapStateToProps, null)(App));
+
+// AKIA5IL3UMD74KUN6DHE   l4ywHjoWj7Aowy36pwalQJ2Us7Jy2JuBpAPTz9P4

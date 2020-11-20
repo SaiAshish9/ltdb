@@ -20,7 +20,7 @@ const Sidebar = ({ dispatch }) => {
       flexDirection="column"
       style={{
         width: "15%",
-        maxWidth: "15rem",
+        // maxWidth: "15rem",
         minHeight: "110vh",
         overflowY: "scroll",
       }}

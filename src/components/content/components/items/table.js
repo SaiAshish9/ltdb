@@ -142,8 +142,11 @@ export default function SimpleTable({ data }) {
 
       <TableContainer
         style={{
-          height: "83vh",
+          height: "90vh",
+          maxHeight: "90vh",
           width: "100%",
+          position: "absolute",
+          bottom: 0,
         }}
         elevation={0}
         component={Paper}
