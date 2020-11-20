@@ -57,6 +57,8 @@ const EditPackage = ({ open, classes, setOpen }) => {
   const [selectedSubCategoryValues, setSelectedSubCategoryValues] = useState(
     []
   );
+  const [validSubCategoryValues,setValidSubCategoryValues] = useState([])
+
 
   const handleChangedData = useCallback(async () => {
     setDisabled(true);
@@ -119,6 +121,8 @@ const EditPackage = ({ open, classes, setOpen }) => {
     setNewImgFile(null);
     setSelectedItems([]);
     setSelectedSubCategories([]);
+    setSelectedSubCategoryValues([])
+    setValidSubCategoryValues([])
     setQuality(null);
     setDisabled(false);
     setValue(null);
@@ -186,6 +190,8 @@ const EditPackage = ({ open, classes, setOpen }) => {
                   setNewImgFile(null);
                   setSelectedItems([]);
                   setSelectedSubCategories([]);
+                  setSelectedSubCategoryValues([])
+                  setValidSubCategoryValues([])
                   setQuality(null);
                   setDisabled(false);
                   setValue(null);
@@ -570,6 +576,10 @@ const EditPackage = ({ open, classes, setOpen }) => {
                             ...selectedSubCategories,
                             e.target.value,
                           ]);
+                          setValidSubCategoryValues([
+                            ...validSubCategoryValues,
+                            +e.target.value.split("###")[0],
+                          ])
                       }
                       setSelectedSubCategoryValues([
                         ...selectedSubCategoryValues,
@@ -722,13 +732,21 @@ const EditPackage = ({ open, classes, setOpen }) => {
                           >
                             <IconButton
                               onClick={() => {
-                                if (selectedItems.length !== 1) {
-                                  const x = [...selectedItems];
-                                  const y = [...selectedSubCategories];
-                                  x.splice(k, 1);
-                                  y.splice(k, 1);
-                                  setSelectedItems(x);
+                                const x = [...selectedItems];
+                                const y = [...selectedSubCategories];
+                                x.splice(k, 1);
+                                const a =y[k]
+                                y.splice(k, 1);
+                                if(validSubCategoryValues.includes(+a.split("###")[0])){
+                                  setSelectedSubCategories([...y,a]);
+                                  setSelectedSubCategoryValues(
+                                    selectedSubCategoryValues.filter(i=>i!==+a.split("###")[0])
+                                  )
+                                  setSubCategoryValue(null)
+                                }
+                                if (selectedItems.length !== 1) {                               
                                   setSelectedSubCategories(y);
+                                  setSelectedItems(x);
                                 } else {
                                   setSelectedItems([]);
                                   setSelectedSubCategories([]);

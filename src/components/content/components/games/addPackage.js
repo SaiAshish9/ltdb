@@ -42,6 +42,7 @@ const AddPackage = ({ open, classes, setOpen }) => {
   const [selectedSubCategoryValues, setSelectedSubCategoryValues] = useState(
     []
   );
+  const [validSubCategoryValues,setValidSubCategoryValues] = useState([])
 
   const {
     state: { games, items },
@@ -82,6 +83,8 @@ const AddPackage = ({ open, classes, setOpen }) => {
     setCoverImages([]);
     setSelectedItems([]);
     setSelectedSubCategories([]);
+    setSelectedSubCategoryValues([])
+    setValidSubCategoryValues([])
     setValue(null);
     setFile(null);
     setDisabled(false);
@@ -139,6 +142,8 @@ const AddPackage = ({ open, classes, setOpen }) => {
                   setImgFile(null);
                   setCoverImages([]);
                   setSelectedItems([]);
+                  setSelectedSubCategoryValues([])
+                  setValidSubCategoryValues([])
                   setSelectedSubCategories([]);
                   setValue(null);
                   setFile(null);
@@ -425,11 +430,17 @@ const AddPackage = ({ open, classes, setOpen }) => {
                             ...selectedSubCategories,
                             e.target.value,
                           ]);
+                          setValidSubCategoryValues([
+                            ...validSubCategoryValues,
+                            +e.target.value.split("###")[0],
+                          ])
                       }
                       setSelectedSubCategoryValues([
                         ...selectedSubCategoryValues,
                         +e.target.value.split("###")[0],
                       ]);
+                   
+
                     }}
                   >
                     {subCategories ? (
@@ -567,13 +578,21 @@ const AddPackage = ({ open, classes, setOpen }) => {
                           >
                             <IconButton
                               onClick={() => {
-                                if (selectedItems.length !== 1) {
-                                  const x = [...selectedItems];
-                                  const y = [...selectedSubCategories];
-                                  x.splice(k, 1);
-                                  y.splice(k, 1);
-                                  setSelectedItems(x);
+                                const x = [...selectedItems];
+                                const y = [...selectedSubCategories];
+                                x.splice(k, 1);
+                                const a =y[k]
+                                y.splice(k, 1);
+                                if(validSubCategoryValues.includes(+a.split("###")[0])){
+                                  setSelectedSubCategories([...y,a]);
+                                  setSelectedSubCategoryValues(
+                                    selectedSubCategoryValues.filter(i=>i!==+a.split("###")[0])
+                                  )
+                                  setSubCategoryValue(null)
+                                }
+                                if (selectedItems.length !== 1) {                               
                                   setSelectedSubCategories(y);
+                                  setSelectedItems(x);
                                 } else {
                                   setSelectedItems([]);
                                   setSelectedSubCategories([]);
