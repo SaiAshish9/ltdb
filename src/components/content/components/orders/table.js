@@ -71,7 +71,7 @@ const OrderTable = () => {
           paddingRight: "2rem",
         }}
       >
-        <Box style={{ height: "7vh" }}>
+        <Box display="flex" alignItems="center"  style={{ height: "7vh" }}>    
           <Search />
         </Box>
       </Box>
