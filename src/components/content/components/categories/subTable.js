@@ -65,10 +65,7 @@ export default function DenseTable({
       <Box
         display="flex"
         alignItems="center"
-        justifyContent="center"
-        style={{
-          margin: "0 2rem",
-        }}
+        // justifyContent="center"
       >
         {message && (
           <Snackbar

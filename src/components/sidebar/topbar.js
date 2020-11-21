@@ -1,5 +1,4 @@
 import React from 'react'
-import HomeIcon from "@material-ui/icons/Home";
 import IconButton from "@material-ui/core/IconButton";
 import Box from "@material-ui/core/Box";
 import {useHistory} from 'react-router-dom'
@@ -46,7 +45,7 @@ const Topbar = () => {
           />
           {/* Lootbox */}
         </p>
-        <IconButton
+        {/* <IconButton
           onClick={() => {
             history.push("/");
           }}
@@ -57,7 +56,7 @@ const Topbar = () => {
               opacity: history.location.pathname === "/" ? 1 : 0.6,
             }}
           />
-        </IconButton>
+        </IconButton> */}
       </Box>
     );
 }

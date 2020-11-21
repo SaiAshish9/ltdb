@@ -1,5 +1,4 @@
 import React from "react";
-import ShoppingBasketOutlinedIcon from "@material-ui/icons/ShoppingBasketOutlined";
 import CategoryIcon from "@material-ui/icons/Category";
 import NotificationsNoneIcon from "@material-ui/icons/NotificationsNone";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
@@ -10,6 +9,7 @@ import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import ViewCarouselIcon from "@material-ui/icons/ViewCarousel";
 import LabelIcon from "@material-ui/icons/Label";
 import ReceiptIcon from "@material-ui/icons/Receipt";
+import HomeIcon from "@material-ui/icons/Home";
 
 export const options = [
   // {
@@ -27,6 +27,13 @@ export const options = [
   //     // { name: "New Product", path: "/products/new" },
   //   ],
   // },
+  {
+    id: "Dashboard",
+    path: "/",
+    paths: ["/"],
+    icon: <HomeIcon />,
+    options: [],
+  },
   {
     id: "Orders",
     path: "/orders",

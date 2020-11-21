@@ -14,7 +14,7 @@ import Popover from "@material-ui/core/Popover";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress,FormControl,Select,InputLabel,MenuItem } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import { withRouter } from "react-router-dom";
 import Api from "../../../../api";
@@ -32,6 +32,7 @@ const SubCategoryTable = ({
   const [loading, setLoading] = useState(true);
   const { handleSubmit, register, reset } = useForm();
   const [current, setCurrent] = useState(true);
+  const [value,setValue]= useState(null)
 
   const onSubmit = (values) => {
     let x = Object.values(values).splice(2);
@@ -75,6 +76,7 @@ const SubCategoryTable = ({
   const handleClose = () => {
     setAnchorEl(null);
     setOpen1(false);
+    setValue(null)
     reset();
   };
 
@@ -110,6 +112,7 @@ const SubCategoryTable = ({
             <IconButton
               onClick={() => {
                 setOpen(false);
+                setValue(null)
                 reset();
               }}
             >
@@ -123,7 +126,7 @@ const SubCategoryTable = ({
               justifyContent="space-between"
               style={{
                 padding: "1rem",
-                width: "60%",
+                // width: "60%",
               }}
             >
               <TextField
@@ -145,7 +148,26 @@ const SubCategoryTable = ({
                 variant="outlined"
                 label="اسم"
               />
-
+              <FormControl variant="outlined" style={{ width: "30%" }}>
+              <InputLabel style={{position:"absolute",zIndex:15,background:"#fff"}} id="demo">Sub Category</InputLabel>
+                <Select
+                  labelId="demo"
+                  value={value}
+                  onChange={(e) => {
+                    setValue(e.target.value);
+                  }}
+                >
+                  {rows ? (
+                    rows.map((i, k) => (
+                      <MenuItem key={k} value={i.name}>
+                        {i.name}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem value={0}>---</MenuItem>
+                  )}
+                </Select>
+              </FormControl>
               {/* <Tooltip
                 title={msg === 0 ? "InActive" : "Active"}
                 placement="left"
