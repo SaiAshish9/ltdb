@@ -12,6 +12,8 @@ import {
   Input,
   FormControl,
   CircularProgress,
+  FormControlLabel,
+  Checkbox,
   LinearProgress,
 } from "@material-ui/core";
 import Img from "../../../../assets/thumbnail1.png";
@@ -41,6 +43,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
   const [customFields, setCustomFields] = useState([]);
   const [categoryValue, setCategoryValue] = useState(null);
   const [subCategories, setSubCategories] = useState(null);
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     const fetchLinks = async () => {
@@ -89,7 +92,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
             ? description_ar
             : item_details.description_ar,
         link_item_id: item_details.link_items,
-        is_linkable:item_details.is_linkable,
+        is_linkable: item_details.is_linkable,
         item_id: item_details.item_id,
         newImage: imgFile,
         price: price > 0 ? price : item_details.price,
@@ -124,6 +127,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
     reset();
     setImgFile(null);
     setDisabled(false);
+    setChecked(false);
     setCategoryValue(null);
     setSubCategories(null);
     setOpen(false);
@@ -160,6 +164,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                   setItems([]);
                   setCategoryValue(null);
                   setSubCategories(null);
+                  setChecked(false);
                   setOpen(false);
                 }}
               >
@@ -390,37 +395,56 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                 }}
               />
             </Box> */}
-            <Box
-              style={{ margin: "2rem 0" }}
-              display="flex"
-              justifyContent="space-between"
-            >
-              <p
-                style={{
-                  textAlign: "center",
-                  color: "#8095a1",
-                  fontWeight: 500,
-                }}
-              >
-                LinkableItems
-              </p>
-              <FormControl style={{ width: "50%", marginTop: "1rem" }}>
-                <Select
-                  multiple
-                  defaultValue={item_details.link_items}
-                  input={<Input />}
-                  displayEmpty
-                  onChange={handleChangeMultiple}
+            {linkableItems && linkableItems.length > 0 && (
+              <Box>
+                <FormControlLabel
+                  style={{ marginVertical: "2rem" }}
+                  control={
+                    <Checkbox
+                      checked={checked}
+                      onChange={() => {
+                        setChecked(!checked);
+                      }}
+                      name="checkedB"
+                      color="primary"
+                    />
+                  }
+                  label="Add Linkable Items"
+                />
+                <Box
+                  style={{ margin: "2rem 0" }}
+                  display="flex"
+                  justifyContent="space-between"
                 >
-                  {linkableItems &&
-                    linkableItems.map((i, k) => (
-                      <MenuItem key={k} value={i["item_id"]}>
-                        {i["name"]}
-                      </MenuItem>
-                    ))}
-                </Select>
-              </FormControl>
-            </Box>
+                  <p
+                    style={{
+                      textAlign: "center",
+                      color: "#8095a1",
+                      fontWeight: 500,
+                    }}
+                  >
+                    LinkableItems
+                  </p>
+                  <FormControl style={{ width: "50%", marginTop: "1rem" }}>
+                    <Select
+                      multiple
+                      defaultValue={item_details.link_items}
+                      input={<Input />}
+                      displayEmpty
+                      onChange={handleChangeMultiple}
+                    >
+                      {linkableItems &&
+                        linkableItems.map((i, k) => (
+                          <MenuItem key={k} value={i["item_id"]}>
+                            {i["name"]}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Box>
+            )}
+
             <Box
               style={{ margin: "2rem 0" }}
               display="flex"

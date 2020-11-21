@@ -12,6 +12,8 @@ import {
   Input,
   FormControl,
   CircularProgress,
+  Checkbox,
+  FormControlLabel
 } from "@material-ui/core";
 import { Clear, CameraAlt } from "@material-ui/icons";
 import Api from "../../../../api";
@@ -174,6 +176,7 @@ const AddItem = ({ open, setOpen }) => {
     setChecked(false);
     setFile(null);
     setImgFile(null);
+    setChecked(false)
     await fetchItems();
     await fetchCategories();
     setDisabled(false);
@@ -219,6 +222,7 @@ const AddItem = ({ open, setOpen }) => {
                   setNameEn("");
                   fetchCategories();
                   setNameAr("");
+                  setChecked(false)
                   setDescEn("");
                   setDescAr("");
                   setItemValue(null);
@@ -342,40 +346,7 @@ const AddItem = ({ open, setOpen }) => {
                 </Box>
 
                 {item_available === true && (
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    style={{ margin: "1rem 0" }}
-                  >
-                    <p
-                      style={{
-                        fontSize: "1rem",
-                        color: "#282b3c",
-                        fontWeight: 600,
-                      }}
-                    >
-                      Select Item :
-                    </p>
-                    <FormControl style={{ width: "47%" }}>
-                      <Select
-                        value={items}
-                        multiple
-                        input={<Input />}
-                        displayEmpty
-                        onChange={handleChangeMultiple}
-                      >
-                        {linkableItems &&
-                          linkableItems.map((i, k) => (
-                            <MenuItem key={k} value={i["item_id"]}>
-                              {i["name"]}
-                            </MenuItem>
-                          ))}
-                      </Select>
-                    </FormControl>
-                  </Box>
-                )}
-                {/* 
-                {customFields && customFields.length > 0 && (
+                  <Box>
                   <FormControlLabel
                     style={{ marginVertical: "2rem" }}
                     control={
@@ -388,8 +359,48 @@ const AddItem = ({ open, setOpen }) => {
                         color="primary"
                       />
                     }
-                    label="Add custom fields"
+                    label="Add Linkable Items"
                   />
+                  {
+                    checked && (
+                      <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      style={{ margin: "1rem 0" }}
+                    >
+                      <p
+                        style={{
+                          fontSize: "1rem",
+                          color: "#282b3c",
+                          fontWeight: 600,
+                        }}
+                      >
+                        Select Item :
+                      </p>
+                      <FormControl style={{ width: "47%" }}>
+                        <Select
+                          value={items}
+                          multiple
+                          input={<Input />}
+                          displayEmpty
+                          onChange={handleChangeMultiple}
+                        >
+                          {linkableItems &&
+                            linkableItems.map((i, k) => (
+                              <MenuItem key={k} value={i["item_id"]}>
+                                {i["name"]}
+                              </MenuItem>
+                            ))}
+                        </Select>
+                      </FormControl>
+                    </Box>  
+                    )
+                  }
+                </Box>
+                )}
+                {/* 
+                {customFields && customFields.length > 0 && (
+                
                 )} */}
 
                 {!checked && (
