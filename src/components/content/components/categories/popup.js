@@ -6,7 +6,6 @@ import Divider from "@material-ui/core/Divider";
 import ClearIcon from "@material-ui/icons/Clear";
 import IconButton from "@material-ui/core/IconButton";
 import SubTable from "./subTable";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Tooltip from "@material-ui/core/Tooltip";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
@@ -33,6 +32,7 @@ const SubCategoryTable = ({
   const { handleSubmit, register, reset } = useForm();
   const [current, setCurrent] = useState(true);
   const [value,setValue]= useState(null)
+  const [linkSubCategoryId,setLinkSubCategoryId] = useState(null)
 
   const onSubmit = (values) => {
     let x = Object.values(values).splice(2);
@@ -48,6 +48,7 @@ const SubCategoryTable = ({
     res["name_en"] = values["name_en"];
     res["name_ar"] = values["name_ar"];
     res["status"] = msg;
+    res["link_sub_category_id"]= linkSubCategoryId
     res["custom_fields"] = y;
     res["category_id"] = categoryId;
     current &&
@@ -126,7 +127,6 @@ const SubCategoryTable = ({
               justifyContent="space-between"
               style={{
                 padding: "1rem",
-                // width: "60%",
               }}
             >
               <TextField
@@ -155,11 +155,12 @@ const SubCategoryTable = ({
                   value={value}
                   onChange={(e) => {
                     setValue(e.target.value);
+                    setLinkSubCategoryId(e.target.value)
                   }}
                 >
                   {rows ? (
                     rows.map((i, k) => (
-                      <MenuItem key={k} value={i.name}>
+                      <MenuItem key={k} value={i.id}>
                         {i.name}
                       </MenuItem>
                     ))
@@ -168,23 +169,6 @@ const SubCategoryTable = ({
                   )}
                 </Select>
               </FormControl>
-              {/* <Tooltip
-                title={msg === 0 ? "InActive" : "Active"}
-                placement="left"
-              >
-                <Fab
-                  aria-describedby={id}
-                  onClick={handleClick}
-                  style={{
-                    color: "#fff",
-                  }}
-                  size="medium"
-                  color={msg === 0 ? "primary" : "secondary"}
-                >
-                  <ExpandMoreIcon />
-                </Fab>
-              </Tooltip> */}
-
               <Popover
                 id={id}
                 open={open1}

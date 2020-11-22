@@ -13,7 +13,7 @@ import {
   FormControl,
   CircularProgress,
   Checkbox,
-  FormControlLabel
+  FormControlLabel,
 } from "@material-ui/core";
 import { Clear, CameraAlt } from "@material-ui/icons";
 import Api from "../../../../api";
@@ -59,7 +59,7 @@ const AddItem = ({ open, setOpen }) => {
   const [item_value, setItemValue] = useState(null);
   const [items, setItems] = useState([]);
   const [checked, setChecked] = useState(false);
-  const [checkCF, setCheckCF] = useState(true);
+  const [checkSub, setCheckSub] = useState(false);
 
   const handleChangeMultiple = (e) => {
     setItems(e.target.value);
@@ -85,7 +85,7 @@ const AddItem = ({ open, setOpen }) => {
         value_ar: x[i + 1],
       });
     }
-    if (y.filter((x) => x.value_en.length > 0).length > 0) setCheckCF(!true);
+    // if (y.filter((x) => x.value_en.length > 0).length > 0) setCheckCF(!true);
     await handleSave(y);
   };
 
@@ -174,9 +174,10 @@ const AddItem = ({ open, setOpen }) => {
     setCustomFields(null);
     setPrice(0);
     setChecked(false);
+    setCheckSub(false)
     setFile(null);
     setImgFile(null);
-    setChecked(false)
+    setChecked(false);
     await fetchItems();
     await fetchCategories();
     setDisabled(false);
@@ -222,9 +223,10 @@ const AddItem = ({ open, setOpen }) => {
                   setNameEn("");
                   fetchCategories();
                   setNameAr("");
-                  setChecked(false)
+                  setChecked(false);
                   setDescEn("");
                   setDescAr("");
+                  setCheckSub(false)
                   setItemValue(null);
                   setValue(null);
                   setBrandValue(null);
@@ -291,21 +293,17 @@ const AddItem = ({ open, setOpen }) => {
                       fontWeight: 600,
                     }}
                   >
-                    Select Sub-Category :
+                    Select Brand :
                   </p>
                   <FormControl style={{ width: "47%" }}>
                     <Select
-                      value={subValue}
+                      value={brandValue}
                       onChange={(e) => {
-                        setSubValue(e.target.value);
-                        setCustomFields(null);
-                        if (e.target.value !== "a")
-                          fetchCustomFields(e.target.value);
+                        setBrandValue(e.target.value);
                       }}
                     >
-                      <MenuItem value={"a"}></MenuItem>
-                      {subCategories &&
-                        subCategories.map((i, k) => (
+                      {data &&
+                        data.map((i, k) => (
                           <MenuItem key={k} value={k}>
                             {i["name_en"]}
                           </MenuItem>
@@ -313,90 +311,108 @@ const AddItem = ({ open, setOpen }) => {
                     </Select>
                   </FormControl>
                 </Box>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  style={{ margin: "1rem 0" }}
-                >
-                  <p
-                    style={{
-                      fontSize: "1rem",
-                      color: "#282b3c",
-                      fontWeight: 600,
-                    }}
+                <FormControlLabel
+                  style={{ marginVertical: "2rem" }}
+                  control={
+                    <Checkbox
+                      checked={checkSub}
+                      onChange={() => {
+                        setCheckSub(!checkSub);
+                      }}
+                      name="checkedB"
+                      color="primary"
+                    />
+                  }
+                  label="Add Sub Category"
+                />
+                {checkSub && (
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    style={{ margin: "1rem 0" }}
                   >
-                    Select Brand :
-                  </p>
-                  <Select
-                    style={{
-                      width: "47%",
-                    }}
-                    value={brandValue}
-                    onChange={(e) => {
-                      setBrandValue(e.target.value);
-                    }}
-                  >
-                    {data &&
-                      data.map((i, k) => (
-                        <MenuItem key={k} value={k}>
-                          {i["name_en"]}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </Box>
+                    <p
+                      style={{
+                        fontSize: "1rem",
+                        color: "#282b3c",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Select Sub-Category :
+                    </p>
+                    <FormControl style={{ width: "47%" }}>
+                      <Select
+                        value={subValue}
+                        onChange={(e) => {
+                          setSubValue(e.target.value);
+                          setCustomFields(null);
+                          is_item_available(false);
+                          if (e.target.value !== "a")
+                            fetchCustomFields(e.target.value);
+                        }}
+                      >
+                        <MenuItem value={"a"}></MenuItem>
+                        {subCategories &&
+                          subCategories.map((i, k) => (
+                            <MenuItem key={k} value={k}>
+                              {i["name_en"]}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
+                )}
 
                 {item_available === true && (
                   <Box>
-                  <FormControlLabel
-                    style={{ marginVertical: "2rem" }}
-                    control={
-                      <Checkbox
-                        checked={checked}
-                        onChange={() => {
-                          setChecked(!checked);
-                        }}
-                        name="checkedB"
-                        color="primary"
-                      />
-                    }
-                    label="Add Linkable Items"
-                  />
-                  {
-                    checked && (
+                    <FormControlLabel
+                      style={{ marginVertical: "2rem" }}
+                      control={
+                        <Checkbox
+                          checked={checked}
+                          onChange={() => {
+                            setChecked(!checked);
+                          }}
+                          name="checkedB"
+                          color="primary"
+                        />
+                      }
+                      label="Add Linkable Items"
+                    />
+                    {checked && (
                       <Box
-                      display="flex"
-                      justifyContent="space-between"
-                      style={{ margin: "1rem 0" }}
-                    >
-                      <p
-                        style={{
-                          fontSize: "1rem",
-                          color: "#282b3c",
-                          fontWeight: 600,
-                        }}
+                        display="flex"
+                        justifyContent="space-between"
+                        style={{ margin: "1rem 0" }}
                       >
-                        Select Item :
-                      </p>
-                      <FormControl style={{ width: "47%" }}>
-                        <Select
-                          value={items}
-                          multiple
-                          input={<Input />}
-                          displayEmpty
-                          onChange={handleChangeMultiple}
+                        <p
+                          style={{
+                            fontSize: "1rem",
+                            color: "#282b3c",
+                            fontWeight: 600,
+                          }}
                         >
-                          {linkableItems &&
-                            linkableItems.map((i, k) => (
-                              <MenuItem key={k} value={i["item_id"]}>
-                                {i["name"]}
-                              </MenuItem>
-                            ))}
-                        </Select>
-                      </FormControl>
-                    </Box>  
-                    )
-                  }
-                </Box>
+                          Select Item :
+                        </p>
+                        <FormControl style={{ width: "47%" }}>
+                          <Select
+                            value={items}
+                            multiple
+                            input={<Input />}
+                            displayEmpty
+                            onChange={handleChangeMultiple}
+                          >
+                            {linkableItems &&
+                              linkableItems.map((i, k) => (
+                                <MenuItem key={k} value={i["item_id"]}>
+                                  {i["name"]}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </FormControl>
+                      </Box>
+                    )}
+                  </Box>
                 )}
                 {/* 
                 {customFields && customFields.length > 0 && (
