@@ -19,7 +19,7 @@ const DeliveryFees = () => {
   const { handleSubmit, reset, register } = useForm();
   const { fetchDeliveryDetails, addDeliveryFees } = useContext(DataContext);
   const [data, setData] = useState(null);
-  const [newData, setNewData] = useState(null);
+  const [newData, setNewData] = useState([]);
   const [deletedData, setDeletedData] = useState([]);
 
   const getData = async () => {
@@ -37,21 +37,11 @@ const DeliveryFees = () => {
   }, []);
 
   const onSubmit = async (data1) => {
-    setMessage("Submission Successful");
-    var x = [...Object.values(data1).map((x) => +x)];
-    var y = [];
-    // if (deletedCount > 0) x = x.slice(deletedCount * 3, x.length);
-    for (let i = 0; i < x.length; i += 3) {
-      y.push({
-        min_price: x[i],
-        max_price: x[i + 1],
-        delivery_fee: x[i + 2],
-      });
-    }
-    y = [...data.filter((x, i) => !deletedData.includes(i)), ...y];
+    const y = [...data, ...newData];
     await addDeliveryFees(y);
-    // reset();
+    setMessage("Submission Successful");
     setData(null);
+    setNewData([]);
     await getData();
     await setOpenSnackbar(true);
   };
@@ -85,280 +75,229 @@ const DeliveryFees = () => {
             overflowY: "scroll",
           }}
         >
-          {!data ? (
+          <Box display="flex" justifyContent="space-between">
+            <p
+              style={{
+                color: "#8095a1",
+                fontWeight: 500,
+              }}
+            >
+              Order Range
+            </p>
+            <p
+              style={{
+                color: "#8095a1",
+                fontWeight: 500,
+                width: "30%",
+              }}
+            >
+              Delivery Fees
+            </p>
+          </Box>
+          {data &&
+            data.map((i, k) => (
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                style={{ margin: "1rem 0" }}
+              >
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  style={{ width: "60%" }}
+                >
+                  <TextField
+                    inputProps={{
+                      min: 0,
+                      step: 0.1,
+                      style: {
+                        textAlign: "center",
+                      },
+                    }}
+                    type="number"
+                    disabled
+                    value={i["min_price"]}
+                  />
+                  <p
+                    style={{
+                      color: "#8095a1",
+                      fontWeight: 500,
+                      margin: "0 1rem",
+                    }}
+                  >
+                    To
+                  </p>
+                  <TextField
+                    disabled
+                    inputProps={{
+                      min: 0,
+                      step: 0.1,
+                      style: {
+                        textAlign: "center",
+                      },
+                    }}
+                    type="number"
+                    value={i["max_price"]}
+                  />
+                </Box>
+                <Box display="flex">
+                  <TextField
+                    disabled
+                    inputProps={{
+                      min: 0,
+                      step: 0.1,
+                      style: {
+                        textAlign: "center",
+                      },
+                    }}
+                    type="number"
+                    value={i["delivery_fee"]}
+                  />
+                </Box>
+                <Box display="flex">
+                  {k === data.length - 1 && newData.length === 0 && (
+                    <Fab
+                      onClick={() => {
+                        setNewData([
+                          ...newData,
+                          {
+                            min_price: 0,
+                            max_price: 0,
+                            delivery_fee: 0,
+                          },
+                        ]);
+                      }}
+                      color="primary"
+                      style={{ margin: "0 1rem" }}
+                    >
+                      <AddIcon />
+                    </Fab>
+                  )}
+                  {data.length !== 1 && (
+                    <Fab
+                      onClick={() => {
+                        const x = [...data];
+                        x.splice(k, 1);
+                        setData(x);
+                      }}
+                      color="secondary"
+                      style={{ margin: "0 1rem" }}
+                    >
+                      <DeleteOutlineIcon />
+                    </Fab>
+                  )}
+                </Box>
+              </Box>
+            ))}
+          {newData.map((i, k) => (
             <Box
               display="flex"
-              style={{ width: "60vw", height: "60vh" }}
+              justifyContent="space-between"
               alignItems="center"
-              justifyContent="center"
+              style={{ margin: "1rem 0" }}
             >
-              <CircularProgress
-                style={{
-                  color: "#151628",
-                }}
-              />
-            </Box>
-          ) : (
-            <Box display="flex" justifyContent="space-between">
-              <Box>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                style={{ width: "60%" }}
+              >
+                <TextField
+                  inputProps={{
+                    min: 0,
+                    step: 0.1,
+                    style: {
+                      textAlign: "center",
+                    },
+                  }}
+                  value={i["min_price"]}
+                  onChange={(e) => {
+                    const x = [...newData];
+                    x[k]["min_price"] = e.target.value;
+                    setNewData(x);
+                  }}
+                  type="number"
+                />
                 <p
                   style={{
                     color: "#8095a1",
                     fontWeight: 500,
+                    margin: "0 1rem",
                   }}
                 >
-                  Order Range
+                  To
                 </p>
-                {data &&
-                  data.length > 0 &&
-                  data
-                    .filter(
-                      (x, i) =>
-                        !deletedData.includes(Object.values(x).join("#"))
-                    )
-                    .map((i, k) => (
-                      <Box
-                        key={k}
-                        style={{ height: "10vh" }}
-                        display="flex"
-                        justifyContent="space-between"
-                      >
-                        <TextField
-                          type="number"
-                          disabled
-                          name={`min_price${k}`}
-                          value={i.min_price}
-                          // inputRef={register()}
-                          inputProps={{
-                            min: 0,
-                            style: {
-                              textAlign: "center",
-                            },
-                          }}
-                        />
-                        <p
-                          style={{
-                            color: "#8095a1",
-                            fontWeight: 500,
-                            margin: "0 1.5rem",
-                          }}
-                        >
-                          To
-                        </p>{" "}
-                        <TextField
-                          type="number"
-                          disabled
-                          name={`max_price${k}`}
-                          // inputRef={register()}
-                          value={i.max_price}
-                          inputProps={{
-                            min: 0,
-                            style: {
-                              textAlign: "center",
-                            },
-                          }}
-                        />
-                      </Box>
-                    ))}
-                {newData &&
-                  newData.length > 0 &&
-                  newData.map((i, k) => (
-                    <Box
-                      key={k}
-                      style={{ height: "10vh" }}
-                      display="flex"
-                      justifyContent="space-between"
-                    >
-                      <TextField
-                        type="number"
-                        name={`min_price${k + data.length}`}
-                        inputRef={register()}
-                        inputProps={{
-                          min: 0,
-                          style: {
-                            textAlign: "center",
-                          },
-                        }}
-                      />
-                      <p
-                        style={{
-                          color: "#8095a1",
-                          fontWeight: 500,
-                          margin: "0 1.5rem",
-                        }}
-                      >
-                        To
-                      </p>{" "}
-                      <TextField
-                        type="number"
-                        name={`max_price${k + data.length}`}
-                        inputRef={register()}
-                        inputProps={{
-                          min: 0,
-                          style: {
-                            textAlign: "center",
-                          },
-                        }}
-                      />
-                    </Box>
-                  ))}
+                <TextField
+                  inputProps={{
+                    min: 0,
+                    step: 0.1,
+                    style: {
+                      textAlign: "center",
+                    },
+                  }}
+                  type="number"
+                  value={i["max_price"]}
+                  onChange={(e) => {
+                    const x = [...newData];
+                    x[k]["max_price"] = e.target.value;
+                    setNewData(x);
+                  }}
+                />
               </Box>
-
-              <Box>
-                <p
-                  style={{
-                    color: "#8095a1",
-                    fontWeight: 500,
+              <Box display="flex">
+                <TextField
+                  inputProps={{
+                    min: 0,
+                    step: 0.1,
+                    style: {
+                      textAlign: "center",
+                    },
                   }}
+                  type="number"
+                  value={i["delivery_fee"]}
+                  onChange={(e) => {
+                    const x = [...newData];
+                    x[k]["delivery_fee"] = e.target.value;
+                    setNewData(x);
+                  }}
+                />
+              </Box>
+              <Box display="flex">
+                {k === newData.length - 1 && (
+                  <Fab
+                    onClick={() => {
+                      setNewData([
+                        ...newData,
+                        {
+                          min_price: 0,
+                          max_price: 0,
+                          delivery_fee: 0,
+                        },
+                      ]);
+                    }}
+                    color="primary"
+                    style={{ margin: "0 1rem" }}
+                  >
+                    <AddIcon />
+                  </Fab>
+                )}
+                <Fab
+                  onClick={() => {
+                    const x = [...newData];
+                    x.splice(k, 1);
+                    setNewData(x);
+                  }}
+                  color="secondary"
+                  style={{ margin: "0 1rem" }}
                 >
-                  Delivery Fees
-                </p>
-                {data &&
-                  data.length > 0 &&
-                  data
-                    .filter(
-                      (x, i) =>
-                        !deletedData.includes(Object.values(x).join("#"))
-                    )
-                    .map((i, k) => (
-                      <Box
-                        style={{ height: "10vh" }}
-                        key={k}
-                        display="flex"
-                        justifyContent="space-between"
-                      >
-                        <TextField
-                          type="number"
-                          disabled
-                          value={i.delivery_fee}
-                          name={`delivery_fee${k}`}
-                          // inputRef={register()}
-                          inputProps={{
-                            min: 0,
-                            style: {
-                              textAlign: "center",
-                            },
-                          }}
-                        />
-                        <p
-                          style={{
-                            color: "#8095a1",
-                            fontWeight: 500,
-                            marginLeft: "1.5rem",
-                          }}
-                        >
-                          KD
-                        </p>
-                        <Box display="flex" justifyContent="space-between">
-                          {newData &&
-                            newData.length === 0 &&
-                            k === data.length - 1 && (
-                              <Fab
-                                onClick={() => {
-                                  setNewData([
-                                    ...newData,
-                                    {
-                                      min_price: 0,
-                                      max_price: 0,
-                                      delivery_fee: 0,
-                                    },
-                                  ]);
-                                }}
-                                color="primary"
-                                style={{ margin: "0 1rem" }}
-                              >
-                                <AddIcon />
-                              </Fab>
-                            )}
-
-                          <Fab
-                            disabled={newData && newData.length === 0}
-                            onClick={() => {
-                              const x = [...data];
-                              x.splice(k, 1);
-                              // setData(x);
-                              setDeletedData([
-                                ...deletedData,
-                                Object.values(i).join("#"),
-                              ]);
-                              // setDeletedCount(deletedCount + 1);
-                            }}
-                            color="secondary"
-                          >
-                            <DeleteOutlineIcon />
-                          </Fab>
-                        </Box>
-                      </Box>
-                    ))}
-                {newData &&
-                  // newData.length > 0 &&
-                  newData.map((i, k) => (
-                    <Box
-                      style={{ height: "10vh" }}
-                      key={k}
-                      display="flex"
-                      justifyContent="space-between"
-                    >
-                      <TextField
-                        type="number"
-                        name={`delivery_fee${k + data.length}`}
-                        inputRef={register()}
-                        inputProps={{
-                          min: 0,
-                          step: 0.01,
-                          style: {
-                            textAlign: "center",
-                          },
-                        }}
-                      />
-                      <p
-                        style={{
-                          color: "#8095a1",
-                          fontWeight: 500,
-                          marginLeft: "1.5rem",
-                        }}
-                      >
-                        KD
-                      </p>
-                      <Box display="flex" justifyContent="space-between">
-                        {newData.length - 1 === k && (
-                          <Fab
-                            onClick={() => {
-                              setNewData([
-                                ...newData,
-                                {
-                                  min_price: 0,
-                                  max_price: 0,
-                                  delivery_fee: 0,
-                                },
-                              ]);
-                            }}
-                            color="primary"
-                            style={{ margin: "0 1rem" }}
-                          >
-                            <AddIcon />
-                          </Fab>
-                        )}
-                        <Fab
-                          onClick={() => {
-                            const x = [...newData];
-                            x.splice(k, 1);
-                            setNewData(x);
-                          }}
-                          disabled={
-                            newData.length === 1 && data && data.length === 0
-                          }
-                          color="secondary"
-                        >
-                          <DeleteOutlineIcon />
-                        </Fab>
-                        {/* )} */}
-                      </Box>
-                    </Box>
-                  ))}
+                  <DeleteOutlineIcon />
+                </Fab>
               </Box>
             </Box>
-          )}
+          ))}
+
           {data && (
             <Box
               style={{ width: "100%" }}
