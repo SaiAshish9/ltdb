@@ -174,7 +174,7 @@ const AddItem = ({ open, setOpen }) => {
     setCustomFields(null);
     setPrice(0);
     setChecked(false);
-    setCheckSub(false)
+    setCheckSub(false);
     setFile(null);
     setImgFile(null);
     setChecked(false);
@@ -226,7 +226,7 @@ const AddItem = ({ open, setOpen }) => {
                   setChecked(false);
                   setDescEn("");
                   setDescAr("");
-                  setCheckSub(false)
+                  setCheckSub(false);
                   setItemValue(null);
                   setValue(null);
                   setBrandValue(null);
@@ -293,6 +293,41 @@ const AddItem = ({ open, setOpen }) => {
                       fontWeight: 600,
                     }}
                   >
+                    Select Sub-Category :
+                  </p>
+                  <FormControl style={{ width: "47%" }}>
+                    <Select
+                      value={subValue}
+                      onChange={(e) => {
+                        setSubValue(e.target.value);
+                        setCustomFields(null);
+                        is_item_available(false);
+                        if (e.target.value !== "a")
+                          fetchCustomFields(e.target.value);
+                      }}
+                    >
+                      <MenuItem value={"a"}></MenuItem>
+                      {subCategories &&
+                        subCategories.map((i, k) => (
+                          <MenuItem key={k} value={k}>
+                            {i["name_en"]}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  style={{ margin: "1rem 0" }}
+                >
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      color: "#282b3c",
+                      fontWeight: 600,
+                    }}
+                  >
                     Select Brand :
                   </p>
                   <FormControl style={{ width: "47%" }}>
@@ -311,57 +346,6 @@ const AddItem = ({ open, setOpen }) => {
                     </Select>
                   </FormControl>
                 </Box>
-                <FormControlLabel
-                  style={{ marginVertical: "2rem" }}
-                  control={
-                    <Checkbox
-                      checked={checkSub}
-                      onChange={() => {
-                        setCheckSub(!checkSub);
-                      }}
-                      name="checkedB"
-                      color="primary"
-                    />
-                  }
-                  label="Add Sub Category"
-                />
-                {checkSub && (
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    style={{ margin: "1rem 0" }}
-                  >
-                    <p
-                      style={{
-                        fontSize: "1rem",
-                        color: "#282b3c",
-                        fontWeight: 600,
-                      }}
-                    >
-                      Select Sub-Category :
-                    </p>
-                    <FormControl style={{ width: "47%" }}>
-                      <Select
-                        value={subValue}
-                        onChange={(e) => {
-                          setSubValue(e.target.value);
-                          setCustomFields(null);
-                          is_item_available(false);
-                          if (e.target.value !== "a")
-                            fetchCustomFields(e.target.value);
-                        }}
-                      >
-                        <MenuItem value={"a"}></MenuItem>
-                        {subCategories &&
-                          subCategories.map((i, k) => (
-                            <MenuItem key={k} value={k}>
-                              {i["name_en"]}
-                            </MenuItem>
-                          ))}
-                      </Select>
-                    </FormControl>
-                  </Box>
-                )}
 
                 {item_available === true && (
                   <Box>
