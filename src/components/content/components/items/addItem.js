@@ -59,7 +59,8 @@ const AddItem = ({ open, setOpen }) => {
   const [item_value, setItemValue] = useState(null);
   const [items, setItems] = useState([]);
   const [checked, setChecked] = useState(false);
-  const [checkSub, setCheckSub] = useState(false);
+  const [checkLk, setCheckLk] = useState(false);
+  const [linkableItem, setLinkableItem] = useState(0);
 
   const handleChangeMultiple = (e) => {
     setItems(e.target.value);
@@ -106,7 +107,6 @@ const AddItem = ({ open, setOpen }) => {
     Api.post("admin/subcategory/category-wise-list", {
       category_id: id,
     }).then(async (data) => {
-      await fetchLinkableItems();
       setSubCategories(data.data.data);
     });
   };
@@ -174,7 +174,7 @@ const AddItem = ({ open, setOpen }) => {
     setCustomFields(null);
     setPrice(0);
     setChecked(false);
-    setCheckSub(false);
+    setCheckLk(false);
     setFile(null);
     setImgFile(null);
     setChecked(false);
@@ -226,7 +226,7 @@ const AddItem = ({ open, setOpen }) => {
                   setChecked(false);
                   setDescEn("");
                   setDescAr("");
-                  setCheckSub(false);
+                  setCheckLk(false);
                   setItemValue(null);
                   setValue(null);
                   setBrandValue(null);
@@ -298,9 +298,12 @@ const AddItem = ({ open, setOpen }) => {
                   <FormControl style={{ width: "47%" }}>
                     <Select
                       value={subValue}
-                      onChange={(e) => {
+                      onChange={async (e) => {
                         setSubValue(e.target.value);
                         setCustomFields(null);
+                        await fetchLinkableItems(
+                          subCategories[e.target.value]["sub_category_id"]
+                        );
                         is_item_available(false);
                         if (e.target.value !== "a")
                           fetchCustomFields(e.target.value);
@@ -349,59 +352,55 @@ const AddItem = ({ open, setOpen }) => {
 
                 {item_available === true && (
                   <Box>
-                    <FormControlLabel
-                      style={{ marginVertical: "2rem" }}
-                      control={
-                        <Checkbox
-                          checked={checked}
-                          onChange={() => {
-                            setChecked(!checked);
-                          }}
-                          name="checkedB"
-                          color="primary"
-                        />
-                      }
-                      label="Add Linkable Items"
-                    />
-                    {checked && (
-                      <Box
-                        display="flex"
-                        justifyContent="space-between"
-                        style={{ margin: "1rem 0" }}
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      style={{ margin: "1rem 0" }}
+                    >
+                      <p
+                        style={{
+                          fontSize: "1rem",
+                          color: "#282b3c",
+                          fontWeight: 600,
+                        }}
                       >
-                        <p
-                          style={{
-                            fontSize: "1rem",
-                            color: "#282b3c",
-                            fontWeight: 600,
+                        Select Item :
+                      </p>
+                      <FormControl style={{ width: "47%" }}>
+                        <Select
+                          value={linkableItem}
+                          input={<Input />}
+                          displayEmpty
+                          onChange={(e) => {
+                            setLinkableItem(e.target.value);
                           }}
                         >
-                          Select Item :
-                        </p>
-                        <FormControl style={{ width: "47%" }}>
-                          <Select
-                            value={items}
-                            multiple
-                            input={<Input />}
-                            displayEmpty
-                            onChange={handleChangeMultiple}
-                          >
-                            {linkableItems &&
-                              linkableItems.map((i, k) => (
-                                <MenuItem key={k} value={i["item_id"]}>
-                                  {i["name"]}
-                                </MenuItem>
-                              ))}
-                          </Select>
-                        </FormControl>
-                      </Box>
-                    )}
+                          {linkableItems &&
+                            linkableItems.map((i, k) => (
+                              <MenuItem key={k} value={i["item_id"]}>
+                                {i["name"]}
+                              </MenuItem>
+                            ))}
+                        </Select>
+                      </FormControl>
+                    </Box>
                   </Box>
                 )}
-                {/* 
-                {customFields && customFields.length > 0 && (
-                
-                )} */}
+
+                <FormControlLabel
+                  style={{ marginVertical: "2rem" }}
+                  control={
+                    <Checkbox
+                      checked={checkLk}
+                      onChange={() => {
+                        setCheckLk(!checkLk);
+                      }}
+                      name="checkedB"
+                      color="primary"
+                    />
+                  }
+                  label="Make this item linkable"
+                />
 
                 {!checked && (
                   <Box

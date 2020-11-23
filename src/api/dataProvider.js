@@ -199,9 +199,9 @@ const fetchGames = (dispatch) => async (page, limit, search, status) => {
   }
 };
 
-const fetchLinkableItems = (dispatch) => async () => {
+const fetchLinkableItems = (dispatch) => async (id) => {
   try {
-    const data = await Api("admin/item/get-linkable-items");
+    const data = await Api(`admin/item/get-linkable-items?sub_category_id=${id}`);
     dispatch({
       type: "SET_LINKABLE_ITEMS",
       payload: data.data.data,
