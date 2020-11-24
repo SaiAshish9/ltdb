@@ -28,6 +28,7 @@ const EditItem = ({ classes, open, setOpen, id }) => {
     fetchItem,
     editItem,
     fetchItems,
+    fetchLinkableItems,
   } = useContext(DataContext);
   const { handleSubmit, reset, register } = useForm();
   const [items, setItems] = useState([]);
@@ -44,10 +45,14 @@ const EditItem = ({ classes, open, setOpen, id }) => {
   const [categoryValue, setCategoryValue] = useState(null);
   const [subCategories, setSubCategories] = useState(null);
   const [checked, setChecked] = useState(false);
+  const [checkLk, setCheckLk] = useState(false);
+  const [linkableItem, setLinkableItem] = useState(0);
 
   useEffect(() => {
     const fetchLinks = async () => {
-      await fetchItem(id);
+      const x = await fetchItem(id);
+      await fetchSubCategories(x.category_id)
+      await fetchLinkableItems(x.sub_category_id)
     };
     fetchLinks();
   }, []);
@@ -364,37 +369,6 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                 type="number"
               />
             </Box>
-            {/* <Box
-              style={{ margin: "2rem 0" }}
-              display="flex"
-              justifyContent="space-between"
-            >
-              <p
-                style={{
-                  textAlign: "center",
-                  color: "#8095a1",
-                  fontWeight: 500,
-                }}
-              >
-                Created On
-              </p>
-              <TextField
-                variant="outlined"
-                id="date"
-                type="date"
-                style={{ width: "50%" }}
-                defaultValue={
-                  item_details &&
-                  moment(new Date(item_details.created_at)).format("YYYY-MM-DD")
-                }
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={(e) => {
-                  setDate(e.target.value);
-                }}
-              />
-            </Box> */}
             {linkableItems && linkableItems.length > 0 && (
               <Box>
                 <FormControlLabel
@@ -526,6 +500,61 @@ const EditItem = ({ classes, open, setOpen, id }) => {
                 />
               )}
             </Box>
+            <FormControlLabel
+              style={{ marginVertical: "2rem" }}
+              control={
+                <Checkbox
+                  checked={checkLk}
+                  onChange={() => {
+                    setCheckLk(!checkLk);
+                    if (linkableItem === 0) {
+                      setLinkableItem(1);
+                    } else {
+                      setLinkableItem(0);
+                    }
+                  }}
+                  name="checkedB"
+                  color="primary"
+                />
+              }
+              label="Make this item linkable"
+            />
+
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              style={{ margin: "1rem 0" }}
+            >
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "#8095a1",
+                  fontWeight: 500,
+                }}
+              >
+                Select Item :
+              </p>
+              <FormControl style={{ width: "50%" }}>
+                <Select
+                  value={linkableItem}
+                  input={<Input />}
+                  displayEmpty
+                  onChange={(e) => {
+                    setLinkableItem(e.target.value);
+                  }}
+                >
+                  {linkableItems &&
+                    linkableItems.map((i, k) => (
+                      <MenuItem key={k} value={i["item_id"]}>
+                        {i["name"]}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
+            </Box>
+
+
+
             <Box display="flex" alignItems="center" justifyContent="center">
               <p style={{ fontWeight: "bold" }}>Custom Fields</p>
             </Box>

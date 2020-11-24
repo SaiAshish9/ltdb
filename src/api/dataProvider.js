@@ -371,6 +371,7 @@ const fetchItem = (dispatch) => async (id) => {
       type: "SET_SUB_CATEGORY",
       payload: data,
     });
+    return data1.data.data
   } catch (e) {}
 };
 
@@ -470,7 +471,7 @@ const addItem = (dispatch) => async (data) => {
             item_custom_values: data.item_custom_values,
             link_item_id: data.link_item_id,
             image: data1,
-            is_linkable: 0,
+            is_linkable: data.is_linkable,
             price: data.price,
             status: data.status,
           })
@@ -498,7 +499,7 @@ const addItem = (dispatch) => async (data) => {
             description_ar: data.description_ar,
             link_item_id: data.link_item_id,
             image: data1,
-            is_linkable: 0,
+            is_linkable: data.is_linkable,
             price: data.price,
             status: data.status,
           })
@@ -529,7 +530,7 @@ const addItem = (dispatch) => async (data) => {
             item_custom_values: data.item_custom_values,
             image: data1,
             price: data.price,
-            is_linkable: 1,
+            is_linkable: data.is_linkable,
             status: data.status,
           })
             .then(async (data) => {
@@ -557,7 +558,7 @@ const addItem = (dispatch) => async (data) => {
             image: data1,
             price: data.price,
             status: data.status,
-            is_linkable: 1,
+            is_linkable: data.is_linkable,
           })
             .then(async (data) => {
               dispatch({
@@ -780,7 +781,6 @@ const fetchPackage = (dispatch) => async (id) => {
             `admin/subcategory/subcategory-by-id`,
             { sub_category_id: i.sub_category_id }
           );
-
           const item = await Api(`admin/item/getitem?item_id=${i.item_id}`);
           return {
             sub_category:
@@ -792,7 +792,6 @@ const fetchPackage = (dispatch) => async (id) => {
         } catch (e) {}
       })
     );
-
     dispatch({
       type: "SET_PACKAGE",
       payload: { ...data, package_items },
@@ -863,7 +862,6 @@ const fetchBannerDetails = (dispatch) => async (id) => {
   const {
     data: { data },
   } = await Api(`admin/banner/get-banner?banner_id=${id}`);
-
   dispatch({
     type: "SET_BANNER_DETAILS",
     payload: data,

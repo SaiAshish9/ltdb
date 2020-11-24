@@ -173,7 +173,7 @@ export default function SimpleTable({ data }) {
             style={{
               maxHeight: "3.4rem",
               overflowY: "hidden",
-              width:"90vw",
+              width: "90vw",
               background: "#f4f4f4",
             }}
           >
@@ -534,12 +534,16 @@ export default function SimpleTable({ data }) {
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
       <Popup classes={classes} open={open} setOpen={setOpen} />
-      <EditItem
-        id={id}
-        classes={classes}
-        open={openEditDialog}
-        setOpen={setOpenEditDialog}
-      />
+
+      {openEditDialog && (
+        <EditItem
+          id={id}
+          classes={classes}
+          open={openEditDialog}
+          setOpen={setOpenEditDialog}
+        />
+      )}
+
       <AddItem open={openAddItem} setOpen={setOpenAddItem} />
     </React.Fragment>
   );

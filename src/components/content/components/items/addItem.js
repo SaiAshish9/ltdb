@@ -138,6 +138,7 @@ const AddItem = ({ open, setOpen }) => {
         link_item_id: items,
         name_ar: name_ar,
         description_en: desc_en,
+        is_linkable: linkableItem,
         description_ar: desc_ar,
         image: imgFile,
         price: price ? +price : 0,
@@ -154,6 +155,7 @@ const AddItem = ({ open, setOpen }) => {
         description_en: desc_en,
         description_ar: desc_ar,
         image: imgFile,
+        is_linkable: linkableItem,
         price: price ? +price : 0,
         status: 1,
         item_custom_values: y,
@@ -394,6 +396,11 @@ const AddItem = ({ open, setOpen }) => {
                       checked={checkLk}
                       onChange={() => {
                         setCheckLk(!checkLk);
+                        if (linkableItem === 0) {
+                          setLinkableItem(1);
+                        } else {
+                          setLinkableItem(0);
+                        }
                       }}
                       name="checkedB"
                       color="primary"
