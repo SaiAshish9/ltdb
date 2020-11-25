@@ -22,6 +22,7 @@ import EditNotificationPopup from "./editNotification";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import { MdNotificationsNone } from "react-icons/md";
+import { IoIosSend } from "react-icons/io"
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -150,7 +151,7 @@ const NotificationTable = () => {
               >
                 Type
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 style={{
                   fontWeight: "bold",
                   fontSize: "0.8rem",
@@ -166,7 +167,7 @@ const NotificationTable = () => {
                 >
                   Status{" "}
                 </Box>{" "}
-              </TableCell>
+              </TableCell> */}
               <TableCell
                 style={{
                   fontWeight: "bold",
@@ -225,7 +226,7 @@ const NotificationTable = () => {
                   >
                     All User
                   </TableCell>
-                  <TableCell
+                  {/* <TableCell
                     onClick={async () => {
                       // await toggleBannerStatus([i.id], +i.status === 0 ? 1 : 0);
                       // await fetchBanners();
@@ -239,7 +240,7 @@ const NotificationTable = () => {
                     }}
                   >
                     {+i.status === 1 ? "Active" : "InActive"}
-                  </TableCell>
+                  </TableCell> */}
 
                   <TableCell>
                     <Box
@@ -263,6 +264,9 @@ const NotificationTable = () => {
                           }}
                           style={{ cursor: "pointer" }}
                         />{" "}
+                      </IconButton>
+                      <IconButton onClick={()=>{}}>
+                        <IoIosSend/>
                       </IconButton>
                     </Box>
                   </TableCell>

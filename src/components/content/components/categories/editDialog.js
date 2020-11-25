@@ -226,6 +226,7 @@ const EditDialog = ({
                 style={{
                   fontSize: "1rem",
                   fontWeight: 600,
+                  color:"#979aa4"
                 }}
               >
                 Custom Fields

@@ -13,7 +13,13 @@ import Popover from "@material-ui/core/Popover";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-import { CircularProgress,FormControl,Select,InputLabel,MenuItem } from "@material-ui/core";
+import {
+  CircularProgress,
+  FormControl,
+  Select,
+  InputLabel,
+  MenuItem,
+} from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import { withRouter } from "react-router-dom";
 import Api from "../../../../api";
@@ -31,8 +37,8 @@ const SubCategoryTable = ({
   const [loading, setLoading] = useState(true);
   const { handleSubmit, register, reset } = useForm();
   const [current, setCurrent] = useState(true);
-  const [value,setValue]= useState(null)
-  const [linkSubCategoryId,setLinkSubCategoryId] = useState(null)
+  const [value, setValue] = useState(null);
+  const [linkSubCategoryId, setLinkSubCategoryId] = useState(null);
 
   const onSubmit = (values) => {
     let x = Object.values(values).splice(2);
@@ -48,7 +54,7 @@ const SubCategoryTable = ({
     res["name_en"] = values["name_en"];
     res["name_ar"] = values["name_ar"];
     res["status"] = msg;
-    res["link_sub_category_id"]= linkSubCategoryId
+    res["link_sub_category_id"] = linkSubCategoryId;
     res["custom_fields"] = y;
     res["category_id"] = categoryId;
     current &&
@@ -77,7 +83,7 @@ const SubCategoryTable = ({
   const handleClose = () => {
     setAnchorEl(null);
     setOpen1(false);
-    setValue(null)
+    setValue(null);
     reset();
   };
 
@@ -113,7 +119,7 @@ const SubCategoryTable = ({
             <IconButton
               onClick={() => {
                 setOpen(false);
-                setValue(null)
+                setValue(null);
                 reset();
               }}
             >
@@ -123,39 +129,92 @@ const SubCategoryTable = ({
           <Divider />
           <Box>
             <Box
-              display="flex"
-              justifyContent="space-between"
+              // display="flex"
+              // justifyContent="space-between"
               style={{
                 padding: "1rem",
               }}
             >
-              <TextField
-                inputRef={register()}
-                name="name_en"
-                variant="outlined"
-                label="Name"
-              />
-              <TextField
-                inputRef={register()}
-                name="name_ar"
-                inputProps={{
-                  dir: "rtl",
-                  style: {
-                    textAlign: "right",
-                    direction: "rtl",
-                  },
+              <Box display="flex" justifyContent="space-between">
+                <p
+                  style={{
+                    fontSize: "1rem",
+                    fontWeight: 600,
+                    color: "#979aa4",
+                  }}
+                >
+                  Name
+                </p>
+                <TextField
+                  inputRef={register()}
+                  name="name_en"
+                  variant="outlined"
+                  label="Name"
+                  style={{ width: "47%" }}
+                />
+              </Box>
+
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                style={{ margin: "2rem 0" }}
+              >
+                <p
+                  style={{
+                    fontSize: "1rem",
+                    fontWeight: 600,
+                    color: "#979aa4",
+                  }}
+                >
+                  Arabic Name
+                </p>
+                <TextField
+                  inputRef={register()}
+                  name="name_ar"
+                  inputProps={{
+                    dir: "rtl",
+                    style: {
+                      textAlign: "right",
+                      direction: "rtl",
+                    },
+                  }}
+                  style={{ width: "47%" }}
+                  variant="outlined"
+                  label="اسم"
+                />
+              </Box>
+            </Box>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              style={{ margin: "0 1rem 2rem" }}
+            >
+              <p
+                style={{
+                  fontSize: "1rem",
+                  fontWeight: 600,
+                  color: "#979aa4",
                 }}
-                variant="outlined"
-                label="اسم"
-              />
-              <FormControl variant="outlined" style={{ width: "30%" }}>
-              <InputLabel style={{position:"absolute",zIndex:15,background:"#fff"}} id="demo">Sub Category</InputLabel>
+              >
+                Do you want to link this subcategory for advance builder ?
+              </p>
+              <FormControl variant="outlined" style={{ width: "47%" }}>
+                <InputLabel
+                  style={{
+                    position: "absolute",
+                    zIndex: 15,
+                    background: "#fff",
+                  }}
+                  id="demo"
+                >
+                  Sub Category
+                </InputLabel>
                 <Select
                   labelId="demo"
                   value={value}
                   onChange={(e) => {
                     setValue(e.target.value);
-                    setLinkSubCategoryId(e.target.value)
+                    setLinkSubCategoryId(e.target.value);
                   }}
                 >
                   {rows ? (
@@ -169,63 +228,10 @@ const SubCategoryTable = ({
                   )}
                 </Select>
               </FormControl>
-              <Popover
-                id={id}
-                open={open1}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "center",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "center",
-                }}
-              >
-                {open1 && (
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    style={{
-                      fontWeight: 600,
-                    }}
-                  >
-                    <Button
-                      onClick={() => {
-                        handleClose();
-                        setMsg(0);
-                      }}
-                      style={{
-                        borderRadius: 0,
-                        textTransform: "none",
-                        fontWeight: 600,
-                      }}
-                      variant="contained"
-                      color="primary"
-                    >
-                      InActive
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        handleClose();
-                        setMsg(1);
-                      }}
-                      style={{
-                        borderRadius: 0,
-                        textTransform: "none",
-                        fontWeight: 600,
-                      }}
-                      variant="contained"
-                      color="secondary"
-                    >
-                      Active
-                    </Button>
-                  </Box>
-                )}
-              </Popover>
             </Box>
             <Box
+              Arabic
+              Name
               display="flex"
               flexDirection="column"
               justifyContent="space-between"
@@ -249,25 +255,38 @@ const SubCategoryTable = ({
                   display="flex"
                   justifyContent="space-between"
                 >
-                  <TextField
-                    inputRef={register()}
-                    name={`name_en${k + 1}`}
-                    variant="outlined"
-                    label="Name"
-                  />
-                  <TextField
-                    inputRef={register()}
-                    variant="outlined"
-                    inputProps={{
-                      dir: "rtl",
-                      style: {
-                        textAlign: "right",
-                        direction: "rtl",
-                      },
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    style={{
+                      width: "70%",
                     }}
-                    name={`name_ar${k + 1}`}
-                    label="اسم"
-                  />
+                  >
+                    <TextField
+                      inputRef={register()}
+                      name={`name_en${k + 1}`}
+                      variant="outlined"
+                      label="Name"
+                      style={{ width: "47%" }}
+                    />
+                    <TextField
+                      inputRef={register()}
+                      variant="outlined"
+                      inputProps={{
+                        dir: "rtl",
+                        style: {
+                          textAlign: "right",
+                          direction: "rtl",
+                        },
+                      }}
+                      style={{ width: "47%" }}
+                      name={`name_ar${k + 1}`}
+                      label="اسم"
+                      Arabic
+                      Name
+                    />
+                  </Box>
+
                   <Box display="flex">
                     {k === [...Array(customFieldCount).keys()].length - 1 && (
                       <Tooltip title="Add New Custom Field" placement="left">

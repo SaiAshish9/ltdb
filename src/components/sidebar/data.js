@@ -35,11 +35,16 @@ export const options = [
     options: [],
   },
   {
-    id: "Orders",
-    path: "/orders",
-    paths: ["/orders", "/orders/details"],
-    icon: <AddShoppingCartIcon />,
-    options: [{ name: "Orders Detail", path: "/orders/details" }],
+    id: "Users",
+    icon: <PeopleIcon />,
+    path: "/users",
+    paths: ["/users"],
+    options: [
+      {
+        name: "All users",
+        path: "/users",
+      },
+    ],
   },
   {
     id: "Categories",
@@ -56,18 +61,18 @@ export const options = [
     options: [],
   },
   {
-    id: "Banners",
-    icon: <ViewCarouselIcon />,
-    path: "/banner",
-    paths: ["/banner"],
-    options: [],
-  },
-  {
     id: "Games",
     icon: <SportsEsportsIcon />,
     path: "/games",
     paths: ["/games"],
     options: [],
+  },
+  {
+    id: "Orders",
+    path: "/orders",
+    paths: ["/orders", "/orders/details"],
+    icon: <AddShoppingCartIcon />,
+    options: [{ name: "Orders Detail", path: "/orders/details" }],
   },
   {
     id: "Notifications",
@@ -86,16 +91,11 @@ export const options = [
     ],
   },
   {
-    id: "Users",
-    icon: <PeopleIcon />,
-    path: "/users",
-    paths: ["/users"],
-    options: [
-      {
-        name: "All users",
-        path: "/users",
-      },
-    ],
+    id: "Banners",
+    icon: <ViewCarouselIcon />,
+    path: "/banner",
+    paths: ["/banner"],
+    options: [],
   },
   {
     id: "Settings",
