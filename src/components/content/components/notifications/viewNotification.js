@@ -1,6 +1,14 @@
 import React, { useState, useContext } from "react";
-import { Backdrop, Box, Paper, IconButton, TextField } from "@material-ui/core";
-import { Clear, CameraAlt } from "@material-ui/icons";
+import {
+  Backdrop,
+  Box,
+  Paper,
+  IconButton,
+  TextField,
+  CircularProgress,
+  Fab,
+} from "@material-ui/core";
+import { Clear } from "@material-ui/icons";
 import Thumbnail from "../../../../assets/thumbnail1.png";
 import { Context as DataContext } from "../../../../api/dataProvider";
 import { useForm } from "react-hook-form";
@@ -11,36 +19,16 @@ const ViewNotification = ({ classes, open, setOpen }) => {
   const [imgFile, setImgFile] = useState(null);
   const [name_en, setNameEn] = useState("");
   const [name_ar, setNameAr] = useState("");
-  const {
-    addBanner,
-    fetchBanners,
-    state: { banner_details },
-  } = useContext(DataContext);
+  const { addBanner, fetchBanners } = useContext(DataContext);
   const { handleSubmit } = useForm();
-
-  const handleImgChange = (e) => {
-    var file1 = e.target.files[0];
-    var reader = new FileReader();
-    reader.onload = (e) => {
-      setFile(reader.result);
-    };
-    setImgFile(file1);
-    reader.readAsDataURL(file1);
-  };
 
   const onSubmit = async () => {
     setDisabled(true);
-    await addBanner({
-      title_en: name_en,
-      title_ar: name_ar,
-      image: imgFile,
-      status: 1,
-    });
     setNameEn("");
     setNameAr("");
     setImgFile(null);
     setFile(null);
-    await fetchBanners();
+    // await fetchBanners();
     setDisabled(false);
     setOpen(false);
   };
@@ -54,37 +42,32 @@ const ViewNotification = ({ classes, open, setOpen }) => {
           alignItems="center"
           justifyContent="center"
         >
-          {banner_details && (
-            <Paper
-              style={{
-                position: "absolute",
-                top: "12vh",
-                maxHeight: "80vh",
-                overflowY: "scroll",
-                width: "50vw",
-                padding: "2rem",
-                margin: "auto",
-              }}
-            >
-              <Box display="flex" flexDirection="row-reverse">
-                <IconButton
-                  onClick={() => {
-                    setNameEn("");
-                    setNameAr("");
-                    setImgFile(null);
-                    setFile(null);
-                    setDisabled(false);
-                    setOpen(false);
-                    setOpen(false);
-                  }}
-                >
-                  <Clear />
-                </IconButton>
-              </Box>
+          <Paper
+            style={{
+              position: "absolute",
+              top: "12vh",
+              maxHeight: "80vh",
+              overflowY: "scroll",
+              width: "80vw",
+              padding: "2rem",
+              margin: "auto",
+            }}
+          >
+            <Box display="flex" flexDirection="row-reverse">
+              <IconButton
+                onClick={() => {
+                  setOpen(false);
+                }}
+              >
+                <Clear />
+              </IconButton>
+            </Box>
+            <Box display="flex" justifyContent="space-between">
               <Box
                 display="flex"
                 justifyContent="space-between"
-                alignItems="center"
+                flexDirection="column"
+                style={{ width: "47%" }}
               >
                 <p
                   style={{
@@ -92,39 +75,39 @@ const ViewNotification = ({ classes, open, setOpen }) => {
                     color: "#282b3c",
                   }}
                 >
-                  English Name
+                  Title{" "}
                 </p>
                 <TextField
                   variant="outlined"
-                  //   label="English Name"
-                  value={banner_details.title_en}
-                  required
+                  label="Enter title in english"
+                  value={name_en}
                   disabled
+                  required
                   onChange={(e) => {
                     setNameEn(e.target.value);
                   }}
-                  style={{ width: "47%" }}
                 />
               </Box>
-              <br />
               <Box
                 display="flex"
                 justifyContent="space-between"
-                alignItems="center"
+                flexDirection="column"
+                style={{ width: "47%" }}
               >
                 <p
                   style={{
                     fontWeight: "bolder",
                     color: "#282b3c",
+                    textAlign: "right",
                   }}
                 >
-                  Arabic Name
+                  عنوان
                 </p>
                 <TextField
                   variant="outlined"
-                  //   label="Arabic Name"
-                  value={banner_details.title_ar}
-                  required
+                  label="Enter title in arabic"
+                  disabled
+                  value={name_ar}
                   inputProps={{
                     dir: "rtl",
                     style: {
@@ -132,18 +115,24 @@ const ViewNotification = ({ classes, open, setOpen }) => {
                       direction: "rtl",
                     },
                   }}
-                  disabled
+                  required
                   onChange={(e) => {
                     setNameAr(e.target.value);
                   }}
-                  style={{ width: "47%" }}
                 />
               </Box>
-              <br />
+            </Box>
+
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              style={{ margin: "2rem 0" }}
+            >
               <Box
                 display="flex"
                 justifyContent="space-between"
-                alignItems="center"
+                flexDirection="column"
+                style={{ width: "47%" }}
               >
                 <p
                   style={{
@@ -151,10 +140,69 @@ const ViewNotification = ({ classes, open, setOpen }) => {
                     color: "#282b3c",
                   }}
                 >
-                  Upload Image
+                  Message{" "}
+                </p>
+                <TextField
+                  variant="outlined"
+                  label="Enter message in english"
+                  rows={7}
+                  disabled
+                  multiline
+                  // value={name_en}
+                  required
+                  onChange={(e) => {
+                    setNameEn(e.target.value);
+                  }}
+                />
+              </Box>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                flexDirection="column"
+                style={{ width: "47%" }}
+              >
+                <p
+                  style={{
+                    fontWeight: "bolder",
+                    color: "#282b3c",
+                    textAlign: "right",
+                  }}
+                >
+                  سالة
+                </p>
+                <TextField
+                  variant="outlined"
+                  rows={7}
+                  disabled
+                  multiline
+                  label="Enter message in arabic"
+                  // value={name_ar}
+                  inputProps={{
+                    dir: "rtl",
+                    style: {
+                      textAlign: "right",
+                      direction: "rtl",
+                    },
+                  }}
+                  required
+                  onChange={(e) => {
+                    setNameAr(e.target.value);
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box>
+              <Box display="flex" justifyContent="space-between">
+                <p
+                  style={{
+                    fontWeight: "bolder",
+                    color: "#282b3c",
+                  }}
+                >
+                  Image{" "}
                 </p>
                 <Paper style={{ width: "47%" }} onClick={() => {}}>
-                  <label htmlFor="add-banner-image">
+                  <label htmlFor="notification-button">
                     <Box
                       display="flex"
                       alignItems="center"
@@ -164,36 +212,30 @@ const ViewNotification = ({ classes, open, setOpen }) => {
                         cursor: "pointer",
                       }}
                     >
-                      {banner_details.image ? (
-                        <img
-                          style={{
-                            height: "20vh",
-                          }}
-                          alt="img"
-                          src={`https://lootbox-s3.s3.us-east-2.amazonaws.com/${banner_details.image}`}
-                        />
-                      ) : (
-                        <img
-                          style={{
-                            height: "20vh",
-                          }}
-                          alt="img"
-                          src={Thumbnail}
-                        />
-                      )}
+                      {/* {file ? (
+                            <img
+                              style={{
+                                height: "20vh",
+                              }}
+                              alt="img"
+                              src={file}
+                            />
+                          ) : (
+                      
+                          )} */}
+                      <img
+                        style={{
+                          height: "20vh",
+                        }}
+                        alt="img"
+                        src={Thumbnail}
+                      />
                     </Box>
                   </label>
-                  <input
-                    id="add-banner-image"
-                    style={{ display: "none" }}
-                    type="file"
-                    accept=".png,.jpg,.jpeg"
-                    onChange={(e) => handleImgChange(e)}
-                  />
                 </Paper>
               </Box>
-            </Paper>
-          )}
+            </Box>
+          </Paper>
         </Box>
       </form>
     </Backdrop>

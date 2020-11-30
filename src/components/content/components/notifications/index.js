@@ -4,13 +4,13 @@ import Table from "./table";
 import { Context as DataContext } from "../../../../api/dataProvider";
 
 const Notifications = () => {
-  const { fetchBanners } = useContext(DataContext);
+  const { fetchNotifications } = useContext(DataContext);
   const [loading, isLoading] = useState(false);
 
   useEffect(() => {
     async function fetchdata() {
       isLoading(true);
-      await fetchBanners();
+      await fetchNotifications();
       isLoading(false);
     }
     fetchdata();

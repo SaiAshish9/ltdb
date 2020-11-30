@@ -19,22 +19,26 @@ const AddNotification = ({ classes, open, setOpen }) => {
   const [imgFile, setImgFile] = useState(null);
   const [name_en, setNameEn] = useState("");
   const [name_ar, setNameAr] = useState("");
-  const { addBanner, fetchBanners } = useContext(DataContext);
+  const [description_en, setDescriptionEn] = useState("");
+  const [description_ar, setDescriptionAr] = useState("");
+  const { addNotification, fetchNotifications } = useContext(DataContext);
   const { handleSubmit } = useForm();
 
   const onSubmit = async () => {
     setDisabled(true);
-    // await addBanner({
-    //   title_en: name_en,
-    //   title_ar: name_ar,
-    //   image: imgFile,
-    //   status: 1,
-    // });
+    await addNotification({
+      title_en: name_en,
+      title_ar: name_ar,
+      description_en,
+      description_ar,
+    });
     setNameEn("");
     setNameAr("");
+    setDescriptionEn("");
+    setDescriptionAr("");
     setImgFile(null);
     setFile(null);
-    // await fetchBanners();
+    await fetchNotifications();
     setDisabled(false);
     setOpen(false);
   };
@@ -151,10 +155,10 @@ const AddNotification = ({ classes, open, setOpen }) => {
                   label="Enter message in english"
                   rows={7}
                   multiline
-                  // value={name_en}
+                  value={description_en}
                   required
                   onChange={(e) => {
-                    setNameEn(e.target.value);
+                    setDescriptionEn(e.target.value);
                   }}
                 />
               </Box>
@@ -178,7 +182,7 @@ const AddNotification = ({ classes, open, setOpen }) => {
                   rows={7}
                   multiline
                   label="Enter message in arabic"
-                  // value={name_ar}
+                  value={description_ar}
                   inputProps={{
                     dir: "rtl",
                     style: {
@@ -188,9 +192,42 @@ const AddNotification = ({ classes, open, setOpen }) => {
                   }}
                   required
                   onChange={(e) => {
-                    setNameAr(e.target.value);
+                    setDescriptionAr(e.target.value);
                   }}
                 />
+              </Box>
+            </Box>
+            <Box>
+              <Box display="flex" justifyContent="space-between">
+                <p
+                  style={{
+                    fontWeight: "bolder",
+                    color: "#282b3c",
+                  }}
+                >
+                  Image{" "}
+                </p>
+                <Paper style={{ width: "47%" }} onClick={() => {}}>
+                  <label htmlFor="notification-button">
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      style={{
+                        height: "20vh",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <img
+                        style={{
+                          height: "20vh",
+                        }}
+                        alt="img"
+                        src={Thumbnail}
+                      />
+                    </Box>
+                  </label>
+                </Paper>
               </Box>
             </Box>
             <Box

@@ -22,7 +22,7 @@ import EditNotificationPopup from "./editNotification";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import { MdNotificationsNone } from "react-icons/md";
-import { IoIosSend } from "react-icons/io"
+import { IoIosSend } from "react-icons/io";
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -37,10 +37,10 @@ const NotificationTable = () => {
   const [openViewNotification, setOpenViewNotification] = useState(false);
   const [openEditNotification, setOpenEditNotification] = useState(false);
   const {
-    state: { banners, message },
+    state: { notifications, message },
     fetchBannerDetails,
     toggleBannerStatus,
-    fetchBanners,
+    fetchNotifications,
   } = useContext(DataContext);
   const [openSnackbar, setOpenSnackbar] = useState(true);
   const [selected, setSelected] = useState([]);
@@ -60,10 +60,10 @@ const NotificationTable = () => {
           zIndex: 2,
           width: "85vw",
           paddingRight: "2rem",
-          color:"#fff"
+          color: "#fff",
         }}
       >
-        <Box  display="flex" justifyContent="space-between">
+        <Box display="flex" justifyContent="space-between">
           <IconButton style={{ color: "#fff" }}>
             <MdNotificationsNone color="#fff" style={{ color: "#fff" }} />
           </IconButton>
@@ -151,23 +151,6 @@ const NotificationTable = () => {
               >
                 Type
               </TableCell>
-              {/* <TableCell
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "0.8rem",
-                  color: "#282b3c",
-                  textAlign: "center",
-                }}
-              >
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  style={{ textAlign: "center", paddingLeft: "2rem" }}
-                >
-                  Status{" "}
-                </Box>{" "}
-              </TableCell> */}
               <TableCell
                 style={{
                   fontWeight: "bold",
@@ -181,9 +164,9 @@ const NotificationTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {banners &&
-              banners.length > 0 &&
-              banners.map((i, k) => (
+            {notifications &&
+              notifications.length > 0 &&
+              notifications.map((i, k) => (
                 <TableRow
                   key={k}
                   elevation={0}
@@ -208,7 +191,7 @@ const NotificationTable = () => {
                       fontWeight: 500,
                     }}
                   >
-                    Demo Notification
+                    {i.title_en}
                   </TableCell>
                   <TableCell
                     style={{
@@ -216,7 +199,7 @@ const NotificationTable = () => {
                       fontWeight: 500,
                     }}
                   >
-                    Demo Notification
+                    {i.title_ar}
                   </TableCell>
                   <TableCell
                     style={{
@@ -224,24 +207,8 @@ const NotificationTable = () => {
                       fontWeight: 500,
                     }}
                   >
-                    All User
+                    {+i.type === 1 ? "All Users" : "Specific User"}
                   </TableCell>
-                  {/* <TableCell
-                    onClick={async () => {
-                      // await toggleBannerStatus([i.id], +i.status === 0 ? 1 : 0);
-                      // await fetchBanners();
-                    }}
-                    style={{
-                      cursor: "pointer",
-                      textAlign: "center",
-                      color: +i.status !== 1 ? "red" : "green",
-                      fontWeight: 500,
-                      paddingLeft: "4rem",
-                    }}
-                  >
-                    {+i.status === 1 ? "Active" : "InActive"}
-                  </TableCell> */}
-
                   <TableCell>
                     <Box
                       display="flex"
@@ -250,7 +217,7 @@ const NotificationTable = () => {
                     >
                       <IconButton
                         onClick={async () => {
-                          await fetchBannerDetails(i.id);
+                          // await fetchBannerDetails(i.id);
                           setOpenEditNotification(true);
                         }}
                       >
@@ -259,14 +226,13 @@ const NotificationTable = () => {
                       <IconButton onClick={async () => {}}>
                         <VisibilityOutlinedIcon
                           onClick={async () => {
-                            await fetchBannerDetails(i.id);
                             setOpenViewNotification(true);
                           }}
                           style={{ cursor: "pointer" }}
                         />{" "}
                       </IconButton>
-                      <IconButton onClick={()=>{}}>
-                        <IoIosSend/>
+                      <IconButton onClick={() => {}}>
+                        <IoIosSend />
                       </IconButton>
                     </Box>
                   </TableCell>
@@ -276,16 +242,11 @@ const NotificationTable = () => {
         </Table>
       </TableContainer>
       <AddNotificationPopup open={open} setOpen={setOpen} classes={classes} />
-      {/* <ViewBannerPopup
-        open={openViewBanner}
-        setOpen={setOpenViewBanner}
+      <ViewNotificationPopup
+        open={openViewNotification}
+        setOpen={setOpenViewNotification}
         classes={classes}
       />
-      <EditBannerPopup
-        open={openEditBanner}
-        setOpen={setOpenEditBanner}
-        classes={classes}
-      /> */}
     </React.Fragment>
   );
 };

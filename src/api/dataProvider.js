@@ -59,6 +59,11 @@ const reducer = (state, action) => {
         ...state,
         banners: action.payload,
       };
+    case "SET_NOTIFICATIONS":
+      return {
+        ...state,
+        notifications: action.payload,
+      };
     case "SET_LABEL_DETAILS":
       return {
         ...state,
@@ -201,7 +206,9 @@ const fetchGames = (dispatch) => async (page, limit, search, status) => {
 
 const fetchLinkableItems = (dispatch) => async (id) => {
   try {
-    const data = await Api(`admin/item/get-linkable-items?sub_category_id=${id}`);
+    const data = await Api(
+      `admin/item/get-linkable-items?sub_category_id=${id}`
+    );
     dispatch({
       type: "SET_LINKABLE_ITEMS",
       payload: data.data.data,
@@ -371,7 +378,7 @@ const fetchItem = (dispatch) => async (id) => {
       type: "SET_SUB_CATEGORY",
       payload: data,
     });
-    return data1.data.data
+    return data1.data.data;
   } catch (e) {}
 };
 
@@ -457,7 +464,7 @@ const editItem = (dispatch) => async (data) => {
 const addItem = (dispatch) => async (data) => {
   await uploadImage("media", data.image)
     .then(async (data1) => {
-      console.log({data,data1})
+      console.log({ data, data1 });
       if (data.link_item_id && data.link_item_id.length > 0) {
         if (data.item_custom_values && data.item_custom_values.length > 0) {
           await Api.post("admin/item/add", {
@@ -636,7 +643,6 @@ const addPackage = (dispatch) => async (data) => {
 };
 
 const editPackage = (dispatch) => async (data) => {
-  // console.log(data);
   await Promise.all(
     data.deleted_cover_images.map(async (x) => {
       try {
@@ -675,10 +681,7 @@ const editPackage = (dispatch) => async (data) => {
       graphic_quality: data.graphic_quality,
       status: data.status,
       package_item: data.package_item,
-      cover_images: [
-        // ...data.cover_images.map((x) => x["imgFile"].split("com/")[1]),
-        ...new_cover_images,
-      ],
+      cover_images: [...new_cover_images],
     });
     await Api.post("admin/game/add-package", {
       image,
@@ -689,10 +692,7 @@ const editPackage = (dispatch) => async (data) => {
       graphic_quality: data.graphic_quality,
       status: data.status,
       package_item: data.package_item,
-      cover_images: [
-        // ...data.cover_images.map((x) => x["imgFile"].split("com/")[1]),
-        ...new_cover_images,
-      ],
+      cover_images: [...new_cover_images],
     });
   } catch (e) {
     console.log(e);
@@ -1088,7 +1088,7 @@ const fetchDeliveryDetails = (dispatch) => async () => {
 
 const addDeliveryFees = (dispatch) => async (data) => {
   try {
-    console.log(data)
+    console.log(data);
     await Api.post("admin/delivery/add-upadte", data);
     await fetchDeliveryDetails();
   } catch (e) {}
@@ -1100,6 +1100,30 @@ const fetchDashboardDetails = (dispatch) => async () => {
       data: { data },
     } = await Api("admin/dashboard");
     dispatch({ type: "SET_DASHBOARD_DETAILS", payload: data });
+  } catch (e) {}
+};
+
+const fetchNotifications = (dispatch) => async () => {
+  try {
+    const {
+      data: { data },
+    } = await Api("admin/notification/notification-list");
+    console.log(data);
+    dispatch({ type: "SET_NOTIFICATIONS", payload: data });
+  } catch (e) {}
+};
+
+const addNotification = (dispatch) => async (data) => {
+  try {
+    await Api.post("admin/notification/add-notification", {
+      type: 1,
+      title_en: data.title_en,
+      title_ar: data.title_ar,
+      description_en: data.description_en,
+      description_ar: data.description_ar,
+      image: "",
+    });
+    await fetchNotifications()
   } catch (e) {}
 };
 
@@ -1125,6 +1149,8 @@ export const { Context, Provider } = createDataContext(
     fetchItem,
     fetchOrder,
     fetchBannerDetails,
+    fetchNotifications,
+    addNotification,
     toggleUserStatus,
     clearMessage,
     fetchResolutions,
@@ -1157,6 +1183,7 @@ export const { Context, Provider } = createDataContext(
     dashboard_details: null,
     games: [],
     labels: [],
+    notifications: [],
     delivery_details: null,
     banner_details: null,
     package_details: null,
