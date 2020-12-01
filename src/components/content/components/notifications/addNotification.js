@@ -24,6 +24,16 @@ const AddNotification = ({ classes, open, setOpen }) => {
   const { addNotification, fetchNotifications } = useContext(DataContext);
   const { handleSubmit } = useForm();
 
+  const handleImgChange = (e) => {
+    var file1 = e.target.files[0];
+    var reader = new FileReader();
+    reader.onload = (e) => {
+      setFile(reader.result);
+    };
+    setImgFile(file1);
+    reader.readAsDataURL(file1);
+  };
+
   const onSubmit = async () => {
     setDisabled(true);
     await addNotification({
@@ -31,6 +41,7 @@ const AddNotification = ({ classes, open, setOpen }) => {
       title_ar: name_ar,
       description_en,
       description_ar,
+      image: imgFile,
     });
     setNameEn("");
     setNameAr("");
@@ -218,15 +229,32 @@ const AddNotification = ({ classes, open, setOpen }) => {
                         cursor: "pointer",
                       }}
                     >
-                      <img
-                        style={{
-                          height: "20vh",
-                        }}
-                        alt="img"
-                        src={Thumbnail}
-                      />
+                      {file ? (
+                        <img
+                          style={{
+                            height: "20vh",
+                          }}
+                          alt="img"
+                          src={file}
+                        />
+                      ) : (
+                        <img
+                          style={{
+                            height: "20vh",
+                          }}
+                          alt="img"
+                          src={Thumbnail}
+                        />
+                      )}
                     </Box>
                   </label>
+                  <input
+                    id="notification-button"
+                    style={{ display: "none" }}
+                    type="file"
+                    accept=".png,.jpg,.jpeg"
+                    onChange={(e) => handleImgChange(e)}
+                  />
                 </Paper>
               </Box>
             </Box>

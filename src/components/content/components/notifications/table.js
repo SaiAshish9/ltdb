@@ -38,13 +38,14 @@ const NotificationTable = () => {
   const [openEditNotification, setOpenEditNotification] = useState(false);
   const {
     state: { notifications, message },
-    fetchBannerDetails,
+    fetchNotificationDetails,
     toggleBannerStatus,
     fetchNotifications,
   } = useContext(DataContext);
   const [openSnackbar, setOpenSnackbar] = useState(true);
   const [selected, setSelected] = useState([]);
   const [action, setAction] = useState(0);
+  const [notificationId, setNotificationId] = useState(null);
 
   return (
     <React.Fragment>
@@ -216,20 +217,20 @@ const NotificationTable = () => {
                       alignItems="center"
                     >
                       <IconButton
-                        onClick={async () => {
-                          // await fetchBannerDetails(i.id);
+                        onClick={() => {
+                          setNotificationId(i.notification_id);
                           setOpenEditNotification(true);
                         }}
                       >
                         <EditOutlinedIcon style={{ cursor: "pointer" }} />{" "}
                       </IconButton>
-                      <IconButton onClick={async () => {}}>
-                        <VisibilityOutlinedIcon
-                          onClick={async () => {
-                            setOpenViewNotification(true);
-                          }}
-                          style={{ cursor: "pointer" }}
-                        />{" "}
+                      <IconButton
+                        onClick={async () => {
+                          await fetchNotificationDetails(i.notification_id);
+                          setOpenViewNotification(true);
+                        }}
+                      >
+                        <VisibilityOutlinedIcon style={{ cursor: "pointer" }} />{" "}
                       </IconButton>
                       <IconButton onClick={() => {}}>
                         <IoIosSend />
@@ -247,6 +248,14 @@ const NotificationTable = () => {
         setOpen={setOpenViewNotification}
         classes={classes}
       />
+      {notificationId && (
+        <EditNotificationPopup
+          open={openEditNotification}
+          setOpen={setOpenEditNotification}
+          classes={classes}
+          notificationId={notificationId}
+        />
+      )}
     </React.Fragment>
   );
 };

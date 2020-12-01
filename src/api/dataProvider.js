@@ -149,6 +149,11 @@ const reducer = (state, action) => {
         ...state,
         sub_category: action.payload,
       };
+    case "SET_NOTIFICATION":
+      return {
+        ...state,
+        notification_details: action.payload,
+      };
     default:
       return state;
   }
@@ -1115,15 +1120,50 @@ const fetchNotifications = (dispatch) => async () => {
 
 const addNotification = (dispatch) => async (data) => {
   try {
-    await Api.post("admin/notification/add-notification", {
-      type: 1,
-      title_en: data.title_en,
-      title_ar: data.title_ar,
-      description_en: data.description_en,
-      description_ar: data.description_ar,
-      image: "",
+    var x;
+    var image;
+    if (data.image) {
+      image = await uploadImage("notifications", data.image);
+    } else {
+      image = data.imgFile;
+    }
+    if (data.notification_id) {
+      x = {
+        type: 1,
+        notification_id: data.notification_id,
+        title_en: data.title_en,
+        title_ar: data.title_ar,
+        description_en: data.description_en,
+        description_ar: data.description_ar,
+        image,
+      };
+    } else {
+      x = {
+        type: 1,
+        title_en: data.title_en,
+        title_ar: data.title_ar,
+        description_en: data.description_en,
+        description_ar: data.description_ar,
+        image,
+      };
+    }
+    await Api.post("admin/notification/add-notification", x);
+    await fetchNotifications();
+  } catch (e) {}
+};
+
+const fetchNotificationDetails = (dispatch) => async (id) => {
+  try {
+    const {
+      data: { data },
+    } = await Api.post(`admin/notification/get-notification`, {
+      notification_id: id,
     });
-    await fetchNotifications()
+    dispatch({
+      type: "SET_NOTIFICATION",
+      payload: data,
+    });
+    return data;
   } catch (e) {}
 };
 
@@ -1135,6 +1175,7 @@ export const { Context, Provider } = createDataContext(
     toggleSubCategoryStatus,
     fetchDashboardDetails,
     fetchDeliveryDetails,
+    fetchNotificationDetails,
     fetchLabelDetails,
     addItem,
     importLabel,
@@ -1187,6 +1228,7 @@ export const { Context, Provider } = createDataContext(
     delivery_details: null,
     banner_details: null,
     package_details: null,
+    notification_details: null,
     label_details: null,
     game_packages: [],
     game_package_items: [],
