@@ -12,6 +12,7 @@ import {
   Box,
   IconButton,
   Checkbox,
+  TablePagination,
 } from "@material-ui/core";
 import AddNotificationPopup from "./addNotification";
 import { Context as DataContext } from "../../../../api/dataProvider";
@@ -37,7 +38,7 @@ const NotificationTable = () => {
   const [openViewNotification, setOpenViewNotification] = useState(false);
   const [openEditNotification, setOpenEditNotification] = useState(false);
   const {
-    state: { notifications, message },
+    state: { notifications, message, notification_count },
     fetchNotificationDetails,
     toggleBannerStatus,
     fetchNotifications,
@@ -46,6 +47,19 @@ const NotificationTable = () => {
   const [selected, setSelected] = useState([]);
   const [action, setAction] = useState(0);
   const [notificationId, setNotificationId] = useState(null);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0);
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    fetchNotifications(page + 1, +event.target.value);
+    setPage(0);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+    fetchNotifications(newPage + 1, rowsPerPage);
+  };
 
   return (
     <React.Fragment>
@@ -89,8 +103,10 @@ const NotificationTable = () => {
 
       <TableContainer
         style={{
-          height: "90vh",
+          height: "83vh",
           width: "100%",
+          overflowY: "scroll",
+          overflowX: "hidden",
         }}
         elevation={0}
         component={Paper}
@@ -242,6 +258,15 @@ const NotificationTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        component="div"
+        rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[5, 10]}
+        page={page}
+        count={notification_count}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
       <AddNotificationPopup open={open} setOpen={setOpen} classes={classes} />
       <ViewNotificationPopup
         open={openViewNotification}

@@ -129,6 +129,11 @@ const reducer = (state, action) => {
         ...state,
         game_count: action.payload,
       };
+    case "SET_BANNER_COUNT":
+      return {
+        ...state,
+        banner_count: action.payload,
+      };
     case "SET_GAME_PACKAGES":
       return {
         ...state,
@@ -153,6 +158,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         notification_details: action.payload,
+      };
+    case "SET_NOTIFICATION_COUNT":
+      return {
+        ...state,
+        notification_count: action.payload,
       };
     default:
       return state;
@@ -804,15 +814,29 @@ const fetchPackage = (dispatch) => async (id) => {
   } catch (e) {}
 };
 
-const fetchBanners = (dispatch) => async () => {
+const fetchBanners = (dispatch) => async (page, limit) => {
   try {
-    const {
-      data: { data },
-    } = await Api("admin/banner/get-list");
+    var url;
+    if (page && limit) {
+      url = `admin/banner/get-list?limit=${limit}&page=${page}`;
+      dispatch({
+        type: "SET_BANNERS",
+        payload: null,
+      });
+    } else {
+      url = "admin/banner/get-list?limit=10&&page=1";
+    }
+    const { data } = await Api(url);
     dispatch({
       type: "SET_BANNERS",
-      payload: data,
+      payload: data.data,
     });
+    if (data) {
+      dispatch({
+        type: "SET_BANNER_COUNT",
+        payload: data["parameter"]["total"],
+      });
+    }
   } catch (e) {}
 };
 
@@ -1108,13 +1132,25 @@ const fetchDashboardDetails = (dispatch) => async () => {
   } catch (e) {}
 };
 
-const fetchNotifications = (dispatch) => async () => {
+const fetchNotifications = (dispatch) => async (page, limit) => {
   try {
-    const {
-      data: { data },
-    } = await Api("admin/notification/notification-list");
-    console.log(data);
-    dispatch({ type: "SET_NOTIFICATIONS", payload: data });
+    var url;
+    if (page && limit) {
+      url = `admin/notification/notification-list?limit=${limit}&page=${page}`;
+      dispatch({
+        type: "SET_LABELS",
+        payload: null,
+      });
+    } else {
+      url = "admin/notification/notification-list?limit=10&&page=1";
+    }
+    const { data } = await Api(url);
+    console.log(data)
+    dispatch({ type: "SET_NOTIFICATIONS", payload: data.data });
+    dispatch({
+      type: "SET_NOTIFICATION_COUNT",
+      payload: data["parameter"]["total"],
+    });
   } catch (e) {}
 };
 
@@ -1237,7 +1273,9 @@ export const { Context, Provider } = createDataContext(
     game_count: 0,
     game_page_count: 0,
     label_count: 0,
+    notification_count: 0,
     order_count: 0,
+    banner_count: 0,
     label_page_count: 0,
     resolution_list: null,
     linkableItems: [],

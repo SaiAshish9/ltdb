@@ -12,6 +12,7 @@ import {
   Box,
   IconButton,
   Checkbox,
+  TablePagination,
 } from "@material-ui/core";
 // import Search from "./search";
 import AddBannerPopup from "./addBanner";
@@ -36,7 +37,7 @@ const BannerTable = () => {
   const [openViewBanner, setOpenViewBanner] = useState(false);
   const [openEditBanner, setOpenEditBanner] = useState(false);
   const {
-    state: { banners, message },
+    state: { banners, message, banner_count },
     fetchBannerDetails,
     toggleBannerStatus,
     fetchBanners,
@@ -44,6 +45,19 @@ const BannerTable = () => {
   const [openSnackbar, setOpenSnackbar] = useState(true);
   const [selected, setSelected] = useState([]);
   const [action, setAction] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0);
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    fetchBanners(page + 1, +event.target.value);
+    setPage(0);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+    fetchBanners(newPage + 1, rowsPerPage);
+  };
 
   return (
     <React.Fragment>
@@ -81,8 +95,10 @@ const BannerTable = () => {
 
       <TableContainer
         style={{
-          height: "90vh",
+          height: "83vh",
           width: "100%",
+          overflowY: "scroll",
+          overflowX: "hidden",
         }}
         elevation={0}
         component={Paper}
@@ -331,6 +347,15 @@ const BannerTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        component="div"
+        rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[5, 10]}
+        page={page}
+        count={banner_count}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
       <AddBannerPopup open={open} setOpen={setOpen} classes={classes} />
       <ViewBannerPopup
         open={openViewBanner}
