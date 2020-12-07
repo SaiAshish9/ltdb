@@ -48,9 +48,9 @@ export default function CustomizedInputBase({ active, inActive }) {
         setSearched(true);
       }
     } else {
-        setValue("");
-        fetchGames();
-        setSearched(false);
+      setValue("");
+      fetchGames();
+      setSearched(false);
     }
   };
 
@@ -59,6 +59,7 @@ export default function CustomizedInputBase({ active, inActive }) {
       <form onSubmit={handleSubmit(onSubmit)}>
         {!searched ? (
           <IconButton
+            type="submit"
             // onClick={async () => {
 
             //   // setValue(null);
@@ -70,6 +71,7 @@ export default function CustomizedInputBase({ active, inActive }) {
           </IconButton>
         ) : (
           <IconButton
+            type="submit"
             // onClick={() => {
             //   setValue("");
             //   fetchGames();

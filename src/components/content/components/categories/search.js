@@ -28,7 +28,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CustomizedInputBase({ categoryId, fetchSubCategories }) {
+export default function CustomizedInputBase({
+  categoryId,
+  fetchSubCategories,
+}) {
   const classes = useStyles();
   const [value, setValue] = useState("");
   const [searched, setSearched] = useState(false);
@@ -36,14 +39,14 @@ export default function CustomizedInputBase({ categoryId, fetchSubCategories }) 
 
   const onSubmit = async () => {
     if (!searched) {
-        if (value) {
-          await fetchSubCategories(categoryId, value);
-        }
-        setSearched(true);
+      if (value) {
+        await fetchSubCategories(categoryId, value);
+      }
+      setSearched(true);
     } else {
-        setValue("");
-        fetchSubCategories(categoryId);
-        setSearched(false);
+      setValue("");
+      fetchSubCategories(categoryId);
+      setSearched(false);
     }
   };
 
@@ -52,6 +55,7 @@ export default function CustomizedInputBase({ categoryId, fetchSubCategories }) 
       <form onSubmit={handleSubmit(onSubmit)}>
         {!searched ? (
           <IconButton
+            type="submit"
             // onClick={async () => {
             //   if (value) {
             //     await fetchSubCategories(categoryId, value);
@@ -65,6 +69,7 @@ export default function CustomizedInputBase({ categoryId, fetchSubCategories }) 
           </IconButton>
         ) : (
           <IconButton
+            type="submit"
             // onClick={() => {
             //   setValue("");
             //   fetchSubCategories(categoryId);

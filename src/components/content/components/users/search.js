@@ -60,6 +60,7 @@ export default function CustomizedInputBase({ active, inActive }) {
       <form onSubmit={handleSubmit(onSubmit)}>
         {!searched ? (
           <IconButton
+            type="submit"
             // onClick={async () => {
             // if (value) {
             //   if (active) await fetchUsers(null, null, value, 1);
@@ -78,6 +79,7 @@ export default function CustomizedInputBase({ active, inActive }) {
           </IconButton>
         ) : (
           <IconButton
+            type="submit"
             onClick={() => {
               // setValue("");
               // fetchUsers();

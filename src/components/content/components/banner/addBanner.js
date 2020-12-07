@@ -128,12 +128,9 @@ const AddBanner = ({ classes, open, setOpen }) => {
                     direction: "rtl",
                   },
                 }}
-                style={{
-                  direction: "RTL",
-                }}
                 required
                 onChange={(e) => {
-                  setNameAr(e.target.value.split("").reverse().join(""));
+                  setNameAr(e.target.value);
                 }}
                 style={{ width: "47%" }}
               />

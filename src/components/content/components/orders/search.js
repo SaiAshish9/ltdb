@@ -39,13 +39,13 @@ export default function CustomizedInputBase({ active, inActive }) {
   const onSubmit = async () => {
     if (!searched) {
       if (value) {
-        fetchOrders(null, null, value);
+        await fetchOrders(null, null, value);
         setSearched(true);
-      } else {
-        setValue("");
-        fetchOrders();
-        setSearched(false);
-      }
+      } 
+    }else {
+      setValue("");
+      await fetchOrders();
+      setSearched(false);
     }
   };
 
@@ -54,19 +54,20 @@ export default function CustomizedInputBase({ active, inActive }) {
       <form onSubmit={handleSubmit(onSubmit)}>
         {!searched ? (
           <IconButton
-            onClick={async () => {
-              // if (value) {
-              //   if (active) await fetchOrders(null, null, value, 1);
-              //   else if (inActive) {
-              //     await fetchOrders(null, null, value, 0);
-              //   } else {
-              //     await fetchGames(null, null, value);
-              //   }
-              // }
-              // fetchOrders(null, null, value);
-              // setSearched(true);
-              // setValue(null);
-            }}
+            type="submit"
+            // onClick={async () => {
+            //   // if (value) {
+            //   //   if (active) await fetchOrders(null, null, value, 1);
+            //   //   else if (inActive) {
+            //   //     await fetchOrders(null, null, value, 0);
+            //   //   } else {
+            //   //     await fetchGames(null, null, value);
+            //   //   }
+            //   // }
+            //   // fetchOrders(null, null, value);
+            //   // setSearched(true);
+            //   // setValue(null);
+            // }}
             className={classes.iconButton}
             aria-label="menu"
           >
@@ -74,6 +75,7 @@ export default function CustomizedInputBase({ active, inActive }) {
           </IconButton>
         ) : (
           <IconButton
+            type="submit"
             onClick={() => {
               // setValue("");
               // fetchOrders();
