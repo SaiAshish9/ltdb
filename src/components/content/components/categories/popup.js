@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Backdrop from "@material-ui/core/Backdrop";
 import TextField from "@material-ui/core/TextField";
 import Fab from "@material-ui/core/Fab";
@@ -19,10 +19,13 @@ import {
   Select,
   InputLabel,
   MenuItem,
+  Checkbox,
 } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import { withRouter } from "react-router-dom";
 import Api from "../../../../api";
+import Thumbnail from "../../../../assets/thumbnail1.png";
+import { uploadImage } from "../../../../api/dataProvider";
 
 const SubCategoryTable = ({
   categoryId,
@@ -40,7 +43,24 @@ const SubCategoryTable = ({
   const [value, setValue] = useState(null);
   const [linkSubCategoryId, setLinkSubCategoryId] = useState(null);
 
-  const onSubmit = (values) => {
+  const [showBuilder, IsShowBuilder] = useState(false);
+  const [optional, IsOptional] = useState(false);
+  const [multiple, IsMultiple] = useState(false);
+  const [file, setFile] = useState(null);
+  const [imgFile, setImgFile] = useState(null);
+
+  const handleImgChange = (e) => {
+    var file1 = e.target.files[0];
+    var reader = new FileReader();
+    reader.onload = (e) => {
+      setFile(reader.result);
+    };
+    setImgFile(file1);
+    reader.readAsDataURL(file1);
+  };
+
+
+  const onSubmit = async (values) => {
     let x = Object.values(values).splice(2);
     let y = [];
     for (let i = 0; i < x.length; i += 2) {
@@ -52,14 +72,25 @@ const SubCategoryTable = ({
     }
     let res = {};
     res["name_en"] = values["name_en"];
+    res["is_show_builder"] = showBuilder ? 1 : 0;
+    res["is_optional"] = optional ? 1 : 0;
+    res["is_multiple"] = multiple ? 1 : 0;
     res["name_ar"] = values["name_ar"];
     res["status"] = msg;
     res["link_sub_category_id"] = linkSubCategoryId;
     res["custom_fields"] = y;
     res["category_id"] = categoryId;
+    res["image"] = await uploadImage("advanced-builders", imgFile);
+
     current &&
       Api.post("admin/subcategory/add", res).then((data) => {
         setOpen(false);
+        setValue(null);
+        setFile(null);
+        setImgFile(null);
+        IsOptional(false)
+        IsShowBuilder(false)
+        IsMultiple(false)
         reset();
       });
   };
@@ -120,6 +151,11 @@ const SubCategoryTable = ({
               onClick={() => {
                 setOpen(false);
                 setValue(null);
+                setFile(null);
+                setImgFile(null);
+                IsOptional(false)
+                IsShowBuilder(false)
+                IsMultiple(false)
                 reset();
               }}
             >
@@ -229,6 +265,149 @@ const SubCategoryTable = ({
                 </Select>
               </FormControl>
             </Box>
+            <Box
+              style={{ margin: "0 1rem 2rem" }}
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <p
+                style={{
+                  fontSize: "1rem",
+                  fontWeight: 600,
+                  color: "#979aa4",
+                }}
+              >
+                Logo
+              </p>
+              <label htmlFor="add-logo-image" m style={{ width: "47%" }}>
+                <Paper style={{ width: "100%" }}>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    style={{
+                      height: "20vh",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      style={{
+                        height: "20vh",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {file ? (
+                        <img
+                          style={{
+                            height: "20vh",
+                          }}
+                          alt="img"
+                          src={file}
+                        />
+                      ) : (
+                        <img
+                          style={{
+                            height: "20vh",
+                          }}
+                          alt="img"
+                          src={Thumbnail}
+                        />
+                      )}
+                    </Box>
+                  </Box>
+                </Paper>
+              </label>
+              <input
+                id="add-logo-image"
+                style={{ display: "none" }}
+                type="file"
+                accept=".png,.jpg,.jpeg"
+                onChange={(e) => handleImgChange(e)}
+              />
+            </Box>
+
+            <Box
+              style={{ margin: "0 1rem 2rem" }}
+              display="flex"
+              alignItems="center"
+            >
+              <Checkbox
+                checked={showBuilder}
+                onChange={() => {
+                  IsShowBuilder(!showBuilder);
+                }}
+                style={{ color: "#8095a1" }}
+              />
+              <p
+                style={{
+                  fontSize: "1rem",
+                  fontWeight: 600,
+                  color: "#979aa4",
+                  marginLeft: "0.5rem",
+                }}
+              >
+                Show Builder
+              </p>
+            </Box>
+
+            {showBuilder && (
+              <>
+                <Box
+                  style={{ margin: "0 1rem 2rem" }}
+                  display="flex"
+                  alignItems="center"
+                >
+                  <Checkbox
+                    // disabled
+                    checked={optional}
+                    onChange={() => {
+                      IsOptional(!optional);
+                    }}
+                    style={{ color: "#8095a1" }}
+                  />
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      fontWeight: 600,
+                      color: "#979aa4",
+                      marginLeft: "0.5rem",
+                    }}
+                  >
+                    Optional
+                  </p>
+                </Box>
+
+                <Box
+                  style={{ margin: "0 1rem 2rem" }}
+                  display="flex"
+                  alignItems="center"
+                >
+                  <Checkbox
+                    // disabled
+                    checked={multiple}
+                    onChange={() => {
+                      IsMultiple(!multiple);
+                    }}
+                    style={{ color: "#8095a1" }}
+                  />
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      fontWeight: 600,
+                      color: "#979aa4",
+                      marginLeft: "0.5rem",
+                    }}
+                  >
+                    Multiple
+                  </p>
+                </Box>
+              </>
+            )}
+
             <Box
               Arabic
               Name

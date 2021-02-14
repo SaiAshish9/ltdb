@@ -10,6 +10,7 @@ import ViewCarouselIcon from "@material-ui/icons/ViewCarousel";
 import LabelIcon from "@material-ui/icons/Label";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 import HomeIcon from "@material-ui/icons/Home";
+import BuildCircleIcon from "@material-ui/icons/BuildRounded"
 
 export const options = [
   // {
@@ -51,6 +52,13 @@ export const options = [
     icon: <CategoryIcon />,
     path: "/categories",
     paths: ["/categories", "/categories/add/subcategory"],
+    options: [],
+  },
+  {
+    id: "Advanced Builder",
+    icon: <BuildCircleIcon />,
+    path: "/advanced-builder",
+    paths: ["/advanced-builder"],
     options: [],
   },
   {

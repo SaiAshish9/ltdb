@@ -10,6 +10,7 @@ import Banner from "./components/banner";
 import Labels from "./components/labels";
 import DeliveryFees from "./components/delivery-fees";
 import Orders from "./components/orders";
+import AdvancedBuilder from "./components/advancedBuilder"
 
 const Content = () => {
   return (
@@ -23,6 +24,7 @@ const Content = () => {
       <Route exact path="/games" component={Games} />
       <Route exact path="/orders" component={Orders} />
       <Route exact path="/banner" component={Banner} />
+      <Route exact path="/advanced-builder" component={AdvancedBuilder} />
       <Route exact path="/delivery-fees" component={DeliveryFees} />
     </Switch>
   );

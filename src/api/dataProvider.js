@@ -164,9 +164,26 @@ const reducer = (state, action) => {
         ...state,
         notification_count: action.payload,
       };
+    case "SET_ADVANCE_BUILDERS":
+      return {
+        ...state,
+        advanced_builders: action.payload,
+      };
     default:
       return state;
   }
+};
+
+const fetchAdvancedBuilderCategories = (dispatch) => async () => {
+  try {
+    const {
+      data: { data },
+    } = await Api("admin/advance-builder/categories");
+    dispatch({
+      type: "SET_ADVANCE_BUILDERS",
+      payload: data,
+    });
+  } catch (e) {}
 };
 
 const fetchGames = (dispatch) => async (page, limit, search, status) => {
@@ -618,7 +635,7 @@ const fetchResolutions = (dispatch) => () => {
   });
 };
 
-const uploadImage = async (bucket, file) => {
+export const uploadImage = async (bucket, file) => {
   const config = {
     bucketName: "lootbox-s3",
     region: "us-east-2",
@@ -1145,7 +1162,7 @@ const fetchNotifications = (dispatch) => async (page, limit) => {
       url = "admin/notification/notification-list?limit=10&&page=1";
     }
     const { data } = await Api(url);
-    console.log(data)
+    console.log(data);
     dispatch({ type: "SET_NOTIFICATIONS", payload: data.data });
     dispatch({
       type: "SET_NOTIFICATION_COUNT",
@@ -1211,6 +1228,7 @@ export const { Context, Provider } = createDataContext(
     toggleSubCategoryStatus,
     fetchDashboardDetails,
     fetchDeliveryDetails,
+    fetchAdvancedBuilderCategories,
     fetchNotificationDetails,
     fetchLabelDetails,
     addItem,
@@ -1258,6 +1276,7 @@ export const { Context, Provider } = createDataContext(
     game_details: null,
     users: null,
     dashboard_details: null,
+    advanced_builders: [],
     games: [],
     labels: [],
     notifications: [],

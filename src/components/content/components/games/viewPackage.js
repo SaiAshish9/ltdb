@@ -173,34 +173,6 @@ const AddPackage = ({ open, classes, setOpen }) => {
                 </Select>
               </FormControl>
             </Box>
-            {/* <Box
-              display="flex"
-              justifyContent="space-between"
-              style={{ margin: "1rem 0" }}
-            >
-              <p
-                style={{
-                  fontSize: "1rem",
-                  color: "#282b3c",
-                  fontWeight: 600,
-                }}
-              >
-                Status :
-              </p>
-              <FormControl style={{ width: "47%" }}>
-                <Select
-                  disabled
-                  value={package_details && package_details.status}
-                  onChange={(e) => {
-                    setValue(e.target.value);
-                  }}
-                >
-                  {["Active", "InActive"].map((i, k) => (
-                    <MenuItem value={k}>{i}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box> */}
             <Box
               display="flex"
               justifyContent="space-between"
@@ -336,25 +308,6 @@ const AddPackage = ({ open, classes, setOpen }) => {
                           marginBottom: 15,
                         }}
                       >
-                        {/* <IconButton
-                        onClick={() => {
-                          const x = [
-                            ...coverImages.splice(0, k),
-                            ...coverImages.splice(k + 1, 0),
-                          ];
-                          setCoverImages(x);
-                        }}
-                        style={{
-                          background: "#fff",
-                          position: "absolute",
-                          right: -10,
-                          top: -10,
-                          zIndex: 10,
-                          padding: 0,
-                        }}
-                      >
-                        <GiCancel />
-                      </IconButton> */}
                         <Avatar
                           style={{
                             height: 100,
@@ -366,20 +319,6 @@ const AddPackage = ({ open, classes, setOpen }) => {
                         />
                       </Box>
                     ))}
-
-                  {/* <label htmlFor={`cover-image1${coverImages.length + 1}`}>
-                    <Avatar
-                      style={{
-                        height: 100,
-                        width: 100,
-                        marginRight: 10,
-                        cursor: "pointer",
-                      }}
-                      variant="rounded"
-                    >
-                      <CameraAlt />
-                    </Avatar>
-                  </label> */}
                 </Box>
               </Box>
             </Box>
